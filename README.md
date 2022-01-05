@@ -1,1 +1,3 @@
 # calendar
+
+All rights reserved
