@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Selecione a data da visita</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Poppins:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <header>
+      <div class="header-container">
+        <h1>Calendar</h1>
+        <nav>
+          <ul>
+            <li><a href="#">Marcar Sessão</a></li>
+            <li><a href="#">Verificar Sessão</a></li>
+            <li><a href="#">Wemerson ^</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <form action="#" method="get" id="create-session"></form>
+      <div class="sections">
+        <section>
+          <div class="input-container">
+            <label for="name">Nome:</label>
+            <input type="text" name="name" id="name" form="create-session" />
+          </div>
+          <div class="input-container">
+            <label for="email">E-mail:</label>
+            <input type="email" name="email" id="email" form="create-session" />
+          </div>
+          <div class="input-container">
+            <label for="phone">Telefone:</label>
+            <input type="tel" name="phone" id="phone" form="create-session" />
+          </div>
+          <div class="input-container">
+            <label for="cpf">CPF:</label>
+            <input type="text" name="cpf" id="cpf" form="create-session" />
+          </div>
+          <div class="input-container">
+            <label for="description"
+              >Descreva para gente a tatuagem que deseja fazer (Quanto mais
+              detalhes melhor):</label
+            >
+            <textarea
+              name="description"
+              id="description"
+              form="create-session"
+            ></textarea>
+          </div>
+        </section>
+        <section>
+          <div class="date-picker">
+            <div class="date-month-year">
+              <h3>Dezembro de 2021</h3>
+              <div class="picker">
+                <i>^</i>
+                <i>^</i>
+              </div>
+            </div>
+            <div class="date-days">
+              <table>
+                <thead>
+                  <th>Dom</th>
+                  <th>Seg</th>
+                  <th>Ter</th>
+                  <th>Qua</th>
+                  <th>Qui</th>
+                  <th>Sex</th>
+                  <th>Sáb</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                    <td>11</td>
+                    <td>12</td>
+                    <td>13</td>
+                  </tr>
+                  <tr>
+                    <td>14</td>
+                    <td>15</td>
+                    <td>16</td>
+                    <td>17</td>
+                    <td>18</td>
+                    <td>19</td>
+                    <td>20</td>
+                  </tr>
+                  <tr>
+                    <td>21</td>
+                    <td>22</td>
+                    <td>23</td>
+                    <td>24</td>
+                    <td>25</td>
+                    <td>26</td>
+                    <td>27</td>
+                  </tr>
+                  <tr>
+                    <td>28</td>
+                    <td>29</td>
+                    <td>30</td>
+                    <td>31</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="hour-picker">
+            <ol>
+              <li>7:30</li>
+              <li>08:00</li>
+              <li>08:30</li>
+              <li>09:00</li>
+              <li>09:30</li>
+              <li>10:00</li>
+              <li>11:00</li>
+              <li>14:00</li>
+              <li>15:00</li>
+              <li>18:00</li>
+            </ol>
+          </div>
+        </section>
+        <section>
+          <div class="input-container">
+            <label for="file"> Envie uma imagem para nós</label>
+            <input type="file" name="file" id="file" form="create-session" />
+          </div>
+          <button type="submit" form="create-session">Marcar Sessão</button>
+        </section>
+      </div>
+    </main>
+
+    <script src="index.js"></script>
+  </body>
+</html>
