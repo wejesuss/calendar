@@ -8,12 +8,22 @@
   --link-hover: #e2dddd;
   --input-border-color: #ffffff99;
   --title-properties: 500 1.8rem "Poppins", sans-serif;
+  --upload-file-label: #fafafa;
   --upload-file-background: #7676768c;
   --upload-file-border: #ffffffcc;
   --upload-file-shadow: #0000001a;
   --upload-file-background-hover: #515156;
   --upload-file-border-hover: #b4b4b4;
   --upload-file-text-color-hover: #f1f1e8cf;
+  --submit-button-background: #089046;
+  --submit-button-border: #096031e6;
+  --submit-button-color: #f1f1f1;
+  --submit-button-background-hover: #089046c9;
+  --submit-button-border-hover: #a3a3a3e6;
+  --submit-button-color-hover: #ffffff;
+  --submit-button-background-focus: #089045;
+  --submit-button-border-focus: #111111cc;
+  --submit-button-color-focus: #f8f8f8;
 }
 
 html {
@@ -125,29 +135,41 @@ main .sections section:nth-of-type(3) {
 }
 
 .sections section .input-container textarea {
-  height: 60px;
+  height: 95px;
   max-height: 170px;
   resize: vertical;
 }
 
 /* section 3 */
 
+.sections section:nth-child(3) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.4rem 3rem;
+}
+
 .sections section:nth-child(3) .input-container {
   margin-bottom: 24px;
 }
 
 .sections section:nth-child(3) .input-container > label {
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  color: var(--upload-file-label);
   margin-bottom: 8px;
 }
 
 .sections section:nth-child(3) .input-container .photo-upload label {
   display: inline-block;
   margin-bottom: 0;
-  width: 14rem;
+  width: 13rem;
   height: 3rem;
   background: var(--upload-file-background);
   border: 1px solid var(--upload-file-border);
   box-shadow: 0px 4px 4px 2px var(--upload-file-shadow);
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
   color: var(--text-color);
   text-align: center;
   line-height: 3rem;
@@ -167,6 +189,35 @@ main .sections section:nth-of-type(3) {
   border: 0;
   width: 0;
   height: 0;
+}
+
+.sections section:nth-child(3) button {
+  width: 100%;
+  height: 30px;
+  background: var(--submit-button-background);
+  border: 1px solid var(--submit-button-border);
+  border-radius: 6px;
+  font-family: Ubuntu;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  text-align: center;
+  letter-spacing: 0.01em;
+  color: var(--submit-button-color);
+  transition: 0.6s;
+}
+
+.sections section:nth-child(3) button:hover {
+  background: var(--submit-button-background-hover);
+  border: 1px solid var(--submit-button-border-hover);
+  color: var(--submit-button-color-hover);
+}
+
+.sections section:nth-child(3) button:focus {
+  transition: 0.4s;
+  background: var(--submit-button-background-focus);
+  border: 0.5px solid var(--submit-button-border-focus);
+  color: var(--submit-button-color-focus);
 }
 
 /* footer */
