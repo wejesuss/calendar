@@ -24,6 +24,10 @@
   --submit-button-background-focus: #089045;
   --submit-button-border-focus: #111111cc;
   --submit-button-color-focus: #f8f8f8;
+  --calendar-title: #ffffff;
+  --calendar-dates: #d8d8d8;
+  --hour-picker-background: #404040;
+  --hour-picker-text-color: #c1c1c1;
 }
 
 html {
@@ -138,6 +142,97 @@ main .sections section:nth-of-type(3) {
   height: 95px;
   max-height: 170px;
   resize: vertical;
+}
+
+/* section 2 */
+
+.sections section:nth-child(2) {
+  padding: 0;
+}
+
+.sections section:nth-child(2) .date-picker {
+  padding: 1.6rem 3.2rem;
+  padding-right: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sections section:nth-child(2) .date-month-year {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.sections section:nth-child(2) .date-month-year h3 {
+  font-family: Poppins;
+  font-weight: normal;
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  color: var(--calendar-title);
+}
+
+.sections section:nth-child(2) .date-month-year .picker {
+  margin-left: 24px;
+  font-size: 2rem;
+}
+
+.sections section:nth-child(2) .date-month-year .picker i:first-child {
+  margin-right: 16px;
+}
+
+.sections section:nth-child(2) .date-days {
+  margin: 0 auto;
+}
+
+.sections section:nth-child(2) .date-days table {
+  text-align: center;
+  border-collapse: separate;
+  border-spacing: 4px 8px;
+}
+
+.sections section:nth-child(2) .date-days table thead tr th,
+.sections section:nth-child(2) .date-days table tbody tr td {
+  font-family: Poppins;
+  font-weight: normal;
+  font-size: 1.2rem;
+  padding: 1px 2px;
+  color: var(--calendar-dates);
+}
+
+.sections section:nth-child(2) .date-days table tbody tr td div {
+  border: 1px solid;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 18px;
+  margin: 0 auto;
+}
+
+.sections section:nth-child(2) .hour-picker {
+  width: 104px;
+  background-color: var(--hour-picker-background);
+  border-radius: 0 4px 4px 0;
+  padding: 0.6rem 0;
+}
+
+.sections section:nth-child(2) .hour-picker ol {
+  padding: 0;
+  list-style: none;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sections section:nth-child(2) .hour-picker li {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--hour-picker-text-color);
+}
+
+.sections section:nth-child(2) .hour-picker li:last-child {
+  margin-bottom: 0;
 }
 
 /* section 3 */
