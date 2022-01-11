@@ -187,7 +187,7 @@ main .sections section:nth-of-type(3) {
 .sections section:nth-child(2) .date-days table {
   text-align: center;
   border-collapse: separate;
-  border-spacing: 4px 8px;
+  border-spacing: 4px 4px;
 }
 
 .sections section:nth-child(2) .date-days table thead tr th,
