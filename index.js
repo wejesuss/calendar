@@ -125,43 +125,24 @@ function createWeekRow(dayOfWeek, day, weekLength = 7) {
 }
 
 function createMonth(year, month) {
+  const WEEK_LENGTH = 7;
   const thisMonth = new Date(year, month, 1);
-  console.log(thisMonth);
-  const dates = [
-    [null, null, null, null, null, null, 1],
-    [2, 3, 4, 5, 6, 7, 8],
-    [9, 10, 11, 12, 13, 14, 15],
-    [16, 17, 18, 19, 20, 21, 22],
-    [23, 24, 25, 26, 27, 28, 29],
-    [30, 31, null, null, null, null, null],
-  ];
+  const dates = [];
 
   let dayOfWeek = thisMonth.getDay();
   let day = 1;
-  const WEEK_LENGTH = 7;
 
-  for (let i = 0; i < 3; i++) {
-    if (day === 1) {
-      const firstWeek = createWeekRow(dayOfWeek, day);
-      console.log(firstWeek);
-    }
+  let weekLength = 7;
+  while (weekLength > 0) {
+    const week = createWeekRow(dayOfWeek, day, weekLength);
+    dates.push(week);
 
     day = WEEK_LENGTH - dayOfWeek + day;
     dayOfWeek = 0;
-
-    const week = createWeekRow(dayOfWeek, day);
-    console.log(week);
+    weekLength = calcWeekLength(year, month, day);
   }
 
-  day = WEEK_LENGTH - dayOfWeek + day;
-  let weekLength = calcWeekLength(year, month, day);
-
-  while (weekLength > 0) {
-    const week = createWeekRow(dayOfWeek, day, weekLength);
-    console.log(week);
-    day = WEEK_LENGTH - dayOfWeek + day;
-    weekLength -= 7;
-  }
+  return dates;
 }
 
 function calcWeekLength(year, month, day) {
@@ -169,5 +150,3 @@ function calcWeekLength(year, month, day) {
 
   return days - day + 1;
 }
-
-createMonth(2022, 0);
