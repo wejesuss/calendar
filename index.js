@@ -1,32 +1,9 @@
-const calendarHeader = document.querySelector(
-  "section:nth-child(2) > .date-picker > .date-month-year"
-);
-const title = calendarHeader.querySelector("h3");
-const pickers = calendarHeader.querySelectorAll(".picker i");
-
 /**
  * Verify if the year is a leap year
  * @param {number} year The year to verify
  * @returns {boolean} whether the year is a leap year or not
  */
 const isLeapYear = (year) => (year % 4 === 0 ? true : false);
-
-/**
- * Creates a Map that maps each day of the week to its corresponding name. The day of the week is from 0 to 6
- * @returns {Map<number, string>}
- */
-const toWeekString = () => {
-  const mapWeekName = new Map();
-  mapWeekName.set(0, "Dom");
-  mapWeekName.set(1, "Seg");
-  mapWeekName.set(2, "Ter");
-  mapWeekName.set(3, "Qua");
-  mapWeekName.set(4, "Qui");
-  mapWeekName.set(5, "Sex");
-  mapWeekName.set(6, "Sáb");
-
-  return mapWeekName;
-};
 
 /**
  * Creates a Map that maps each month to its corresponding name. The month is from 0 to 11
@@ -74,7 +51,6 @@ const toMonthDays = () => {
   return mapMonthDays;
 };
 
-const mapWeekName = toWeekString();
 const mapMonthName = toMonthString();
 const mapMonthDays = toMonthDays();
 
@@ -174,3 +150,101 @@ function calcWeekLength(year, month, day) {
 
   return days - day + 1;
 }
+
+function createCalendar(year, month) {
+  const dates = [];
+  const monthsToCreate = getMonthsToBeCreated(year, month);
+  monthsToCreate.forEach((date) => {
+    dates.push(createMonth(date.year, date.month));
+  });
+
+  setCalendarTitle(monthsToCreate[0].year, monthsToCreate[0].month);
+  setCalendarDays(dates[0]);
+  setPickersEvent(monthsToCreate, dates);
+}
+
+function setCalendarDays(monthDates) {
+  document.querySelector("table tbody").innerHTML = "";
+  monthDates.forEach((week) => {
+    const tr = document.createElement("tr");
+
+    week.forEach((day) => {
+      const td = document.createElement("td");
+
+      if (day !== null) {
+        const div = document.createElement("div");
+        div.innerText = day;
+        td.append(div);
+      }
+
+      tr.append(td);
+    });
+
+    document.querySelector("table tbody").append(tr);
+  });
+}
+
+function setPickersEvent(monthsToCreate, dates) {
+  const calendarHeader = document.querySelector(
+    "section:nth-child(2) > .date-picker > .date-month-year"
+  );
+
+  let index = Number(calendarHeader.dataset.index);
+  const pickers = calendarHeader.querySelectorAll(".picker i");
+
+  pickers[0].addEventListener("click", () => {
+    const isLimited = index < 1;
+
+    if (isLimited) {
+      return;
+    }
+
+    index--;
+    setCalendarTitle(monthsToCreate[index].year, monthsToCreate[index].month);
+    setCalendarDays(dates[index]);
+    calendarHeader.dataset.index = index;
+  });
+
+  pickers[1].addEventListener("click", () => {
+    const isLimited = index > 1;
+
+    if (isLimited) {
+      return;
+    }
+
+    index++;
+    setCalendarTitle(monthsToCreate[index].year, monthsToCreate[index].month);
+    setCalendarDays(dates[index]);
+    calendarHeader.dataset.index = index;
+  });
+}
+
+function setCalendarTitle(year, month) {
+  const title = document.querySelector(
+    "section:nth-child(2) > .date-picker > .date-month-year h3"
+  );
+
+  const monthName = mapMonthName.get(month);
+  title.innerText = `${monthName} de ${year}`;
+}
+
+function getMonthsToBeCreated(year, month) {
+  const thisMonth = new Date(year, month, 1);
+  return [{}, {}, {}].map((_, index) => {
+    const incrementation = index === 0 ? 0 : 1;
+    const month = thisMonth.getMonth();
+
+    thisMonth.setMonth(month + incrementation);
+
+    const nextYear = thisMonth.getFullYear();
+    const nextMonth = thisMonth.getMonth();
+
+    return {
+      year: nextYear,
+      month: nextMonth,
+    };
+  });
+}
+
+const today = new Date();
+createCalendar(today.getFullYear(), today.getMonth());
