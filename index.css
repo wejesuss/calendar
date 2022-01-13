@@ -159,6 +159,7 @@ main .sections section:nth-of-type(3) {
 
 .sections section:nth-child(2) .date-month-year {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 14px;
 }
@@ -172,12 +173,17 @@ main .sections section:nth-of-type(3) {
 }
 
 .sections section:nth-child(2) .date-month-year .picker {
-  margin-left: 24px;
   font-size: 2rem;
+  user-select: none;
 }
 
 .sections section:nth-child(2) .date-month-year .picker i:first-child {
   margin-right: 16px;
+}
+
+.sections section:nth-child(2) .date-month-year[data-index="0"] i:first-child,
+.sections section:nth-child(2) .date-month-year[data-index="2"] i:last-child {
+  color: #a1a1a1;
 }
 
 .sections section:nth-child(2) .date-days {
