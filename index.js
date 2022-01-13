@@ -124,6 +124,19 @@ function createWeekRow(dayOfWeek, day, weekLength = 7) {
   });
 }
 
+/**
+ * Creates a calendar structure that returns an array of arrays, each inner-array represents a week
+ * @param {number} year The year of that month
+ * @param {number} month month to be created the calendar structure
+ * @returns {number[][]} An array with up to 6 arrays, each inner-array is a fixed-7-length array of numbers with the corresponding days of that week
+ *
+ * @example createMonth(1931, 1)
+ * // returns
+ * [[1, 2, 3, 4, 5, 6, 7],
+ * [8, 9, 10, 11, 12, 13, 14],
+ * [15, 16, 17, 18, 19, 20, 21],
+ * [22, 23, 24, 25, 26, 27, 28]]
+ */
 function createMonth(year, month) {
   const WEEK_LENGTH = 7;
   const thisMonth = new Date(year, month, 1);
@@ -145,6 +158,17 @@ function createMonth(year, month) {
   return dates;
 }
 
+/**
+ * Calculate de difference between the number of days in that month (e.g. 31) and the `day` passed in this function as a parameter (inclusive)
+ * @param {number} year year to calculate leap years (only useful for February)
+ * @param {number} month month to get total number of days in that month
+ * @param {number} day day to calculate the difference
+ * @returns {number} returns `weekLength` used to determine the number of days in that week
+ *
+ * @example calcWeekLength(anyYear, 11, 28)
+ * // returns
+ * 4 // 31 - 28 + 1
+ */
 function calcWeekLength(year, month, day) {
   const days = mapMonthDays.get(month)(year);
 
