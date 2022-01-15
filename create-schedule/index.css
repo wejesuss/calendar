@@ -1,0 +1,253 @@
+main .sections {
+  display: grid;
+  grid-template-columns: repeat(12, 7rem);
+  justify-content: center;
+  column-gap: 30px;
+  row-gap: 52px;
+}
+
+main .sections section {
+  background-color: var(--box-color);
+  padding: 1.6rem 2.4rem;
+  border-radius: 4px;
+}
+
+main .sections section:nth-of-type(1) {
+  grid-column: 2/6;
+  grid-row: 1/3;
+}
+
+main .sections section:nth-of-type(2) {
+  grid-column: 6/10;
+  display: flex;
+  justify-content: space-between;
+}
+
+main .sections section:nth-of-type(3) {
+  grid-column: 6/10;
+}
+
+/* section 1 */
+
+.sections section .input-container:not(:last-child) {
+  margin-bottom: 16px;
+}
+
+.sections section .input-container label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1.2rem;
+}
+
+.sections section .input-container input,
+.sections section .input-container textarea {
+  width: 100%;
+  height: 30px;
+  padding: 8px 6px;
+  color: var(--text-color);
+  border: 1px solid var(--input-border-color);
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  background-color: transparent;
+}
+
+.sections section .input-container textarea {
+  height: 95px;
+  max-height: 170px;
+  resize: vertical;
+}
+
+/* section 2 */
+
+.sections section:nth-child(2) {
+  padding: 0;
+}
+
+.sections section:nth-child(2) .date-picker {
+  padding: 1.6rem 3.2rem;
+  padding-right: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sections section:nth-child(2) .date-month-year {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.sections section:nth-child(2) .date-month-year h3 {
+  font-family: Poppins;
+  font-weight: normal;
+  font-size: 1.8rem;
+  line-height: 2.4rem;
+  color: var(--calendar-title);
+}
+
+.sections section:nth-child(2) .date-month-year .picker {
+  font-size: 2rem;
+  user-select: none;
+}
+
+.sections section:nth-child(2) .date-month-year .picker i:first-child {
+  margin-right: 16px;
+}
+
+.sections section:nth-child(2) .date-month-year[data-index="0"] i:first-child,
+.sections section:nth-child(2) .date-month-year[data-index="2"] i:last-child {
+  color: #a1a1a1;
+}
+
+.sections section:nth-child(2) .date-days {
+  margin: 0 auto;
+}
+
+.sections section:nth-child(2) .date-days table {
+  text-align: center;
+  border-collapse: separate;
+  border-spacing: 2px 6px;
+}
+
+.sections section:nth-child(2) .date-days table thead tr th {
+  width: 28px;
+}
+
+.sections section:nth-child(2) .date-days table thead tr th,
+.sections section:nth-child(2) .date-days table tbody tr td {
+  font-family: Poppins;
+  font-weight: normal;
+  font-size: 1rem;
+  padding: 1px 2px;
+  color: var(--calendar-dates);
+}
+
+.sections section:nth-child(2) .date-days table tbody tr td div {
+  border: 1px solid;
+  width: 18px;
+  height: 18px;
+  text-align: center;
+  line-height: 16px;
+  margin: 0 auto;
+}
+
+.sections section:nth-child(2) .hour-picker {
+  width: 100px;
+  background-color: var(--hour-picker-background);
+  border-radius: 0 4px 4px 0;
+  padding: 0.9rem 0;
+}
+
+.sections section:nth-child(2) .hour-picker ol {
+  padding: 0;
+  list-style: none;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.sections section:nth-child(2) .hour-picker li {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--hour-picker-text-color);
+}
+
+.sections section:nth-child(2) .hour-picker li:last-child {
+  margin-bottom: 0;
+}
+
+/* section 3 */
+
+.sections section:nth-child(3) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.4rem 3rem;
+}
+
+.sections section:nth-child(3) .input-container {
+  margin-bottom: 24px;
+}
+
+.sections section:nth-child(3) .input-container > label {
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  color: var(--upload-file-label);
+  margin-bottom: 8px;
+}
+
+.sections section:nth-child(3) .input-container .photo-upload label {
+  display: inline-block;
+  margin-bottom: 0;
+  width: 13rem;
+  height: 3rem;
+  background: var(--upload-file-background);
+  border: 1px solid var(--upload-file-border);
+  box-shadow: 0px 4px 4px 2px var(--upload-file-shadow);
+  font-size: 1.1rem;
+  letter-spacing: 0.01em;
+  color: var(--text-color);
+  text-align: center;
+  line-height: 3rem;
+  border-radius: 6px;
+  transition: 1s;
+}
+
+.sections section:nth-child(3) .input-container .photo-upload label:hover {
+  background: var(--upload-file-background-hover);
+  border: 1px solid var(--upload-file-border-hover);
+  color: var(--upload-file-text-color-hover);
+}
+
+.sections section:nth-child(3) .input-container input {
+  opacity: 0;
+  padding: 0;
+  border: 0;
+  width: 0;
+  height: 0;
+}
+
+.sections section:nth-child(3) button {
+  width: 100%;
+  height: 30px;
+  background: var(--submit-button-background);
+  border: 1px solid var(--submit-button-border);
+  border-radius: 6px;
+  font-family: Ubuntu;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  text-align: center;
+  letter-spacing: 0.01em;
+  color: var(--submit-button-color);
+  transition: 0.6s;
+}
+
+.sections section:nth-child(3) button:hover {
+  background: var(--submit-button-background-hover);
+  border: 1px solid var(--submit-button-border-hover);
+  color: var(--submit-button-color-hover);
+}
+
+.sections section:nth-child(3) button:focus {
+  transition: 0.4s;
+  background: var(--submit-button-background-focus);
+  border: 0.5px solid var(--submit-button-border-focus);
+  color: var(--submit-button-color-focus);
+}
+
+/* footer */
+
+footer {
+  background-color: var(--box-color);
+  position: fixed;
+  height: 24px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  text-align: center;
+  margin-bottom: 0px;
+  padding: 6px 0;
+  font-size: 1.2rem;
+}
