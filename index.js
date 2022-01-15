@@ -158,12 +158,18 @@ function createCalendar(year, month) {
     dates.push(createMonth(date.year, date.month));
   });
 
-  setCalendarTitle(monthsToCreate[0].year, monthsToCreate[0].month);
-  setCalendarDays(dates[0]);
+  const firstMonthToCreate = monthsToCreate[0];
+
+  setCalendarTitle(firstMonthToCreate.year, firstMonthToCreate.month);
+  setCalendarDays(dates[0], firstMonthToCreate.year, firstMonthToCreate.month);
   setPickersEvent(monthsToCreate, dates);
 }
 
-function setCalendarDays(monthDates) {
+function setCalendarDays(monthDates, year, month) {
+  const inputDay = document.getElementById("date-picker-day");
+  const inputMonth = document.getElementById("date-picker-month");
+  const inputYear = document.getElementById("date-picker-year");
+
   document.querySelector("table tbody").innerHTML = "";
   monthDates.forEach((week) => {
     const tr = document.createElement("tr");
@@ -174,6 +180,14 @@ function setCalendarDays(monthDates) {
       if (day !== null) {
         const div = document.createElement("div");
         div.innerText = day;
+        div.addEventListener("click", () => {
+          inputDay.value = day;
+          inputMonth.value = month;
+          inputYear.value = year;
+
+          document.getElementById("date-picker-time").value = "";
+        });
+
         td.append(div);
       }
 
@@ -200,8 +214,10 @@ function setPickersEvent(monthsToCreate, dates) {
     }
 
     index--;
-    setCalendarTitle(monthsToCreate[index].year, monthsToCreate[index].month);
-    setCalendarDays(dates[index]);
+
+    const monthToCreate = monthsToCreate[index];
+    setCalendarTitle(monthToCreate.year, monthToCreate.month);
+    setCalendarDays(dates[index], monthToCreate.year, monthToCreate.month);
     calendarHeader.dataset.index = index;
   });
 
@@ -213,8 +229,10 @@ function setPickersEvent(monthsToCreate, dates) {
     }
 
     index++;
-    setCalendarTitle(monthsToCreate[index].year, monthsToCreate[index].month);
-    setCalendarDays(dates[index]);
+
+    const monthToCreate = monthsToCreate[index];
+    setCalendarTitle(monthToCreate.year, monthToCreate.month);
+    setCalendarDays(dates[index], monthToCreate.year, monthToCreate.month);
     calendarHeader.dataset.index = index;
   });
 }
@@ -248,3 +266,14 @@ function getMonthsToBeCreated(year, month) {
 
 const today = new Date();
 createCalendar(today.getFullYear(), today.getMonth());
+
+document
+  .querySelectorAll(
+    "body > main > div > section:nth-child(2) > div.hour-picker > ol > li"
+  )
+  .forEach((timeEl) => {
+    timeEl.addEventListener("click", (e) => {
+      const time = `0${e.target.innerText}`.slice(-5);
+      document.getElementById("date-picker-time").value = time;
+    });
+  });
