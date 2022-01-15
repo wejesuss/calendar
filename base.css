@@ -1,0 +1,87 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  margin: 0;
+  --box-color: #454545;
+  --text-color: #f1f1f1;
+  --link-hover: #e2dddd;
+  --input-border-color: #ffffff99;
+  --title-properties: 500 1.8rem "Poppins", sans-serif;
+  --upload-file-label: #fafafa;
+  --upload-file-background: #7676768c;
+  --upload-file-border: #ffffffcc;
+  --upload-file-shadow: #0000001a;
+  --upload-file-background-hover: #515156;
+  --upload-file-border-hover: #b4b4b4;
+  --upload-file-text-color-hover: #f1f1e8cf;
+  --submit-button-background: #089046;
+  --submit-button-border: #096031e6;
+  --submit-button-color: #f1f1f1;
+  --submit-button-background-hover: #089046c9;
+  --submit-button-border-hover: #a3a3a3e6;
+  --submit-button-color-hover: #ffffff;
+  --submit-button-background-focus: #089045;
+  --submit-button-border-focus: #111111cc;
+  --submit-button-color-focus: #f8f8f8;
+  --calendar-title: #ffffff;
+  --calendar-dates: #d8d8d8;
+  --hour-picker-background: #404040;
+  --hour-picker-text-color: #c1c1c1;
+}
+
+html {
+  font-size: 62.5%;
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  color: var(--text-color);
+  font-size: 1.6rem;
+}
+
+header {
+  background-color: var(--box-color);
+  padding: 8px 0;
+  display: grid;
+  grid-template-columns: repeat(12, 7rem);
+  justify-content: center;
+  column-gap: 30px;
+}
+
+.header-container {
+  grid-column: 1/13;
+  margin-right: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-container h1 {
+  font: var(--title-properties);
+}
+
+.header-container nav ul {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+.header-container nav ul li {
+  margin-right: 10px;
+}
+
+.header-container nav ul li a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+.header-container nav ul li a:hover {
+  color: var(--link-hover);
+}
+
+main {
+  margin-top: 5.6rem;
+}
