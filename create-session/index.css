@@ -236,18 +236,3 @@ main .sections section:nth-of-type(3) {
   border: 0.5px solid var(--submit-button-border-focus);
   color: var(--submit-button-color-focus);
 }
-
-/* footer */
-
-footer {
-  background-color: var(--box-color);
-  position: fixed;
-  height: 24px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-  text-align: center;
-  margin-bottom: 0px;
-  padding: 6px 0;
-  font-size: 1.2rem;
-}

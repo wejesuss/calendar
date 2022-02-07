@@ -22,8 +22,8 @@
         <h1>Calendar</h1>
         <nav>
           <ul>
-            <li><a href="#">Marcar Sessão</a></li>
-            <li><a href="#">Verificar Sessão</a></li>
+            <li><a href="#">Horários</a></li>
+            <li><a href="#">Pagamentos</a></li>
             <li><a href="#">Wemerson ^</a></li>
           </ul>
         </nav>
@@ -31,219 +31,66 @@
     </header>
 
     <main>
-      <form action="#" method="get" id="create-session"></form>
+      <form action="#" method="get" id="create-event"></form>
       <div class="sections">
         <section>
+          <h2>Criar/Editar evento</h2>
           <div class="input-container">
-            <label for="name">Nome:</label>
-            <input type="text" name="name" id="name" form="create-session" />
-          </div>
-          <div class="input-container">
-            <label for="email">E-mail:</label>
-            <input type="email" name="email" id="email" form="create-session" />
-          </div>
-          <div class="input-container">
-            <label for="phone">Telefone:</label>
-            <input type="tel" name="phone" id="phone" form="create-session" />
-          </div>
-          <div class="input-container">
-            <label for="cpf">CPF:</label>
-            <input type="text" name="cpf" id="cpf" form="create-session" />
-          </div>
-          <div class="input-container">
-            <label for="description"
-              >Descreva para gente a tatuagem que deseja fazer (Quanto mais
-              detalhes melhor):</label
+            <label for="activation-interval">Intervalo de ativação:</label>
+            <input
+              type="text"
+              name="activation-interval"
+              id="activation-interval"
+              form="create-event"
+            />
+            <select
+              name="activation-interval-type"
+              id="activation-interval-type"
+              form="create-event"
             >
-            <textarea
-              name="description"
-              id="description"
-              form="create-session"
-            ></textarea>
+              <option value="mtf">Meses no futuro</option>
+            </select>
           </div>
-        </section>
-        <section>
-          <div class="date-picker">
-            <div class="date-month-year" data-index="0">
-              <h3>Dezembro de 2021</h3>
-              <div class="picker">
-                <i>^</i>
-                <i>^</i>
-              </div>
-            </div>
-            <div class="date-days">
-              <table>
-                <thead>
-                  <th>Dom</th>
-                  <th>Seg</th>
-                  <th>Ter</th>
-                  <th>Qua</th>
-                  <th>Qui</th>
-                  <th>Sex</th>
-                  <th>Sáb</th>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td></td>
-                    <td>
-                      <div>1</div>
-                    </td>
-                    <td>
-                      <div>2</div>
-                    </td>
-                    <td>
-                      <div>3</div>
-                    </td>
-                    <td>
-                      <div>4</div>
-                    </td>
-                    <td>
-                      <div>5</div>
-                    </td>
-                    <td>
-                      <div>6</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div>7</div>
-                    </td>
-                    <td>
-                      <div>8</div>
-                    </td>
-                    <td>
-                      <div>9</div>
-                    </td>
-                    <td>
-                      <div>10</div>
-                    </td>
-                    <td>
-                      <div>11</div>
-                    </td>
-                    <td>
-                      <div>12</div>
-                    </td>
-                    <td>
-                      <div>13</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div>14</div>
-                    </td>
-                    <td>
-                      <div>15</div>
-                    </td>
-                    <td>
-                      <div>16</div>
-                    </td>
-                    <td>
-                      <div>17</div>
-                    </td>
-                    <td>
-                      <div>18</div>
-                    </td>
-                    <td>
-                      <div>19</div>
-                    </td>
-                    <td>
-                      <div>20</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div>21</div>
-                    </td>
-                    <td>
-                      <div>22</div>
-                    </td>
-                    <td>
-                      <div>23</div>
-                    </td>
-                    <td>
-                      <div>24</div>
-                    </td>
-                    <td>
-                      <div>25</div>
-                    </td>
-                    <td>
-                      <div>26</div>
-                    </td>
-                    <td>
-                      <div>27</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <div>28</div>
-                    </td>
-                    <td>
-                      <div>29</div>
-                    </td>
-                    <td>
-                      <div>30</div>
-                    </td>
-                    <td>
-                      <div>31</div>
-                    </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <input
-              type="hidden"
-              name="year"
-              id="date-picker-year"
-              form="create-session"
-            />
-            <input
-              type="hidden"
-              name="month"
-              id="date-picker-month"
-              form="create-session"
-            />
-            <input
-              type="hidden"
-              name="day"
-              id="date-picker-day"
-              form="create-session"
-            />
-          </div>
-          <div class="hour-picker">
-            <ol>
-              <li>7:30</li>
-              <li>8:00</li>
-              <li>8:30</li>
-              <li>9:00</li>
-              <li>9:30</li>
-              <li>10:00</li>
-              <li>11:00</li>
-              <li>14:00</li>
-              <li>15:00</li>
-              <li>18:00</li>
-            </ol>
-
-            <input
-              type="hidden"
-              name="time"
-              id="date-picker-time"
-              form="create-session"
-            />
-          </div>
-        </section>
-        <section>
           <div class="input-container">
-            <label for="file">Envie uma imagem para nós</label>
-            <div class="photo-upload">
-              <label for="file">Selecione a imagem ^</label>
-              <input type="file" name="file" id="file" form="create-session" />
-            </div>
+            <label for="duration">Duração:</label>
+            <select name="duration" id="duration" form="create-event">
+              <option value="15min">15 Min</option>
+              <option value="30min">30 Min</option>
+              <option value="45min">45 Min</option>
+              <option value="60min">60 Min</option>
+            </select>
           </div>
-          <button type="submit" form="create-session">Marcar Sessão</button>
+          <div class="input-container" id="days-of-week">
+            <label>Disponibilidade:</label>
+          </div>
+          <div class="input-container replacements" id="replacements">
+            <label>Sobreposições:</label>
+            <div class="add-replacement">
+              <button>Adicionar nova data</button>
+            </div>
+            <ol class="replacement-list">
+              <li class="replacement-date">
+                <div class="day">20/01/2022</div>
+                <ol class="time-interval-list">
+                  <li class="time-interval">16:00 - 17:00</li>
+                  <li class="time-interval">18:00 - 19:30</li>
+                </ol>
+                <div class="trash">trash</div>
+              </li>
+              <li class="replacement-date">
+                <div class="day">22/01/2022</div>
+                <ol class="time-interval-list unavailable">
+                  Indisponível
+                </ol>
+                <div class="trash">trash</div>
+              </li>
+            </ol>
+          </div>
+
+          <button type="submit" form="create-event">enviar</button>
+        </section>
+        <section>
+          <h2>Eventos</h2>
         </section>
       </div>
     </main>
