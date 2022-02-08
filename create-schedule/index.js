@@ -125,10 +125,33 @@ function createInputContainer(timeFrom, timeTo) {
   return inputContainer;
 }
 
+function addInputContainer() {
+  const week = controlMenu.parentNode;
+  const weekInputsContainer = week.querySelector(".week-inputs-container");
+  if (!weekInputsContainer) {
+    return new Error("week-inputs-container element does not exist");
+  }
+
+  let inputContainer = weekInputsContainer.querySelector(
+    ".input-container:last-child"
+  );
+
+  if (inputContainer) {
+    inputContainer = inputContainer.cloneNode(true);
+  } else {
+    inputContainer = createInputContainer("09:00", "17:00");
+    weekInputsContainer.textContent = "";
+  }
+
+  weekInputsContainer.append(inputContainer);
+}
+
 function createControlMenu() {
   const controlMenu = createElement("div", "", { className: "control-menu" });
   const plus = createElement("div", "+", { className: "plus" });
   const copy = createElement("div", "©", { className: "copy" });
+
+  plus.addEventListener("click", addInputContainer);
 
   controlMenu.append(plus, copy);
   return controlMenu;
