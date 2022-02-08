@@ -15,13 +15,63 @@ const toDayString = () => {
 
 const mapDayName = toDayString();
 
+const weeks = [
+  [],
+  [
+    {
+      time_from: "03:50",
+      time_to: "07:00",
+    },
+    {
+      time_from: "09:00",
+      time_to: "14:00",
+    },
+  ],
+  [
+    {
+      time_from: "03:50",
+      time_to: "07:00",
+    },
+  ],
+  [
+    {
+      time_from: "03:50",
+      time_to: "07:00",
+    },
+  ],
+  [
+    {
+      time_from: "03:50",
+      time_to: "07:00",
+    },
+  ],
+  [
+    {
+      time_from: "03:50",
+      time_to: "07:00",
+    },
+  ],
+  [
+    {
+      time_from: "03:50",
+      time_to: "07:00",
+    },
+  ],
+];
+
 for (let index = 0; index < 7; index++) {
+  const weekData = weeks[index];
   const week = createElement("div", "", { className: "week" });
   const weekName = createWeekName(index);
-  const weekInputsContainer = createWeekInputsContainer(index);
+  const weekInputsContainer = createWeekInputsContainer(index, weekData);
   const controlMenu = createControlMenu();
 
-  weekInputsContainer.append(createInputContainer());
+  weekData.forEach((timeInterval) => {
+    weekInputsContainer.append(
+      createInputContainer(timeInterval.time_from, timeInterval.time_to)
+    );
+  });
+
   week.append(weekName, weekInputsContainer, controlMenu);
 
   daysOfWeek.appendChild(week);
@@ -35,30 +85,40 @@ function createWeekName(index) {
   return weekName;
 }
 
-function createWeekInputsContainer(index) {
-  const weekInputsContainer = createElement("div", "", {
-    className: "week-inputs-container",
-    id: `week-${index}`,
-  });
+function createWeekInputsContainer(index, weekData) {
+  const identifiers = weekData.length
+    ? {
+        className: "week-inputs-container",
+        id: `week-${index}`,
+      }
+    : { className: "week-inputs-container" };
+  const content = weekData.length ? "" : "Indisponível";
+
+  const weekInputsContainer = createElement("div", content, identifiers);
 
   return weekInputsContainer;
 }
 
-function createInput(name, type, className, id) {
-  const input = createElement("input", "", { className, id });
+function createInput(name, type, value = "", { className = "", id = "" }) {
+  const input = createElement("input", (content = ""), { className, id });
   input.setAttribute("name", name);
   input.setAttribute("type", type);
+  input.value = value;
 
   return input;
 }
 
-function createInputContainer() {
+function createInputContainer(timeFrom, timeTo) {
   const inputContainer = createElement("div", "", {
     className: "input-container",
   });
-  const inputFrom = createInput("week-time-from", "text", "time-from");
+  const inputFrom = createInput("week-time-from", "text", timeFrom, {
+    className: "time-from",
+  });
   const span = createElement("span", "-", {});
-  const inputTo = createInput("week-time-to", "text", "time-to");
+  const inputTo = createInput("week-time-to", "text", timeTo, {
+    className: "time-to",
+  });
   const trash = createElement("div", "trash", { className: "trash" });
 
   inputContainer.append(inputFrom, span, inputTo, trash);
