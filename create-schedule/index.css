@@ -198,3 +198,36 @@ ol.time-interval-list.unavailable {
   border: 0.5px solid var(--submit-button-border-focus);
   color: var(--submit-button-color-focus);
 }
+
+/* events */
+
+.event {
+  margin-bottom: 8px;
+  padding: 0.8rem 0 0.8rem 1.6rem;
+  border: 1px solid #c4c4c480;
+}
+
+h3.event-date {
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  color: #ffffff;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-row-gap: 8px;
+}
+
+dt,
+dd {
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  color: #ffffffe3;
+}
+
+dt {
+  font-weight: bold;
+  color: #ffffff;
+}
