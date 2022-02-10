@@ -86,12 +86,10 @@ function createWeekName(index) {
 }
 
 function createWeekInputsContainer(index, weekData) {
-  const identifiers = weekData.length
-    ? {
-        className: "week-inputs-container",
-        id: `week-${index}`,
-      }
-    : { className: "week-inputs-container" };
+  const identifiers = {
+    className: "week-inputs-container",
+    id: `week-${index}`,
+  };
   const content = weekData.length ? "" : "Indisponível";
 
   const weekInputsContainer = createElement("div", content, identifiers);
