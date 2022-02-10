@@ -123,8 +123,8 @@ function createInputContainer(timeFrom, timeTo) {
   return inputContainer;
 }
 
-function addInputContainer() {
-  const week = controlMenu.parentNode;
+function addInputContainer(e) {
+  const week = e.target.parentNode.parentNode;
   const weekInputsContainer = week.querySelector(".week-inputs-container");
   if (!weekInputsContainer) {
     return new Error("week-inputs-container element does not exist");
