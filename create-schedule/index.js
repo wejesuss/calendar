@@ -106,6 +106,16 @@ function createInput(name, type, value = "", { className = "", id = "" }) {
   return input;
 }
 
+function removeInputContainer(e) {
+  const inputContainer = e.target.parentNode;
+  const weekInputsContainer = inputContainer.parentNode;
+
+  inputContainer.remove();
+  if (weekInputsContainer.children.length < 1) {
+    weekInputsContainer.textContent = "Indisponível";
+  }
+}
+
 function createInputContainer(timeFrom, timeTo) {
   const inputContainer = createElement("div", "", {
     className: "input-container",
@@ -118,6 +128,8 @@ function createInputContainer(timeFrom, timeTo) {
     className: "time-to",
   });
   const trash = createElement("div", "trash", { className: "trash" });
+
+  trash.addEventListener("click", removeInputContainer);
 
   inputContainer.append(inputFrom, span, inputTo, trash);
   return inputContainer;
@@ -136,6 +148,7 @@ function addInputContainer(e) {
 
   if (inputContainer) {
     inputContainer = inputContainer.cloneNode(true);
+    inputContainer.children[3].addEventListener("click", removeInputContainer);
   } else {
     inputContainer = createInputContainer("09:00", "17:00");
     weekInputsContainer.textContent = "";
