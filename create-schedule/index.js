@@ -206,33 +206,50 @@ function renderAvailability() {
   }
 }
 
+function createReplacementDate() {
+  return createElement("li", "", {
+    className: "replacement-date",
+  });
+}
+
+function createReplacementDay(date) {
+  return createElement("div", date, { className: "day" });
+}
+
+function createTrash() {
+  return createElement("div", "trash", { className: "trash" });
+}
+
+function createTimeIntervalList(content) {
+  return createElement("ol", content, {
+    className: `time-interval-list${content ? " unavailable" : ""}`,
+  });
+}
+
+function createTimeInterval(timeFrom, timeTo) {
+  return createElement("li", `${timeFrom} - ${timeTo}`, {
+    className: "time-interval",
+  });
+}
+
 function renderReplacements() {
   const replacementList = inputReplacements.querySelector(".replacement-list");
 
   const $replacements = replacements.map((replacement) => {
     const { date, time_intervals } = replacement;
 
-    const replacementDate = createElement("li", "", {
-      className: "replacement-date",
-    });
-
-    const day = createElement("div", date, { className: "day" });
+    const replacementDate = createReplacementDate();
+    const day = createReplacementDay(date);
+    const trash = createTrash();
     let timeIntervalList;
-    const trash = createElement("div", "trash", { className: "trash" });
 
     if (!time_intervals || time_intervals.length === 0) {
-      timeIntervalList = createElement("ol", "Indisponível", {
-        className: "time-interval-list unavailable",
-      });
+      timeIntervalList = createTimeIntervalList("Indisponível");
     } else {
-      timeIntervalList = createElement("ol", "", {
-        className: "time-interval-list",
-      });
+      timeIntervalList = createTimeIntervalList("");
 
       time_intervals.forEach(({ time_from, time_to }) => {
-        const timeInterval = createElement("li", `${time_from} - ${time_to}`, {
-          className: "time-interval",
-        });
+        const timeInterval = createTimeInterval(time_from, time_to);
 
         timeIntervalList.append(timeInterval);
       });
