@@ -118,6 +118,12 @@ function removeInputContainer(e) {
   }
 }
 
+function removeReplacementDate(e) {
+  const replacementDate = e.target.parentNode;
+
+  replacementDate.remove();
+}
+
 function createInputContainer(timeFrom, timeTo) {
   const inputContainer = createElement("div", "", {
     className: "input-container",
@@ -129,8 +135,7 @@ function createInputContainer(timeFrom, timeTo) {
   const inputTo = createInput("week-time-to", "text", timeTo, {
     className: "time-to",
   });
-  const trash = createElement("div", "trash", { className: "trash" });
-
+  const trash = createTrash();
   trash.addEventListener("click", removeInputContainer);
 
   inputContainer.append(inputFrom, span, inputTo, trash);
@@ -232,31 +237,37 @@ function createTimeInterval(timeFrom, timeTo) {
   });
 }
 
+function createReplacement(replacement) {
+  const { date, time_intervals } = replacement;
+
+  const replacementDate = createReplacementDate();
+  const day = createReplacementDay(date);
+  const trash = createTrash();
+  let timeIntervalList;
+
+  if (!time_intervals || time_intervals.length === 0) {
+    timeIntervalList = createTimeIntervalList("Indisponível");
+  } else {
+    timeIntervalList = createTimeIntervalList("");
+
+    time_intervals.forEach(({ time_from, time_to }) => {
+      const timeInterval = createTimeInterval(time_from, time_to);
+
+      timeIntervalList.append(timeInterval);
+    });
+  }
+
+  trash.addEventListener("click", removeReplacementDate);
+
+  replacementDate.append(day, timeIntervalList, trash);
+  return replacementDate;
+}
+
 function renderReplacements() {
   const replacementList = inputReplacements.querySelector(".replacement-list");
 
   const $replacements = replacements.map((replacement) => {
-    const { date, time_intervals } = replacement;
-
-    const replacementDate = createReplacementDate();
-    const day = createReplacementDay(date);
-    const trash = createTrash();
-    let timeIntervalList;
-
-    if (!time_intervals || time_intervals.length === 0) {
-      timeIntervalList = createTimeIntervalList("Indisponível");
-    } else {
-      timeIntervalList = createTimeIntervalList("");
-
-      time_intervals.forEach(({ time_from, time_to }) => {
-        const timeInterval = createTimeInterval(time_from, time_to);
-
-        timeIntervalList.append(timeInterval);
-      });
-    }
-
-    replacementDate.append(day, timeIntervalList, trash);
-    return replacementDate;
+    return createReplacement(replacement);
   });
 
   replacementList.append(...$replacements);
