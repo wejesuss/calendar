@@ -59,24 +59,6 @@ const weeks = [
   ],
 ];
 
-for (let index = 0; index < 7; index++) {
-  const weekData = weeks[index];
-  const week = createElement("div", "", { className: "week" });
-  const weekName = createWeekName(index);
-  const weekInputsContainer = createWeekInputsContainer(index, weekData);
-  const controlMenu = createControlMenu();
-
-  weekData.forEach((timeInterval) => {
-    weekInputsContainer.append(
-      createInputContainer(timeInterval.time_from, timeInterval.time_to)
-    );
-  });
-
-  week.append(weekName, weekInputsContainer, controlMenu);
-
-  daysOfWeek.appendChild(week);
-}
-
 function createWeekName(index) {
   const weekName = createElement("h3", mapDayName.get(index), {
     className: "week-name",
@@ -183,3 +165,25 @@ function createElement(tag, content, { className = "", id = "" }) {
 
   return el;
 }
+
+function renderAvailability() {
+  for (let index = 0; index < 7; index++) {
+    const weekData = weeks[index];
+    const week = createElement("div", "", { className: "week" });
+    const weekName = createWeekName(index);
+    const weekInputsContainer = createWeekInputsContainer(index, weekData);
+    const controlMenu = createControlMenu();
+
+    weekData.forEach((timeInterval) => {
+      weekInputsContainer.append(
+        createInputContainer(timeInterval.time_from, timeInterval.time_to)
+      );
+    });
+
+    week.append(weekName, weekInputsContainer, controlMenu);
+
+    daysOfWeek.appendChild(week);
+  }
+}
+
+renderAvailability();
