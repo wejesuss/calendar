@@ -1,4 +1,5 @@
 const daysOfWeek = document.getElementById("days-of-week");
+const inputReplacements = document.getElementById("replacements");
 
 const toDayString = () => {
   const mapDayName = new Map();
@@ -57,6 +58,25 @@ const weeks = [
       time_to: "07:00",
     },
   ],
+];
+const replacements = [
+  {
+    date: "20/01/2022",
+    time_intervals: [
+      {
+        time_from: "16:00",
+        time_to: "17:00",
+      },
+      {
+        time_from: "18:00",
+        time_to: "19:30",
+      },
+    ],
+  },
+  {
+    date: "22/01/2022",
+    time_intervals: [],
+  },
 ];
 
 function createWeekName(index) {
@@ -154,7 +174,7 @@ function createElement(tag, content, { className = "", id = "" }) {
   const el = document.createElement(tag);
 
   if (className) {
-    el.classList.add(className);
+    el.classList.add(...className.split(" "));
   }
 
   if (id) {
@@ -186,4 +206,44 @@ function renderAvailability() {
   }
 }
 
+function renderReplacements() {
+  const replacementList = inputReplacements.querySelector(".replacement-list");
+
+  const $replacements = replacements.map((replacement) => {
+    const { date, time_intervals } = replacement;
+
+    const replacementDate = createElement("li", "", {
+      className: "replacement-date",
+    });
+
+    const day = createElement("div", date, { className: "day" });
+    let timeIntervalList;
+    const trash = createElement("div", "trash", { className: "trash" });
+
+    if (!time_intervals || time_intervals.length === 0) {
+      timeIntervalList = createElement("ol", "Indisponível", {
+        className: "time-interval-list unavailable",
+      });
+    } else {
+      timeIntervalList = createElement("ol", "", {
+        className: "time-interval-list",
+      });
+
+      time_intervals.forEach(({ time_from, time_to }) => {
+        const timeInterval = createElement("li", `${time_from} - ${time_to}`, {
+          className: "time-interval",
+        });
+
+        timeIntervalList.append(timeInterval);
+      });
+    }
+
+    replacementDate.append(day, timeIntervalList, trash);
+    return replacementDate;
+  });
+
+  replacementList.append(...$replacements);
+}
+
 renderAvailability();
+renderReplacements();
