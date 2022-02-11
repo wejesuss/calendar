@@ -79,68 +79,23 @@ const replacements = [
   },
 ];
 
-function createWeekName(index) {
-  const weekName = createElement("h3", mapDayName.get(index), {
-    className: "week-name",
-  });
+function createElement(tag, content, { className = "", id = "" }) {
+  const el = document.createElement(tag);
 
-  return weekName;
-}
-
-function createWeekInputsContainer(index, weekData) {
-  const identifiers = {
-    className: "week-inputs-container",
-    id: `week-${index}`,
-  };
-  const content = weekData.length ? "" : "Indisponível";
-
-  const weekInputsContainer = createElement("div", content, identifiers);
-
-  return weekInputsContainer;
-}
-
-function createInput(name, type, value = "", { className = "", id = "" }) {
-  const input = createElement("input", (content = ""), { className, id });
-  input.setAttribute("name", name);
-  input.setAttribute("type", type);
-  input.value = value;
-
-  return input;
-}
-
-function removeInputContainer(e) {
-  const inputContainer = e.target.parentNode;
-  const weekInputsContainer = inputContainer.parentNode;
-
-  inputContainer.remove();
-  if (weekInputsContainer.children.length < 1) {
-    weekInputsContainer.textContent = "Indisponível";
+  if (className) {
+    el.classList.add(...className.split(" "));
   }
+
+  if (id) {
+    el.id = id;
+  }
+
+  el.innerText = content;
+
+  return el;
 }
 
-function removeReplacementDate(e) {
-  const replacementDate = e.target.parentNode;
-
-  replacementDate.remove();
-}
-
-function createInputContainer(timeFrom, timeTo) {
-  const inputContainer = createElement("div", "", {
-    className: "input-container",
-  });
-  const inputFrom = createInput("week-time-from", "text", timeFrom, {
-    className: "time-from",
-  });
-  const span = createElement("span", "-", {});
-  const inputTo = createInput("week-time-to", "text", timeTo, {
-    className: "time-to",
-  });
-  const trash = createTrash();
-  trash.addEventListener("click", removeInputContainer);
-
-  inputContainer.append(inputFrom, span, inputTo, trash);
-  return inputContainer;
-}
+// listeners
 
 function addInputContainer(e) {
   const week = e.target.parentNode.parentNode;
@@ -164,6 +119,75 @@ function addInputContainer(e) {
   weekInputsContainer.append(inputContainer);
 }
 
+function removeInputContainer(e) {
+  const inputContainer = e.target.parentNode;
+  const weekInputsContainer = inputContainer.parentNode;
+
+  inputContainer.remove();
+  if (weekInputsContainer.children.length < 1) {
+    weekInputsContainer.textContent = "Indisponível";
+  }
+}
+
+function removeReplacementDate(e) {
+  const replacementDate = e.target.parentNode;
+
+  replacementDate.remove();
+}
+
+// decorators
+
+function createWeekName(index) {
+  const weekName = createElement("h3", mapDayName.get(index), {
+    className: "week-name",
+  });
+
+  return weekName;
+}
+
+function createWeekInputsContainer(index, weekData) {
+  const identifiers = {
+    className: "week-inputs-container",
+    id: `week-${index}`,
+  };
+  const content = weekData.length ? "" : "Indisponível";
+
+  const weekInputsContainer = createElement("div", content, identifiers);
+
+  return weekInputsContainer;
+}
+
+function createTrash() {
+  return createElement("div", "trash", { className: "trash" });
+}
+
+function createInput(name, type, value = "", { className = "", id = "" }) {
+  const input = createElement("input", (content = ""), { className, id });
+  input.setAttribute("name", name);
+  input.setAttribute("type", type);
+  input.value = value;
+
+  return input;
+}
+
+function createInputContainer(timeFrom, timeTo) {
+  const inputContainer = createElement("div", "", {
+    className: "input-container",
+  });
+  const inputFrom = createInput("week-time-from", "text", timeFrom, {
+    className: "time-from",
+  });
+  const span = createElement("span", "-", {});
+  const inputTo = createInput("week-time-to", "text", timeTo, {
+    className: "time-to",
+  });
+  const trash = createTrash();
+  trash.addEventListener("click", removeInputContainer);
+
+  inputContainer.append(inputFrom, span, inputTo, trash);
+  return inputContainer;
+}
+
 function createControlMenu() {
   const controlMenu = createElement("div", "", { className: "control-menu" });
   const plus = createElement("div", "+", { className: "plus" });
@@ -175,41 +199,7 @@ function createControlMenu() {
   return controlMenu;
 }
 
-function createElement(tag, content, { className = "", id = "" }) {
-  const el = document.createElement(tag);
-
-  if (className) {
-    el.classList.add(...className.split(" "));
-  }
-
-  if (id) {
-    el.id = id;
-  }
-
-  el.innerText = content;
-
-  return el;
-}
-
-function renderAvailability() {
-  for (let index = 0; index < 7; index++) {
-    const weekData = weeks[index];
-    const week = createElement("div", "", { className: "week" });
-    const weekName = createWeekName(index);
-    const weekInputsContainer = createWeekInputsContainer(index, weekData);
-    const controlMenu = createControlMenu();
-
-    weekData.forEach((timeInterval) => {
-      weekInputsContainer.append(
-        createInputContainer(timeInterval.time_from, timeInterval.time_to)
-      );
-    });
-
-    week.append(weekName, weekInputsContainer, controlMenu);
-
-    daysOfWeek.appendChild(week);
-  }
-}
+// replacements
 
 function createReplacementDate() {
   return createElement("li", "", {
@@ -219,10 +209,6 @@ function createReplacementDate() {
 
 function createReplacementDay(date) {
   return createElement("div", date, { className: "day" });
-}
-
-function createTrash() {
-  return createElement("div", "trash", { className: "trash" });
 }
 
 function createTimeIntervalList(content) {
@@ -261,6 +247,26 @@ function createReplacement(replacement) {
 
   replacementDate.append(day, timeIntervalList, trash);
   return replacementDate;
+}
+
+function renderAvailability() {
+  for (let index = 0; index < 7; index++) {
+    const weekData = weeks[index];
+    const week = createElement("div", "", { className: "week" });
+    const weekName = createWeekName(index);
+    const weekInputsContainer = createWeekInputsContainer(index, weekData);
+    const controlMenu = createControlMenu();
+
+    weekData.forEach((timeInterval) => {
+      weekInputsContainer.append(
+        createInputContainer(timeInterval.time_from, timeInterval.time_to)
+      );
+    });
+
+    week.append(weekName, weekInputsContainer, controlMenu);
+
+    daysOfWeek.appendChild(week);
+  }
 }
 
 function renderReplacements() {
