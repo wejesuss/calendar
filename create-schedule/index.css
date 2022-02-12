@@ -71,12 +71,13 @@ input#activation-interval {
   color: #ffffff;
 }
 
-.select.interval-type {
+.select {
   display: inline-block;
   position: relative;
 }
 
-select#activation-interval-type {
+select#activation-interval-type,
+select#duration {
   width: 14rem;
   height: 3rem;
   border: 1px solid var(--input-border-color);
@@ -84,8 +85,14 @@ select#activation-interval-type {
   appearance: none;
   padding: 0.4rem 2.4rem 0.4rem 0.8rem;
   color: #ffffff;
+  font-family: Roboto;
   font-size: 1.2rem;
   line-height: 1.4rem;
+  letter-spacing: 0.02em;
+}
+
+select#duration {
+  width: 8rem;
 }
 
 span.arrow {
