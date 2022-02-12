@@ -236,36 +236,6 @@ ol.time-interval-list.unavailable {
   color: #b7b7b7;
 }
 
-.sections section button[type="submit"] {
-  margin-top: 16px;
-  width: 80%;
-  height: 30px;
-  background: var(--submit-button-background);
-  border: 1px solid var(--submit-button-border);
-  border-radius: 6px;
-  font-family: Ubuntu;
-  font-weight: bold;
-  text-transform: uppercase;
-  font-size: 1.4rem;
-  text-align: center;
-  letter-spacing: 0.01em;
-  color: var(--submit-button-color);
-  transition: 0.6s;
-}
-
-.sections section button[type="submit"]:hover {
-  background: var(--submit-button-background-hover);
-  border: 1px solid var(--submit-button-border-hover);
-  color: var(--submit-button-color-hover);
-}
-
-.sections section button[type="submit"]:focus {
-  transition: 0.4s;
-  background: var(--submit-button-background-focus);
-  border: 0.5px solid var(--submit-button-border-focus);
-  color: var(--submit-button-color-focus);
-}
-
 /* events */
 
 .event {
@@ -297,4 +267,36 @@ dd {
 dt {
   font-weight: bold;
   color: #ffffff;
+}
+
+/* button submit */
+
+.sections section button[type="submit"] {
+  margin-top: 16px;
+  width: 80%;
+  height: 30px;
+  background: var(--submit-button-background);
+  border: 1px solid var(--submit-button-border);
+  border-radius: 6px;
+  font-family: Ubuntu;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  text-align: center;
+  letter-spacing: 0.01em;
+  color: var(--submit-button-color);
+  transition: 0.6s;
+}
+
+.sections section button[type="submit"]:hover {
+  background: var(--submit-button-background-hover);
+  border: 1px solid var(--submit-button-border-hover);
+  color: var(--submit-button-color-hover);
+}
+
+.sections section button[type="submit"]:focus {
+  transition: 0.4s;
+  background: var(--submit-button-background-focus);
+  border: 0.5px solid var(--submit-button-border-focus);
+  color: var(--submit-button-color-focus);
 }
