@@ -60,6 +60,51 @@ main .sections section:nth-of-type(2) {
   background-color: transparent;
 }
 
+input#activation-interval {
+  border-radius: 4px;
+  margin-right: 8px;
+  max-width: 40px;
+  padding: 4px 0 4px 8px;
+  font-family: Roboto;
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  color: #ffffff;
+}
+
+.select.interval-type {
+  display: inline-block;
+  position: relative;
+}
+
+select#activation-interval-type {
+  width: 14rem;
+  height: 3rem;
+  border: 1px solid var(--input-border-color);
+  background: #454545;
+  appearance: none;
+  padding: 0.4rem 2.4rem 0.4rem 0.8rem;
+  color: #ffffff;
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+}
+
+span.arrow {
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 2.4rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+span.arrow img {
+  width: 16px;
+  margin: auto;
+}
+
 /* availability */
 
 .sections section .week {
