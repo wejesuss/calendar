@@ -270,29 +270,38 @@ function createReplacement(replacementData) {
   return replacementDate;
 }
 
+function createEventDate(eventDate) {
+  return createElement("h3", eventDate, {
+    className: "event-date",
+  });
+}
+
+function createTable() {
+  return createElement("dl", "", {});
+}
+
+function createTableRow(key, data) {
+  const $key = createElement("dt", key, {});
+  const $value = createElement("dd", data, {});
+
+  return { $key, $value };
+}
+
 function createEvent(eventDate, data) {
   const $event = createElement("div", "", { className: "event" });
 
-  const $eventDate = createElement("h3", eventDate, {
-    className: "event-date",
-  });
-  const $table = createElement("dl", "", {});
+  const $eventDate = createEventDate(eventDate);
+  const $table = createTable();
 
-  const name = data.name;
-  const $nameKey = createElement("dt", "Nome:", {});
-  const $nameValue = createElement("dd", name, {});
+  const { name, email, cpf, id } = data;
 
-  const email = data.email;
-  const $emailKey = createElement("dt", "Email:", {});
-  const $emailValue = createElement("dd", email, {});
-
-  const cpf = data.cpf;
-  const $cpfKey = createElement("dt", "CPF:", {});
-  const $cpfValue = createElement("dd", cpf, {});
-
-  const id = data.id;
-  const $idKey = createElement("dt", "ID:", {});
-  const $idValue = createElement("dd", id, {});
+  const { $key: $nameKey, $value: $nameValue } = createTableRow("Nome:", name);
+  const { $key: $emailKey, $value: $emailValue } = createTableRow(
+    "Email:",
+    email
+  );
+  const { $key: $cpfKey, $value: $cpfValue } = createTableRow("CPF:", cpf);
+  const { $key: $idKey, $value: $idValue } = createTableRow("ID:", id);
 
   $table.append(
     $nameKey,
