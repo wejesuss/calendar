@@ -1,5 +1,6 @@
 const daysOfWeek = document.getElementById("days-of-week");
 const inputReplacements = document.getElementById("replacements");
+const eventsList = document.getElementById("events");
 
 const toDayString = () => {
   const mapDayName = new Map();
@@ -78,6 +79,26 @@ const replacements = [
     time_intervals: [],
   },
 ];
+const events = {
+  "25 de Jan, 2022. De 15:15 até 15:30": {
+    name: "Tiago Corona",
+    email: "tiagocorona@example.com",
+    cpf: "111.111.111-11",
+    id: "MTY1NjQ2MTgyMTMx",
+  },
+  "25 de Jan, 2022. De 15:30 até 15:45": {
+    name: "Tiago Corona",
+    email: "tiagocorona@example.com",
+    cpf: "111.111.111-11",
+    id: "MTY1NjQ2MTgyMTMx",
+  },
+  "19 de Fev, 2022. De 09:00 até 09:15": {
+    name: "Tiago Corona 2",
+    email: "tiagocorona2@example.com",
+    cpf: "222.222.222-22",
+    id: "MTY1NjQ2MTgyMTMx",
+  },
+};
 
 function createElement(tag, content, { className = "", id = "" }) {
   const el = document.createElement(tag);
@@ -249,6 +270,45 @@ function createReplacement(replacementData) {
   return replacementDate;
 }
 
+function createEvent(eventDate, data) {
+  const $event = createElement("div", "", { className: "event" });
+
+  const $eventDate = createElement("h3", eventDate, {
+    className: "event-date",
+  });
+  const $table = createElement("dl", "", {});
+
+  const name = data.name;
+  const $nameKey = createElement("dt", "Nome:", {});
+  const $nameValue = createElement("dd", name, {});
+
+  const email = data.email;
+  const $emailKey = createElement("dt", "Email:", {});
+  const $emailValue = createElement("dd", email, {});
+
+  const cpf = data.cpf;
+  const $cpfKey = createElement("dt", "CPF:", {});
+  const $cpfValue = createElement("dd", cpf, {});
+
+  const id = data.id;
+  const $idKey = createElement("dt", "ID:", {});
+  const $idValue = createElement("dd", id, {});
+
+  $table.append(
+    $nameKey,
+    $nameValue,
+    $emailKey,
+    $emailValue,
+    $cpfKey,
+    $cpfValue,
+    $idKey,
+    $idValue
+  );
+  $event.append($eventDate, $table);
+
+  return $event;
+}
+
 function renderAvailability() {
   for (let index = 0; index < 7; index++) {
     const weekData = weeks[index];
@@ -279,5 +339,14 @@ function renderReplacements() {
   replacementList.append(...$replacements);
 }
 
+function renderEvents() {
+  const $events = Object.entries(events).map(([eventDate, data]) => {
+    return createEvent(eventDate, data);
+  });
+
+  eventsList.append(...$events);
+}
+
 renderAvailability();
 renderReplacements();
+renderEvents();
