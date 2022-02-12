@@ -156,6 +156,20 @@ span.arrow img {
   margin: 0 8px 0 4px;
 }
 
+.trash {
+  cursor: pointer;
+}
+
+.sections section .week-inputs-container .trash {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.trash img {
+  pointer-events: none;
+}
+
 .sections section .week .control-menu {
   display: flex;
   align-items: center;

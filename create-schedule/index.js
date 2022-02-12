@@ -179,7 +179,15 @@ function createWeekInputsContainer(index, weekData) {
 }
 
 function createTrash() {
-  return createElement("div", "trash", { className: "trash" });
+  const trash = createElement("div", "", { className: "trash" });
+  const icon = createElement("img", "", {});
+
+  icon.setAttribute("src", "/images/delete.svg");
+  icon.setAttribute("alt", "deletar");
+
+  trash.appendChild(icon);
+
+  return trash;
 }
 
 function createInput(name, type, value = "", { className = "", id = "" }) {
