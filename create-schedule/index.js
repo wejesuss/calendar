@@ -223,8 +223,8 @@ function createTimeInterval(timeFrom, timeTo) {
   });
 }
 
-function createReplacement(replacement) {
-  const { date, time_intervals } = replacement;
+function createReplacement(replacementData) {
+  const { date, time_intervals } = replacementData;
 
   const replacementDate = createReplacementDate();
   const day = createReplacementDay(date);
