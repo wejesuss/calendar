@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criar datas da visita</title>
+    <link rel="stylesheet" href="/base.css" />
+    <link rel="stylesheet" href="/create-schedule/index.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Poppins:wght@400;500&family=Ubuntu:wght@700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <header>
+      <div class="header-container">
+        <h1>Calendar</h1>
+        <nav>
+          <ul>
+            <li><a href="#">Horários</a></li>
+            <li><a href="#">Pagamentos</a></li>
+            <li><a href="#">Wemerson ^</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <form action="#" method="get" id="create-event"></form>
+      <div class="sections">
+        <section>
+          <h2>Criar/Editar evento</h2>
+          <div class="input-container">
+            <label for="activation-interval">Intervalo de ativação:</label>
+            <input
+              type="text"
+              name="activation-interval"
+              id="activation-interval"
+            />
+            <div class="select interval-type">
+              <select
+                name="activation-interval-type"
+                id="activation-interval-type"
+              >
+                <option value="mtf">Meses no futuro</option>
+              </select>
+              <span class="arrow">
+                <img src="/images/arrow-down.svg" alt="seta para baixo" />
+              </span>
+            </div>
+          </div>
+          <div class="input-container">
+            <label for="duration">Duração:</label>
+            <div class="select duration">
+              <select name="duration" id="duration">
+                <option value="15min">15 Min</option>
+                <option value="30min">30 Min</option>
+                <option value="45min">45 Min</option>
+                <option value="60min">60 Min</option>
+              </select>
+              <span class="arrow">
+                <img src="/images/arrow-down.svg" alt="arrow down" />
+              </span>
+            </div>
+          </div>
+          <div class="input-container" id="days-of-week">
+            <label>Disponibilidade:</label>
+          </div>
+          <div class="input-container replacements" id="replacements">
+            <label>Sobreposições:</label>
+            <div class="add-replacement">
+              <button>Adicionar nova data</button>
+            </div>
+            <ol class="replacement-list"></ol>
+          </div>
+
+          <button type="submit">enviar</button>
+        </section>
+        <section>
+          <h2>Eventos</h2>
+          <div class="events" id="events"></div>
+        </section>
+      </div>
+    </main>
+
+    <footer>Todos os direitos reservados &copy;</footer>
+
+    <script src="index.js"></script>
+  </body>
+</html>

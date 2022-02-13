@@ -1,0 +1,312 @@
+main {
+  margin-bottom: 3.2rem;
+}
+
+main .sections {
+  display: grid;
+  grid-template-columns: repeat(12, 7rem);
+  justify-content: center;
+  column-gap: 30px;
+  row-gap: 52px;
+}
+
+main .sections section {
+  background-color: var(--box-color);
+}
+
+main .sections section:nth-of-type(1) {
+  grid-column: 2/7;
+  padding: 1.6rem 0;
+  padding-left: 3.2rem;
+  border-radius: 4px 0 0 4px;
+}
+
+main .sections section:nth-of-type(2) {
+  grid-column: 7/10;
+  margin-left: -30px;
+  padding: 1.6rem 2.4rem;
+  border-radius: 0 4px 4px 0;
+}
+
+/* sections */
+.sections section h2 {
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 2.4rem;
+  font: var(--title-properties);
+  letter-spacing: 0.04em;
+}
+
+.sections section > .input-container {
+  margin: 24px 0;
+}
+
+.sections section .input-container:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+.sections section .input-container label {
+  display: block;
+  margin-bottom: 12px;
+  font-size: 1.4rem;
+}
+
+.sections section .input-container input {
+  height: 30px;
+  padding: 8px 6px;
+  color: var(--text-color);
+  border: 1px solid var(--input-border-color);
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+  background-color: transparent;
+}
+
+input#activation-interval {
+  border-radius: 4px;
+  margin-right: 8px;
+  max-width: 40px;
+  padding: 4px 0 4px 8px;
+  font-family: Roboto;
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  color: #ffffff;
+}
+
+.select {
+  display: inline-block;
+  position: relative;
+}
+
+select#activation-interval-type,
+select#duration {
+  width: 14rem;
+  height: 3rem;
+  border: 1px solid var(--input-border-color);
+  background: #454545;
+  appearance: none;
+  padding: 0.4rem 2.4rem 0.4rem 0.8rem;
+  color: #ffffff;
+  font-family: Roboto;
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  letter-spacing: 0.02em;
+}
+
+select#duration {
+  width: 8rem;
+}
+
+span.arrow {
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 2.4rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+span.arrow img {
+  width: 16px;
+  margin: auto;
+}
+
+/* availability */
+
+.sections section .week {
+  display: flex;
+  margin-bottom: 16px;
+  align-content: center;
+}
+
+.sections section .week-name {
+  align-self: baseline;
+  width: 40px;
+  height: 30px;
+  margin-right: 16px;
+  font: var(--title-properties);
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.sections section .week-inputs-container {
+  min-width: 180px;
+  min-height: 30px;
+  align-self: baseline;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 16px;
+  color: #b7b7b7;
+}
+
+.sections section .week-inputs-container .input-container {
+  display: flex;
+  align-items: center;
+}
+
+.sections section .week-inputs-container input {
+  width: 64px;
+  text-align: center;
+  border-radius: 4px;
+  font-family: Roboto;
+}
+
+.sections section .week-inputs-container .time-from {
+  margin: 0 4px 0 0;
+}
+
+.sections section .week-inputs-container .time-to {
+  margin: 0 8px 0 4px;
+}
+
+.icon {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sections section .week-inputs-container .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon img {
+  pointer-events: none;
+}
+
+.sections section .week .control-menu {
+  display: flex;
+  height: 30px;
+  align-items: center;
+}
+
+.sections section .control-menu .plus,
+.sections section .control-menu .copy {
+  margin-right: 8px;
+  display: flex;
+}
+
+/* replacements */
+
+.sections section .replacements {
+  max-width: 320px;
+}
+
+.sections section .replacements .add-replacement {
+  max-width: 200px;
+}
+
+.sections section .replacements .add-replacement button {
+  width: 100%;
+  padding: 6px 24px;
+  background-color: transparent;
+  border: 1px solid #fafafa;
+  border-radius: 16px;
+  color: #ffffff;
+  font: 700 1.2rem "Ubuntu", sans-serif;
+  transition: all 0.4s;
+}
+
+.sections section .replacements .add-replacement button:hover {
+  color: #b9a00f;
+  border-color: #d8d516;
+}
+
+.sections section .replacement-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 12px;
+}
+
+.sections section .replacement-date {
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #c4c4c4;
+  padding: 10px 0;
+}
+
+.sections section .replacement-date:not(:last-child) {
+  border-bottom: 1px solid #c4c4c4;
+  margin-bottom: 4px;
+}
+
+.sections section .replacement-date .time-interval-list {
+  list-style: none;
+  padding: 0;
+}
+
+.sections section .time-interval-list .time-interval:not(:last-child) {
+  margin-bottom: 4px;
+}
+
+ol.time-interval-list.unavailable {
+  color: #b7b7b7;
+}
+
+/* events */
+
+.event {
+  margin-bottom: 8px;
+  padding: 0.8rem 0 0.8rem 1.6rem;
+  border: 1px solid #c4c4c480;
+}
+
+h3.event-date {
+  margin-bottom: 16px;
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  color: #ffffff;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-row-gap: 8px;
+}
+
+dt,
+dd {
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  color: #ffffffe3;
+}
+
+dt {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+/* button submit */
+
+.sections section button[type="submit"] {
+  margin-top: 16px;
+  width: 80%;
+  height: 30px;
+  background: var(--submit-button-background);
+  border: 1px solid var(--submit-button-border);
+  border-radius: 6px;
+  font-family: Ubuntu;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  text-align: center;
+  letter-spacing: 0.01em;
+  color: var(--submit-button-color);
+  transition: 0.6s;
+}
+
+.sections section button[type="submit"]:hover {
+  background: var(--submit-button-background-hover);
+  border: 1px solid var(--submit-button-border-hover);
+  color: var(--submit-button-color-hover);
+}
+
+.sections section button[type="submit"]:focus {
+  transition: 0.4s;
+  background: var(--submit-button-background-focus);
+  border: 0.5px solid var(--submit-button-border-focus);
+  color: var(--submit-button-color-focus);
+}
