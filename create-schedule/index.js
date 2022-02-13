@@ -183,7 +183,7 @@ function createTrashIcon() {
   const icon = createElement("img", "", {});
 
   icon.setAttribute("src", "/images/delete.svg");
-  icon.setAttribute("alt", "deletar");
+  icon.setAttribute("alt", "Deletar");
 
   trash.appendChild(icon);
 
@@ -204,7 +204,7 @@ function createPlusIcon() {
 }
 
 function createCopyIcon() {
-  const copy = createElement("div", "", { className: "copy" });
+  const copy = createElement("div", "", { className: "copy icon" });
   const icon = createElement("img", "", {});
 
   icon.setAttribute("src", "/images/copy.svg");
