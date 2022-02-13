@@ -118,11 +118,12 @@ span.arrow img {
   display: flex;
   margin-bottom: 16px;
   align-content: center;
-  align-items: baseline;
 }
 
 .sections section .week-name {
+  align-self: baseline;
   width: 40px;
+  height: 30px;
   margin-right: 16px;
   font: var(--title-properties);
   font-size: 1.2rem;
@@ -131,8 +132,12 @@ span.arrow img {
 }
 
 .sections section .week-inputs-container {
+  min-width: 180px;
+  min-height: 30px;
+  align-self: baseline;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   margin-right: 16px;
 }
 
@@ -156,27 +161,29 @@ span.arrow img {
   margin: 0 8px 0 4px;
 }
 
-.trash {
+.icon {
   cursor: pointer;
 }
 
-.sections section .week-inputs-container .trash {
+.sections section .week-inputs-container .icon {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.trash img {
+.icon img {
   pointer-events: none;
 }
 
 .sections section .week .control-menu {
   display: flex;
+  height: 30px;
   align-items: center;
 }
 
 .sections section .control-menu .plus {
   margin-right: 8px;
+  display: flex;
 }
 
 /* replacements */

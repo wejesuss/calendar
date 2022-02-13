@@ -178,8 +178,8 @@ function createWeekInputsContainer(index, weekData) {
   return weekInputsContainer;
 }
 
-function createTrash() {
-  const trash = createElement("div", "", { className: "trash" });
+function createTrashIcon() {
+  const trash = createElement("div", "", { className: "trash icon" });
   const icon = createElement("img", "", {});
 
   icon.setAttribute("src", "/images/delete.svg");
@@ -188,6 +188,19 @@ function createTrash() {
   trash.appendChild(icon);
 
   return trash;
+}
+
+function createPlusIcon() {
+  const plus = createElement("div", "", { className: "plus icon" });
+  const icon = createElement("img", "", {});
+
+  icon.setAttribute("src", "/images/plus.svg");
+  icon.setAttribute("alt", "Adicionar");
+
+  plus.appendChild(icon);
+  plus.addEventListener("click", addInputContainer);
+
+  return plus;
 }
 
 function createInput(name, type, value = "", { className = "", id = "" }) {
@@ -210,7 +223,7 @@ function createInputContainer(timeFrom, timeTo) {
   const inputTo = createInput("week-time-to", "text", timeTo, {
     className: "time-to",
   });
-  const trash = createTrash();
+  const trash = createTrashIcon();
   trash.addEventListener("click", removeInputContainer);
 
   inputContainer.append(inputFrom, span, inputTo, trash);
@@ -219,10 +232,8 @@ function createInputContainer(timeFrom, timeTo) {
 
 function createControlMenu() {
   const controlMenu = createElement("div", "", { className: "control-menu" });
-  const plus = createElement("div", "+", { className: "plus" });
   const copy = createElement("div", "©", { className: "copy" });
-
-  plus.addEventListener("click", addInputContainer);
+  const plus = createPlusIcon();
 
   controlMenu.append(plus, copy);
   return controlMenu;
@@ -257,7 +268,7 @@ function createReplacement(replacementData) {
 
   const replacementDate = createReplacementDate();
   const day = createReplacementDay(date);
-  const trash = createTrash();
+  const trash = createTrashIcon();
   let timeIntervalList;
 
   if (!time_intervals || time_intervals.length === 0) {
