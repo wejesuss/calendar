@@ -139,6 +139,7 @@ span.arrow img {
   flex-direction: column;
   justify-content: center;
   margin-right: 16px;
+  color: #b7b7b7;
 }
 
 .sections section .week-inputs-container .input-container {
@@ -163,6 +164,7 @@ span.arrow img {
 
 .icon {
   cursor: pointer;
+  user-select: none;
 }
 
 .sections section .week-inputs-container .icon {
