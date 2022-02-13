@@ -203,6 +203,18 @@ function createPlusIcon() {
   return plus;
 }
 
+function createCopyIcon() {
+  const copy = createElement("div", "", { className: "copy" });
+  const icon = createElement("img", "", {});
+
+  icon.setAttribute("src", "/images/copy.svg");
+  icon.setAttribute("alt", "Copiar");
+
+  copy.appendChild(icon);
+
+  return copy;
+}
+
 function createInput(name, type, value = "", { className = "", id = "" }) {
   const input = createElement("input", (content = ""), { className, id });
   input.setAttribute("name", name);
@@ -232,8 +244,8 @@ function createInputContainer(timeFrom, timeTo) {
 
 function createControlMenu() {
   const controlMenu = createElement("div", "", { className: "control-menu" });
-  const copy = createElement("div", "©", { className: "copy" });
   const plus = createPlusIcon();
+  const copy = createCopyIcon();
 
   controlMenu.append(plus, copy);
   return controlMenu;

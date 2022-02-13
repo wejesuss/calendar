@@ -181,7 +181,8 @@ span.arrow img {
   align-items: center;
 }
 
-.sections section .control-menu .plus {
+.sections section .control-menu .plus,
+.sections section .control-menu .copy {
   margin-right: 8px;
   display: flex;
 }
