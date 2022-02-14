@@ -48,7 +48,7 @@ main .sections section:nth-of-type(1) {
 dl {
   display: grid;
   grid-template-columns: auto auto;
-  row-gap: 8px;
+  row-gap: 4px;
 }
 
 dl.event {
