@@ -1,0 +1,114 @@
+main {
+  margin-bottom: 3.2rem;
+}
+
+main .sections {
+  display: grid;
+  grid-template-columns: repeat(12, 7rem);
+  justify-content: center;
+  column-gap: 30px;
+  row-gap: 52px;
+}
+
+main .sections section {
+  background-color: var(--box-color);
+}
+
+main .sections section:nth-of-type(1) {
+  grid-column: 4/9;
+  padding: 1.6rem 0;
+  margin: auto -1.5rem;
+  border-radius: 4px;
+}
+
+/* sections */
+.sections section h2 {
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 2.4rem;
+  font: var(--title-properties);
+  letter-spacing: 0.04em;
+}
+
+.payment {
+  padding: 0.8rem 0.8rem 0.8rem 1.6rem;
+  border: 1px solid #c4c4c480;
+  width: 38rem;
+  margin: 0 auto 0.8rem;
+  box-shadow: 1px 2px 4px 0px #585858;
+}
+
+.payment-data {
+  display: grid;
+  column-gap: 8px;
+  grid-template-columns: auto 1px 1fr;
+  margin-bottom: 8px;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: auto auto;
+  row-gap: 4px;
+  column-gap: 8px;
+  justify-content: start;
+}
+
+dl.event {
+  grid-template-columns: 1fr auto;
+}
+
+dl.status .incomplete {
+  color: #fd7070;
+}
+
+dl.status .complete {
+  color: #4ef913;
+}
+
+dt,
+dd {
+  font-size: 1.2rem;
+  line-height: 1.4rem;
+  color: #ffffffe3;
+}
+
+dt {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+span.vertical-line {
+  height: 100%;
+  border: 1px solid #a9a9a9;
+}
+
+.sections section button[type="submit"] {
+  width: 16rem;
+  transition: 0.6s;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 0.4rem 0;
+  line-height: 1.4rem;
+  letter-spacing: 0.01em;
+  font-weight: bold;
+  font-size: 1.2rem;
+  font-family: Roboto;
+  color: #ffffff;
+  box-shadow: 0px 2px 4px rgb(0 0 0 / 25%);
+  border: 1px solid #c4c4c4;
+  border-radius: 8rem;
+  background: transparent;
+}
+
+.sections section button[type="submit"]:hover {
+  background: #e7770f;
+  border: 1px solid #c9c9c9;
+  color: #f1f1f1;
+}
+
+.sections section button[type="submit"]:focus {
+  outline: none;
+  background: #d8700f;
+  border: 1px solid #adadad;
+  color: #fafafa;
+}
