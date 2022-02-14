@@ -34,6 +34,38 @@
       <div class="sections">
         <section>
           <h2>Pagamentos</h2>
+          <div class="payments">
+            <div class="payment">
+              <div class="payment-data">
+                <dl class="event">
+                  <dt>Data:</dt>
+                  <dd>25 de Jan, 2022. De 15:15 até 15:30</dd>
+                  <dt>Nome:</dt>
+                  <dd>Tiago corona</dd>
+                  <dt>Email:</dt>
+                  <dd>tiagocorona@example.com</dd>
+                  <dt>CPF:</dt>
+                  <dd>111.111.111-11</dd>
+                  <dt>Valor:</dt>
+                  <dd>R$ 120,00</dd>
+                  <dt>ID:</dt>
+                  <dd>MTY1NjQ2MTgyMTMx</dd>
+                </dl>
+                <span class="vertical-line"></span>
+                <dl class="status">
+                  <dt>Status:</dt>
+                  <dd class="incomplete">Não pago</dd>
+                </dl>
+              </div>
+
+              <div class="form">
+                <form action="/payments" method="get">
+                  <input type="hidden" name="id" id="payment-id" />
+                  <button type="submit">Aprovar Pagamento</button>
+                </form>
+              </div>
+            </div>
+          </div>
         </section>
       </div>
     </main>
