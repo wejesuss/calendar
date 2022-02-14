@@ -264,7 +264,7 @@ h3.event-date {
 dl {
   display: grid;
   grid-template-columns: auto auto;
-  grid-row-gap: 8px;
+  row-gap: 8px;
 }
 
 dt,
