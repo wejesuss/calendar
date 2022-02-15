@@ -87,15 +87,20 @@ main .sections section:nth-of-type(3) {
 .sections section:nth-child(2) .date-month-year .picker {
   font-size: 2rem;
   user-select: none;
+  display: flex;
+}
+
+.sections section:nth-child(2) .date-month-year .picker i img {
+  width: 1.8rem;
 }
 
 .sections section:nth-child(2) .date-month-year .picker i:first-child {
-  margin-right: 16px;
+  margin-right: 8px;
 }
 
 .sections section:nth-child(2) .date-month-year[data-index="0"] i:first-child,
 .sections section:nth-child(2) .date-month-year[data-index="2"] i:last-child {
-  color: #a1a1a1;
+  filter: brightness(0.5);
 }
 
 .sections section:nth-child(2) .date-days {
@@ -178,8 +183,10 @@ main .sections section:nth-of-type(3) {
 }
 
 .sections section:nth-child(3) .input-container .photo-upload label {
+  position: relative;
   display: inline-block;
   margin-bottom: 0;
+  padding-right: 16px;
   width: 13rem;
   height: 3rem;
   background: var(--upload-file-background);
@@ -194,10 +201,32 @@ main .sections section:nth-of-type(3) {
   transition: 1s;
 }
 
+.sections section:nth-child(3) .input-container .photo-upload label::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(-4px, -50%);
+  width: 50%;
+  height: 50%;
+  background-image: url("/images/upload.svg");
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: contain;
+}
+
 .sections section:nth-child(3) .input-container .photo-upload label:hover {
   background: var(--upload-file-background-hover);
   border: 1px solid var(--upload-file-border-hover);
   color: var(--upload-file-text-color-hover);
+}
+
+.sections
+  section:nth-child(3)
+  .input-container
+  .photo-upload
+  label:hover::after {
+  filter: brightness(0.9);
 }
 
 .sections section:nth-child(3) .input-container input {

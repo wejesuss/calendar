@@ -24,7 +24,7 @@
           <ul>
             <li><a href="#">Marcar Sessão</a></li>
             <li><a href="#">Verificar Sessão</a></li>
-            <li><a href="#">Wemerson ^</a></li>
+            <li><a href="#">Wemerson</a></li>
           </ul>
         </nav>
       </div>
@@ -67,8 +67,8 @@
             <div class="date-month-year" data-index="0">
               <h3>Dezembro de 2021</h3>
               <div class="picker">
-                <i>^</i>
-                <i>^</i>
+                <i><img src="/images/arrow-up.svg" alt="seta pra cima" /></i>
+                <i><img src="/images/arrow-down.svg" alt="seta pra baixo" /></i>
               </div>
             </div>
             <div class="date-days">
@@ -239,8 +239,14 @@
           <div class="input-container">
             <label for="file">Envie uma imagem para nós</label>
             <div class="photo-upload">
-              <label for="file">Selecione a imagem ^</label>
-              <input type="file" name="file" id="file" form="create-session" />
+              <label for="file">Selecione a imagem</label>
+              <input
+                type="file"
+                name="file"
+                accept="image/*"
+                id="file"
+                form="create-session"
+              />
             </div>
           </div>
           <button type="submit" form="create-session">Marcar Sessão</button>
