@@ -239,8 +239,14 @@
           <div class="input-container">
             <label for="file">Envie uma imagem para nós</label>
             <div class="photo-upload">
-              <input type="file" name="file" id="file" form="create-session" />
               <label for="file">Selecione a imagem</label>
+              <input
+                type="file"
+                name="file"
+                accept="image/*"
+                id="file"
+                form="create-session"
+              />
             </div>
           </div>
           <button type="submit" form="create-session">Marcar Sessão</button>
