@@ -87,15 +87,20 @@ main .sections section:nth-of-type(3) {
 .sections section:nth-child(2) .date-month-year .picker {
   font-size: 2rem;
   user-select: none;
+  display: flex;
+}
+
+.sections section:nth-child(2) .date-month-year .picker i img {
+  width: 1.8rem;
 }
 
 .sections section:nth-child(2) .date-month-year .picker i:first-child {
-  margin-right: 16px;
+  margin-right: 8px;
 }
 
 .sections section:nth-child(2) .date-month-year[data-index="0"] i:first-child,
 .sections section:nth-child(2) .date-month-year[data-index="2"] i:last-child {
-  color: #a1a1a1;
+  filter: brightness(0.5);
 }
 
 .sections section:nth-child(2) .date-days {
