@@ -1,4 +1,4 @@
-import { EmailValidator } from './create-session-protocols'
+import { HttpRequest, EmailValidator } from './create-session-protocols'
 
 export class CreateSessionController {
   private readonly emailValidator: EmailValidator
@@ -7,7 +7,7 @@ export class CreateSessionController {
     this.emailValidator = emailValidator
   }
 
-  async handle (httpRequest: any): Promise<any> {
+  async handle (httpRequest: HttpRequest): Promise<any> {
     const { email } = httpRequest.body
 
     this.emailValidator.isValid(email)
