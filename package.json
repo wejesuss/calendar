@@ -4,7 +4,7 @@
   "description": "Calendar",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "sucrase-node src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,23 @@
   "bugs": {
     "url": "https://github.com/wejesuss/calendar/issues"
   },
-  "homepage": "https://github.com/wejesuss/calendar#readme"
+  "homepage": "https://github.com/wejesuss/calendar#readme",
+  "devDependencies": {
+    "@types/jest": "^27.0.3",
+    "@types/node": "^16.11.11",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard-with-typescript": "^21.0.1",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "git-commit-msg-linter": "^3.2.8",
+    "husky": "^7.0.4",
+    "jest": "^27.4.3",
+    "lint-staged": "^12.1.2",
+    "sucrase": "^3.20.3",
+    "supertest": "^6.1.6",
+    "ts-jest": "^27.0.7",
+    "typescript": "^4.5.2"
+  }
 }
