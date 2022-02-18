@@ -1,5 +1,5 @@
 import { CreateSessionController } from './create-session'
-import { EmailValidator } from '../../protocols/email-validator'
+import { EmailValidator } from './create-session-protocols'
 
 const makeFakeHttpRequest = (email: string): any => ({
   body: {

@@ -1,4 +1,4 @@
-import { EmailValidator } from '../../protocols/email-validator'
+import { EmailValidator } from './create-session-protocols'
 
 export class CreateSessionController {
   private readonly emailValidator: EmailValidator
