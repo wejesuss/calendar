@@ -1,7 +1,13 @@
 import { CreateSessionController } from './create-session'
 import { EmailValidator } from '../../protocols/email-validator'
 
-function makeEmailValidatorStub (): EmailValidator {
+const makeFakeHttpRequest = (email: string): any => ({
+  body: {
+    email
+  }
+})
+
+const makeEmailValidatorStub = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
     isValid (email: string): boolean {
       return true
@@ -28,12 +34,10 @@ describe('Create Session Controller', () => {
     const { sut, emailValidatorStub } = makeSut()
     const emailValidatorSpy = jest.spyOn(emailValidatorStub, 'isValid')
 
-    await sut.handle({
-      body: {
-        email: 'any_email'
-      }
-    })
+    const email = 'any_email'
+    const httpRequest = makeFakeHttpRequest(email)
+    await sut.handle(httpRequest)
 
-    expect(emailValidatorSpy).toHaveBeenCalledWith('any_email')
+    expect(emailValidatorSpy).toHaveBeenCalledWith(email)
   })
 })
