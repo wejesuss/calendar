@@ -50,6 +50,19 @@ describe('Create Session Controller', () => {
     expect(httpResponse).toEqual(badRequest(new MissingParamError('name')))
   })
 
+  test('Should return 400 if name is not a string', async () => {
+    const { sut } = makeSut()
+
+    const httpResponse = await sut.handle({
+      body: {
+        name: 42,
+        email: 'any_email'
+      }
+    })
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('name')))
+  })
+
   test('Should return 400 if no email is provided', async () => {
     const { sut } = makeSut()
 
