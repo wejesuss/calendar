@@ -1,5 +1,12 @@
 import { CreateSessionController } from './create-session'
-import { HttpRequest, EmailValidator, InvalidParamError, MissingParamError, badRequest } from './create-session-protocols'
+import {
+  HttpRequest,
+  EmailValidator,
+  InvalidParamError,
+  MissingParamError,
+  badRequest,
+  internalServerError
+} from './create-session-protocols'
 
 const makeFakeHttpRequest = (email: string): HttpRequest => ({
   body: {
@@ -58,5 +65,18 @@ describe('Create Session Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')))
+  })
+
+  test('Should return 500 if EmailValidator throws', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const email = 'any_email'
+    const httpRequest = makeFakeHttpRequest(email)
+    const promise = sut.handle(httpRequest)
+
+    await expect(promise).resolves.toEqual(internalServerError(new Error()))
   })
 })
