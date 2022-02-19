@@ -38,6 +38,18 @@ const makeSut = (): SutTypes => {
 }
 
 describe('Create Session Controller', () => {
+  test('Should return 400 if no name is provided', async () => {
+    const { sut } = makeSut()
+
+    const httpResponse = await sut.handle({
+      body: {
+        email: 'any_email'
+      }
+    })
+
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('name')))
+  })
+
   test('Should return 400 if no email is provided', async () => {
     const { sut } = makeSut()
 
