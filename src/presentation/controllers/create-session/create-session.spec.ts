@@ -40,4 +40,18 @@ describe('Create Session Controller', () => {
 
     expect(emailValidatorSpy).toHaveBeenCalledWith(email)
   })
+
+  test('Should return 400 if EmailValidator returns false', async () => {
+    const { sut, emailValidatorStub } = makeSut()
+    jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
+
+    const email = 'any_email'
+    const httpRequest = makeFakeHttpRequest(email)
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual({
+      statusCode: 400,
+      body: new Error('Invalid Param: email')
+    })
+  })
 })
