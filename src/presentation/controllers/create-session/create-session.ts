@@ -18,7 +18,11 @@ export class CreateSessionController {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { email } = httpRequest.body
+      const { name, email } = httpRequest.body
+
+      if (!name) {
+        return badRequest(new MissingParamError('name'))
+      }
 
       if (!email) {
         return badRequest(new MissingParamError('email'))
