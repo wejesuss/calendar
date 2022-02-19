@@ -1,4 +1,4 @@
-import { HttpRequest, HttpResponse, EmailValidator, MissingParamError, InvalidParamError } from './create-session-protocols'
+import { HttpRequest, HttpResponse, EmailValidator, MissingParamError, InvalidParamError, badRequest } from './create-session-protocols'
 
 export class CreateSessionController {
   private readonly emailValidator: EmailValidator
@@ -11,18 +11,12 @@ export class CreateSessionController {
     const { email } = httpRequest.body
 
     if (!email) {
-      return {
-        statusCode: 400,
-        body: new MissingParamError('email')
-      }
+      return badRequest(new MissingParamError('email'))
     }
 
     const isFileValid = this.emailValidator.isValid(email)
     if (!isFileValid) {
-      return {
-        statusCode: 400,
-        body: new InvalidParamError('email')
-      }
+      return badRequest(new InvalidParamError('email'))
     }
   }
 }

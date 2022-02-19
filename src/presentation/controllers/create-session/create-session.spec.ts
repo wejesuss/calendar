@@ -1,5 +1,5 @@
 import { CreateSessionController } from './create-session'
-import { HttpRequest, EmailValidator, InvalidParamError, MissingParamError } from './create-session-protocols'
+import { HttpRequest, EmailValidator, InvalidParamError, MissingParamError, badRequest } from './create-session-protocols'
 
 const makeFakeHttpRequest = (email: string): HttpRequest => ({
   body: {
@@ -35,10 +35,7 @@ describe('Create Session Controller', () => {
 
     const httpResponse = await sut.handle({ body: {} })
 
-    expect(httpResponse).toEqual({
-      statusCode: 400,
-      body: new MissingParamError('email')
-    })
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('email')))
   })
 
   test('Should call EmailValidator with correct value', async () => {
@@ -60,9 +57,6 @@ describe('Create Session Controller', () => {
     const httpRequest = makeFakeHttpRequest(email)
     const httpResponse = await sut.handle(httpRequest)
 
-    expect(httpResponse).toEqual({
-      statusCode: 400,
-      body: new InvalidParamError('email')
-    })
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')))
   })
 })
