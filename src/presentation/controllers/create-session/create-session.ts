@@ -10,6 +10,12 @@ export class CreateSessionController {
   async handle (httpRequest: HttpRequest): Promise<any> {
     const { email } = httpRequest.body
 
-    this.emailValidator.isValid(email)
+    const isFileValid = this.emailValidator.isValid(email)
+    if (!isFileValid) {
+      return {
+        statusCode: 400,
+        body: new Error('Invalid Param: email')
+      }
+    }
   }
 }
