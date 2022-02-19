@@ -30,6 +30,17 @@ const makeSut = (): SutTypes => {
 }
 
 describe('Create Session Controller', () => {
+  test('Should return 400 if no email is provided', async () => {
+    const { sut } = makeSut()
+
+    const httpResponse = await sut.handle({ body: {} })
+
+    expect(httpResponse).toEqual({
+      statusCode: 400,
+      body: new Error('Missing Param: email')
+    })
+  })
+
   test('Should call EmailValidator with correct value', async () => {
     const { sut, emailValidatorStub } = makeSut()
     const emailValidatorSpy = jest.spyOn(emailValidatorStub, 'isValid')
