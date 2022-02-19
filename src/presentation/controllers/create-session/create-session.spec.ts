@@ -1,5 +1,5 @@
 import { CreateSessionController } from './create-session'
-import { HttpRequest, EmailValidator } from './create-session-protocols'
+import { HttpRequest, EmailValidator, InvalidParamError, MissingParamError } from './create-session-protocols'
 
 const makeFakeHttpRequest = (email: string): HttpRequest => ({
   body: {
@@ -37,7 +37,7 @@ describe('Create Session Controller', () => {
 
     expect(httpResponse).toEqual({
       statusCode: 400,
-      body: new Error('Missing Param: email')
+      body: new MissingParamError('email')
     })
   })
 
@@ -62,7 +62,7 @@ describe('Create Session Controller', () => {
 
     expect(httpResponse).toEqual({
       statusCode: 400,
-      body: new Error('Invalid Param: email')
+      body: new InvalidParamError('email')
     })
   })
 })
