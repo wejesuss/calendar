@@ -1,4 +1,13 @@
-import { HttpRequest, HttpResponse, EmailValidator, MissingParamError, InvalidParamError, badRequest } from './create-session-protocols'
+import {
+  HttpRequest,
+  HttpResponse,
+  EmailValidator,
+  MissingParamError,
+  InvalidParamError,
+  badRequest,
+  internalServerError,
+  ServerError
+} from './create-session-protocols'
 
 export class CreateSessionController {
   private readonly emailValidator: EmailValidator
@@ -8,15 +17,19 @@ export class CreateSessionController {
   }
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    const { email } = httpRequest.body
+    try {
+      const { email } = httpRequest.body
 
-    if (!email) {
-      return badRequest(new MissingParamError('email'))
-    }
+      if (!email) {
+        return badRequest(new MissingParamError('email'))
+      }
 
-    const isFileValid = this.emailValidator.isValid(email)
-    if (!isFileValid) {
-      return badRequest(new InvalidParamError('email'))
+      const isFileValid = this.emailValidator.isValid(email)
+      if (!isFileValid) {
+        return badRequest(new InvalidParamError('email'))
+      }
+    } catch (error) {
+      return internalServerError(new ServerError(error.stack))
     }
   }
 }

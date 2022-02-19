@@ -1,4 +1,4 @@
-export { MissingParamError, InvalidParamError } from '../../errors'
+export { MissingParamError, InvalidParamError, ServerError } from '../../errors'
 export { HttpRequest, HttpResponse } from '../../protocols/http'
 export { EmailValidator } from '../../protocols/email-validator'
-export { badRequest } from '../../helpers/http-helper'
+export { badRequest, internalServerError } from '../../helpers/http-helper'
