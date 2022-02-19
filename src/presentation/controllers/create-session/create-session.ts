@@ -28,6 +28,10 @@ export class CreateSessionController {
         return badRequest(new MissingParamError('email'))
       }
 
+      if (typeof name !== 'string') {
+        return badRequest(new InvalidParamError('name'))
+      }
+
       const isFileValid = this.emailValidator.isValid(email)
       if (!isFileValid) {
         return badRequest(new InvalidParamError('email'))
