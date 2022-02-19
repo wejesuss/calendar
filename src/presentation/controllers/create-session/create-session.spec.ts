@@ -8,9 +8,10 @@ import {
   internalServerError
 } from './create-session-protocols'
 
-const makeFakeHttpRequest = (email: string): HttpRequest => ({
+const makeFakeHttpRequest = (): HttpRequest => ({
   body: {
-    email
+    name: 'any name',
+    email: 'any_email'
   }
 })
 
@@ -40,7 +41,11 @@ describe('Create Session Controller', () => {
   test('Should return 400 if no email is provided', async () => {
     const { sut } = makeSut()
 
-    const httpResponse = await sut.handle({ body: {} })
+    const httpResponse = await sut.handle({
+      body: {
+        name: 'any name'
+      }
+    })
 
     expect(httpResponse).toEqual(badRequest(new MissingParamError('email')))
   })
@@ -49,19 +54,17 @@ describe('Create Session Controller', () => {
     const { sut, emailValidatorStub } = makeSut()
     const emailValidatorSpy = jest.spyOn(emailValidatorStub, 'isValid')
 
-    const email = 'any_email'
-    const httpRequest = makeFakeHttpRequest(email)
+    const httpRequest = makeFakeHttpRequest()
     await sut.handle(httpRequest)
 
-    expect(emailValidatorSpy).toHaveBeenCalledWith(email)
+    expect(emailValidatorSpy).toHaveBeenCalledWith('any_email')
   })
 
   test('Should return 400 if EmailValidator returns false', async () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
 
-    const email = 'any_email'
-    const httpRequest = makeFakeHttpRequest(email)
+    const httpRequest = makeFakeHttpRequest()
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('email')))
@@ -73,8 +76,7 @@ describe('Create Session Controller', () => {
       throw new Error()
     })
 
-    const email = 'any_email'
-    const httpRequest = makeFakeHttpRequest(email)
+    const httpRequest = makeFakeHttpRequest()
     const promise = sut.handle(httpRequest)
 
     await expect(promise).resolves.toEqual(internalServerError(new Error()))
