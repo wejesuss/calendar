@@ -22,17 +22,12 @@ export class CreateSessionController {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const { name, email, phone } = httpRequest.body
+      const requiredFields = ['name', 'email', 'phone']
 
-      if (!name) {
-        return badRequest(new MissingParamError('name'))
-      }
-
-      if (!email) {
-        return badRequest(new MissingParamError('email'))
-      }
-
-      if (!phone) {
-        return badRequest(new MissingParamError('phone'))
+      for (const field of requiredFields) {
+        if (!httpRequest.body[field]) {
+          return badRequest(new MissingParamError(field))
+        }
       }
 
       if (typeof name !== 'string') {
