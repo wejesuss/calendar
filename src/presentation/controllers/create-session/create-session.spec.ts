@@ -246,4 +246,17 @@ describe('Create Session Controller', () => {
 
     expect(httpResponse).toEqual(badRequest(new MissingParamError('description')))
   })
+
+  test('Should return 400 if description is not a string', async () => {
+    const { sut } = makeSut()
+
+    const httpRequest = makeFakeHttpRequest()
+    httpRequest.body = {
+      ...httpRequest.body,
+      description: 42
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('description')))
+  })
 })
