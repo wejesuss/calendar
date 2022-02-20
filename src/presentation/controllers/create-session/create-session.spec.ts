@@ -218,4 +218,16 @@ describe('Create Session Controller', () => {
 
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('cpf')))
   })
+
+  test('Should return 500 if CPFValidator throws', async () => {
+    const { sut, cpfValidatorStub } = makeSut()
+    jest.spyOn(cpfValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const httpRequest = makeFakeHttpRequest()
+    const promise = sut.handle(httpRequest)
+
+    await expect(promise).resolves.toEqual(internalServerError(new Error()))
+  })
 })
