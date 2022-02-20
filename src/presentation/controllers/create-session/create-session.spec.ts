@@ -3,10 +3,11 @@ import {
   HttpRequest,
   EmailValidator,
   PhoneValidator,
+  CPFValidator,
   InvalidParamError,
   MissingParamError,
-  badRequest,
-  internalServerError
+  internalServerError,
+  badRequest
 } from './create-session-protocols'
 
 const makeFakeHttpRequest = (body?: any): HttpRequest => ({
@@ -38,18 +39,35 @@ const makePhoneValidatorStub = (): PhoneValidator => {
   return new PhoneValidatorStub()
 }
 
+const makeCPFValidatorStub = (): CPFValidator => {
+  class CPFValidatorStub implements CPFValidator {
+    isValid (cpf: string): boolean {
+      return true
+    }
+  }
+
+  return new CPFValidatorStub()
+}
+
 interface SutTypes {
   sut: CreateSessionController
   emailValidatorStub: EmailValidator
   phoneValidatorStub: PhoneValidator
+  cpfValidatorStub: CPFValidator
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidatorStub()
   const phoneValidatorStub = makePhoneValidatorStub()
-  const sut = new CreateSessionController(emailValidatorStub, phoneValidatorStub)
+  const cpfValidatorStub = makeCPFValidatorStub()
+  const sut = new CreateSessionController(emailValidatorStub, phoneValidatorStub, cpfValidatorStub)
 
-  return { sut, emailValidatorStub, phoneValidatorStub }
+  return {
+    sut,
+    emailValidatorStub,
+    phoneValidatorStub,
+    cpfValidatorStub
+  }
 }
 
 describe('Create Session Controller', () => {
@@ -179,5 +197,15 @@ describe('Create Session Controller', () => {
     })
 
     expect(httpResponse).toEqual(badRequest(new MissingParamError('cpf')))
+  })
+
+  test('Should call CPFValidator with correct value', async () => {
+    const { sut, cpfValidatorStub } = makeSut()
+    const cpfValidatorSpy = jest.spyOn(cpfValidatorStub, 'isValid')
+
+    const httpRequest = makeFakeHttpRequest()
+    await sut.handle(httpRequest)
+
+    expect(cpfValidatorSpy).toHaveBeenCalledWith('any_cpf')
   })
 })
