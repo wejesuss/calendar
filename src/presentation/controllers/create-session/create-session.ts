@@ -47,7 +47,10 @@ export class CreateSessionController {
         return badRequest(new InvalidParamError('phone'))
       }
 
-      this.cpfValidator.isValid(cpf)
+      const isCPFValid = this.cpfValidator.isValid(cpf)
+      if (!isCPFValid) {
+        return badRequest(new InvalidParamError('cpf'))
+      }
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
     }
