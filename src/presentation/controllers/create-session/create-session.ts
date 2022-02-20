@@ -39,8 +39,8 @@ export class CreateSessionController {
         return badRequest(new InvalidParamError('name'))
       }
 
-      const isFileValid = this.emailValidator.isValid(email)
-      if (!isFileValid) {
+      const isEmailValid = this.emailValidator.isValid(email)
+      if (!isEmailValid) {
         return badRequest(new InvalidParamError('email'))
       }
 
