@@ -2,6 +2,7 @@ import { CreateSessionController } from './create-session'
 import {
   HttpRequest,
   EmailValidator,
+  PhoneValidator,
   InvalidParamError,
   MissingParamError,
   badRequest,
@@ -26,16 +27,28 @@ const makeEmailValidatorStub = (): EmailValidator => {
   return new EmailValidatorStub()
 }
 
+const makePhoneValidatorStub = (): PhoneValidator => {
+  class PhoneValidatorStub implements PhoneValidator {
+    isValid (phone: string): boolean {
+      return true
+    }
+  }
+
+  return new PhoneValidatorStub()
+}
+
 interface SutTypes {
   sut: CreateSessionController
   emailValidatorStub: EmailValidator
+  phoneValidatorStub: PhoneValidator
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidatorStub()
-  const sut = new CreateSessionController(emailValidatorStub)
+  const phoneValidatorStub = makePhoneValidatorStub()
+  const sut = new CreateSessionController(emailValidatorStub, phoneValidatorStub)
 
-  return { sut, emailValidatorStub }
+  return { sut, emailValidatorStub, phoneValidatorStub }
 }
 
 describe('Create Session Controller', () => {
@@ -120,5 +133,15 @@ describe('Create Session Controller', () => {
     })
 
     expect(httpResponse).toEqual(badRequest(new MissingParamError('phone')))
+  })
+
+  test('Should call PhoneValidator with correct value', async () => {
+    const { sut, phoneValidatorStub } = makeSut()
+    const phoneValidatorSpy = jest.spyOn(phoneValidatorStub, 'isValid')
+
+    const httpRequest = makeFakeHttpRequest()
+    await sut.handle(httpRequest)
+
+    expect(phoneValidatorSpy).toHaveBeenCalledWith('any_phone')
   })
 })
