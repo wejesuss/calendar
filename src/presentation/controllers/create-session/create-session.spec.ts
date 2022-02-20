@@ -144,4 +144,14 @@ describe('Create Session Controller', () => {
 
     expect(phoneValidatorSpy).toHaveBeenCalledWith('any_phone')
   })
+
+  test('Should return 400 if PhoneValidator returns false', async () => {
+    const { sut, phoneValidatorStub } = makeSut()
+    jest.spyOn(phoneValidatorStub, 'isValid').mockReturnValueOnce(false)
+
+    const httpRequest = makeFakeHttpRequest()
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('phone')))
+  })
 })
