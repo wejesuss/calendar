@@ -44,7 +44,10 @@ export class CreateSessionController {
         return badRequest(new InvalidParamError('email'))
       }
 
-      this.phoneValidator.isValid(phone)
+      const isPhoneValid = this.phoneValidator.isValid(phone)
+      if (!isPhoneValid) {
+        return badRequest(new InvalidParamError('phone'))
+      }
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
     }
