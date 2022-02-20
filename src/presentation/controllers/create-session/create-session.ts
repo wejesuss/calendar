@@ -25,7 +25,7 @@ export class CreateSessionController {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const { name, email, phone, cpf } = httpRequest.body
-      const requiredFields = ['name', 'email', 'phone', 'cpf']
+      const requiredFields = ['name', 'email', 'phone', 'cpf', 'description']
 
       for (const field of requiredFields) {
         if (!httpRequest.body[field]) {
