@@ -6,14 +6,17 @@ import {
   InvalidParamError,
   badRequest,
   internalServerError,
-  ServerError
+  ServerError,
+  PhoneValidator
 } from './create-session-protocols'
 
 export class CreateSessionController {
   private readonly emailValidator: EmailValidator
+  private readonly phoneValidator: PhoneValidator
 
-  constructor (emailValidator: EmailValidator) {
+  constructor (emailValidator: EmailValidator, phoneValidator: PhoneValidator) {
     this.emailValidator = emailValidator
+    this.phoneValidator = phoneValidator
   }
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -40,6 +43,8 @@ export class CreateSessionController {
       if (!isFileValid) {
         return badRequest(new InvalidParamError('email'))
       }
+
+      this.phoneValidator.isValid(phone)
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
     }
