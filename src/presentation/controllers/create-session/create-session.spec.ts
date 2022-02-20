@@ -13,7 +13,8 @@ const makeFakeHttpRequest = (): HttpRequest => ({
   body: {
     name: 'any name',
     email: 'any_email',
-    phone: 'any_phone'
+    phone: 'any_phone',
+    cpf: 'any_cpf'
   }
 })
 
@@ -71,7 +72,8 @@ describe('Create Session Controller', () => {
       body: {
         name: 42,
         email: 'any_email',
-        phone: 'any_phone'
+        phone: 'any_phone',
+        cpf: 'any_cpf'
       }
     })
 
@@ -165,5 +167,19 @@ describe('Create Session Controller', () => {
     const promise = sut.handle(httpRequest)
 
     await expect(promise).resolves.toEqual(internalServerError(new Error()))
+  })
+
+  test('Should return 400 if no cpf is provided', async () => {
+    const { sut } = makeSut()
+
+    const httpResponse = await sut.handle({
+      body: {
+        name: 'any name',
+        email: 'any_email',
+        phone: 'any_phone'
+      }
+    })
+
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('cpf')))
   })
 })
