@@ -15,7 +15,8 @@ const makeFakeHttpRequest = (body?: any): HttpRequest => ({
     name: 'any name',
     email: 'any_email',
     phone: 'any_phone',
-    cpf: 'any_cpf'
+    cpf: 'any_cpf',
+    description: 'any_description'
   }
 })
 
@@ -229,5 +230,20 @@ describe('Create Session Controller', () => {
     const promise = sut.handle(httpRequest)
 
     await expect(promise).resolves.toEqual(internalServerError(new Error()))
+  })
+
+  test('Should return 400 if no description is provided', async () => {
+    const { sut } = makeSut()
+
+    const httpResponse = await sut.handle({
+      body: {
+        name: 'any name',
+        email: 'any_email',
+        phone: 'any_phone',
+        cpf: 'any_cpf'
+      }
+    })
+
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('description')))
   })
 })
