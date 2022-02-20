@@ -2,26 +2,29 @@ import {
   HttpRequest,
   HttpResponse,
   EmailValidator,
+  PhoneValidator,
+  CPFValidator,
   MissingParamError,
   InvalidParamError,
-  badRequest,
   internalServerError,
   ServerError,
-  PhoneValidator
+  badRequest
 } from './create-session-protocols'
 
 export class CreateSessionController {
   private readonly emailValidator: EmailValidator
   private readonly phoneValidator: PhoneValidator
+  private readonly cpfValidator: CPFValidator
 
-  constructor (emailValidator: EmailValidator, phoneValidator: PhoneValidator) {
+  constructor (emailValidator: EmailValidator, phoneValidator: PhoneValidator, cpfValidator: CPFValidator) {
     this.emailValidator = emailValidator
     this.phoneValidator = phoneValidator
+    this.cpfValidator = cpfValidator
   }
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { name, email, phone } = httpRequest.body
+      const { name, email, phone, cpf } = httpRequest.body
       const requiredFields = ['name', 'email', 'phone', 'cpf']
 
       for (const field of requiredFields) {
@@ -43,6 +46,8 @@ export class CreateSessionController {
       if (!isPhoneValid) {
         return badRequest(new InvalidParamError('phone'))
       }
+
+      this.cpfValidator.isValid(cpf)
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
     }
