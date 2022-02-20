@@ -154,4 +154,16 @@ describe('Create Session Controller', () => {
 
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('phone')))
   })
+
+  test('Should return 500 if PhoneValidator throws', async () => {
+    const { sut, phoneValidatorStub } = makeSut()
+    jest.spyOn(phoneValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const httpRequest = makeFakeHttpRequest()
+    const promise = sut.handle(httpRequest)
+
+    await expect(promise).resolves.toEqual(internalServerError(new Error()))
+  })
 })
