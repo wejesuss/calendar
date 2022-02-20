@@ -9,8 +9,8 @@ import {
   internalServerError
 } from './create-session-protocols'
 
-const makeFakeHttpRequest = (): HttpRequest => ({
-  body: {
+const makeFakeHttpRequest = (body?: any): HttpRequest => ({
+  body: body ?? {
     name: 'any name',
     email: 'any_email',
     phone: 'any_phone',
@@ -68,15 +68,13 @@ describe('Create Session Controller', () => {
   test('Should return 400 if name is not a string', async () => {
     const { sut } = makeSut()
 
-    const httpResponse = await sut.handle({
-      body: {
-        name: 42,
-        email: 'any_email',
-        phone: 'any_phone',
-        cpf: 'any_cpf'
-      }
-    })
+    const httpRequest = makeFakeHttpRequest()
+    httpRequest.body = {
+      ...httpRequest.body,
+      name: 42
+    }
 
+    const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('name')))
   })
 
