@@ -1,5 +1,5 @@
-import { Controller } from '../../protocols/controller'
 import {
+  Controller,
   HttpRequest,
   HttpResponse,
   EmailValidator,

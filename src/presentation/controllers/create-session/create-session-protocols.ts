@@ -1,5 +1,5 @@
 export { MissingParamError, InvalidParamError, ServerError } from '../../errors'
-export { HttpRequest, HttpResponse } from '../../protocols/http'
+export { HttpRequest, HttpResponse, Controller } from '../../protocols'
 export { EmailValidator } from '../../protocols/email-validator'
 export { PhoneValidator } from '../../protocols/phone-validator'
 export { CPFValidator } from '../../protocols/cpf-validator'
