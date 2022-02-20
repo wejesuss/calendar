@@ -1,3 +1,4 @@
+import { Controller } from '../../protocols/controller'
 import {
   HttpRequest,
   HttpResponse,
@@ -11,7 +12,7 @@ import {
   badRequest
 } from './create-session-protocols'
 
-export class CreateSessionController {
+export class CreateSessionController implements Controller {
   private readonly emailValidator: EmailValidator
   private readonly phoneValidator: PhoneValidator
   private readonly cpfValidator: CPFValidator
