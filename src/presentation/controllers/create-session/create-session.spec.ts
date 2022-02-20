@@ -208,4 +208,14 @@ describe('Create Session Controller', () => {
 
     expect(cpfValidatorSpy).toHaveBeenCalledWith('any_cpf')
   })
+
+  test('Should return 400 if CPFValidator returns false', async () => {
+    const { sut, cpfValidatorStub } = makeSut()
+    jest.spyOn(cpfValidatorStub, 'isValid').mockReturnValueOnce(false)
+
+    const httpRequest = makeFakeHttpRequest()
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('cpf')))
+  })
 })
