@@ -25,15 +25,10 @@ export class CreateSessionController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const {
-        name,
-        email,
-        phone,
-        cpf,
-        description,
-        session_date: sessionDate
-      } = httpRequest.body
+      const { email, phone, cpf } = httpRequest.body
+
       const requiredFields = ['name', 'email', 'phone', 'cpf', 'description', 'session_date']
+      const stringRequiredFields = ['name', 'description', 'session_date']
 
       for (const field of requiredFields) {
         if (!httpRequest.body[field]) {
@@ -41,16 +36,10 @@ export class CreateSessionController implements Controller {
         }
       }
 
-      if (typeof name !== 'string') {
-        return badRequest(new InvalidParamError('name'))
-      }
-
-      if (typeof description !== 'string') {
-        return badRequest(new InvalidParamError('description'))
-      }
-
-      if (typeof sessionDate !== 'string') {
-        return badRequest(new InvalidParamError('session_date'))
+      for (const field of stringRequiredFields) {
+        if (typeof httpRequest.body[field] !== 'string') {
+          return badRequest(new InvalidParamError(field))
+        }
       }
 
       const isEmailValid = this.emailValidator.isValid(email)
