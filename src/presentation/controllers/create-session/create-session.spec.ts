@@ -17,7 +17,8 @@ const makeFakeHttpRequest = (body?: any): HttpRequest => ({
     phone: 'any_phone',
     cpf: 'any_cpf',
     description: 'any_description',
-    session_date: 'any_session_date'
+    session_date: 'any_session_date',
+    session_time: 'any_session_time'
   }
 })
 
@@ -288,5 +289,22 @@ describe('Create Session Controller', () => {
 
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_date')))
+  })
+
+  test('Should return 400 if no session time is provided', async () => {
+    const { sut } = makeSut()
+
+    const httpResponse = await sut.handle({
+      body: {
+        name: 'any name',
+        email: 'any_email',
+        phone: 'any_phone',
+        cpf: 'any_cpf',
+        description: 'any_description',
+        session_date: 'any_session_date'
+      }
+    })
+
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('session_time')))
   })
 })
