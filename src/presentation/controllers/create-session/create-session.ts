@@ -32,7 +32,7 @@ export class CreateSessionController implements Controller {
         cpf,
         description
       } = httpRequest.body
-      const requiredFields = ['name', 'email', 'phone', 'cpf', 'description']
+      const requiredFields = ['name', 'email', 'phone', 'cpf', 'description', 'session_date']
 
       for (const field of requiredFields) {
         if (!httpRequest.body[field]) {
