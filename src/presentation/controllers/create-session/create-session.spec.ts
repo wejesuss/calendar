@@ -276,4 +276,17 @@ describe('Create Session Controller', () => {
 
     expect(httpResponse).toEqual(badRequest(new MissingParamError('session_date')))
   })
+
+  test('Should return 400 if session_date is not a string', async () => {
+    const { sut } = makeSut()
+
+    const httpRequest = makeFakeHttpRequest()
+    httpRequest.body = {
+      ...httpRequest.body,
+      session_date: 42
+    }
+
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_date')))
+  })
 })
