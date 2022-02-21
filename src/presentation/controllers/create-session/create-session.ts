@@ -30,7 +30,8 @@ export class CreateSessionController implements Controller {
         email,
         phone,
         cpf,
-        description
+        description,
+        session_date: sessionDate
       } = httpRequest.body
       const requiredFields = ['name', 'email', 'phone', 'cpf', 'description', 'session_date']
 
@@ -46,6 +47,10 @@ export class CreateSessionController implements Controller {
 
       if (typeof description !== 'string') {
         return badRequest(new InvalidParamError('description'))
+      }
+
+      if (typeof sessionDate !== 'string') {
+        return badRequest(new InvalidParamError('session_date'))
       }
 
       const isEmailValid = this.emailValidator.isValid(email)
