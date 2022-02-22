@@ -58,7 +58,8 @@ export class CreateSessionController implements Controller {
       }
 
       const [year, month, date] = (sessionDate as string).split('/').map(Number)
-      void new Date(year, month, date)
+      const sDate = new Date(year, month, date)
+      sDate.getDay()
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
     }
