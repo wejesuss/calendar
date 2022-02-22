@@ -338,4 +338,19 @@ describe('Create Session Controller', () => {
 
     global.Date = originalDate
   })
+
+  test('Should call Date getDay to get the day of the week', async () => {
+    const { sut } = makeSut()
+    const daySpy = jest.spyOn(Date.prototype, 'getDay')
+
+    const httpRequest = makeFakeHttpRequest()
+    httpRequest.body = {
+      ...httpRequest.body,
+      session_date: '2022/01/22'
+    }
+
+    await sut.handle(httpRequest)
+
+    expect(daySpy).toReturnWith(2)
+  })
 })
