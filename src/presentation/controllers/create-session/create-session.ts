@@ -25,7 +25,7 @@ export class CreateSessionController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { email, phone, cpf } = httpRequest.body
+      const { email, phone, cpf, session_date: sessionDate } = httpRequest.body
 
       const requiredFields = ['name', 'email', 'phone', 'cpf', 'description', 'session_date', 'session_time']
       const stringRequiredFields = ['name', 'description', 'session_date', 'session_time']
@@ -56,6 +56,9 @@ export class CreateSessionController implements Controller {
       if (!isCPFValid) {
         return badRequest(new InvalidParamError('cpf'))
       }
+
+      const [year, month, date] = (sessionDate as string).split('/').map(Number)
+      void new Date(year, month, date)
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
     }
