@@ -320,4 +320,19 @@ describe('Create Session Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
   })
+
+  test('Should call Date with correct values', async () => {
+    const { sut } = makeSut()
+    const dateSpy = jest.spyOn(global, 'Date')
+
+    const httpRequest = makeFakeHttpRequest()
+    httpRequest.body = {
+      ...httpRequest.body,
+      session_date: '2022/01/22'
+    }
+
+    await sut.handle(httpRequest)
+
+    expect(dateSpy).toHaveBeenCalledWith(2022, 1, 22)
+  })
 })
