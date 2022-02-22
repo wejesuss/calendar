@@ -323,6 +323,7 @@ describe('Create Session Controller', () => {
 
   test('Should call Date with correct values', async () => {
     const { sut } = makeSut()
+    const originalDate = global.Date
     const dateSpy = jest.spyOn(global, 'Date')
 
     const httpRequest = makeFakeHttpRequest()
@@ -334,5 +335,7 @@ describe('Create Session Controller', () => {
     await sut.handle(httpRequest)
 
     expect(dateSpy).toHaveBeenCalledWith(2022, 1, 22)
+
+    global.Date = originalDate
   })
 })
