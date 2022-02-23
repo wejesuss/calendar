@@ -5,6 +5,7 @@ import {
   EmailValidator,
   PhoneValidator,
   CPFValidator,
+  DateValidator,
   MissingParamError,
   InvalidParamError,
   internalServerError,
@@ -16,11 +17,18 @@ export class CreateSessionController implements Controller {
   private readonly emailValidator: EmailValidator
   private readonly phoneValidator: PhoneValidator
   private readonly cpfValidator: CPFValidator
+  private readonly dateValidator: DateValidator
 
-  constructor (emailValidator: EmailValidator, phoneValidator: PhoneValidator, cpfValidator: CPFValidator) {
+  constructor (
+    emailValidator: EmailValidator,
+    phoneValidator: PhoneValidator,
+    cpfValidator: CPFValidator,
+    dateValidator: DateValidator
+  ) {
     this.emailValidator = emailValidator
     this.phoneValidator = phoneValidator
     this.cpfValidator = cpfValidator
+    this.dateValidator = dateValidator
   }
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -59,6 +67,8 @@ export class CreateSessionController implements Controller {
 
       const [year, month, date] = (sessionDate as string).split('/').map(Number)
       const sDate = new Date(year, month, date)
+      this.dateValidator.isValid(sDate)
+
       sDate.getDay()
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
