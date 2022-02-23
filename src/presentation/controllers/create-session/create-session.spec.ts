@@ -4,6 +4,7 @@ import {
   EmailValidator,
   PhoneValidator,
   CPFValidator,
+  DateValidator,
   InvalidParamError,
   MissingParamError,
   internalServerError,
@@ -52,24 +53,37 @@ const makeCPFValidatorStub = (): CPFValidator => {
   return new CPFValidatorStub()
 }
 
+const makeDateValidatorStub = (): DateValidator => {
+  class DateValidatorStub implements DateValidator {
+    isValid (date: Date): boolean {
+      return true
+    }
+  }
+
+  return new DateValidatorStub()
+}
+
 interface SutTypes {
   sut: CreateSessionController
   emailValidatorStub: EmailValidator
   phoneValidatorStub: PhoneValidator
   cpfValidatorStub: CPFValidator
+  dateValidatorStub: DateValidator
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidatorStub()
   const phoneValidatorStub = makePhoneValidatorStub()
   const cpfValidatorStub = makeCPFValidatorStub()
-  const sut = new CreateSessionController(emailValidatorStub, phoneValidatorStub, cpfValidatorStub)
+  const dateValidatorStub = makeDateValidatorStub()
+  const sut = new CreateSessionController(emailValidatorStub, phoneValidatorStub, cpfValidatorStub, dateValidatorStub)
 
   return {
     sut,
     emailValidatorStub,
     phoneValidatorStub,
-    cpfValidatorStub
+    cpfValidatorStub,
+    dateValidatorStub
   }
 }
 
@@ -337,6 +351,22 @@ describe('Create Session Controller', () => {
     expect(dateSpy).toHaveBeenCalledWith(2022, 1, 22)
 
     global.Date = originalDate
+  })
+
+  test('Should call DateValidator with correct values', async () => {
+    const { sut, dateValidatorStub } = makeSut()
+
+    const dateValidatorSpy = jest.spyOn(dateValidatorStub, 'isValid')
+
+    const httpRequest = makeFakeHttpRequest()
+    httpRequest.body = {
+      ...httpRequest.body,
+      session_date: '2022/01/22'
+    }
+    await sut.handle(httpRequest)
+
+    const firstParam = dateValidatorSpy.mock.calls.pop()[0]
+    expect(firstParam).toEqual(new Date(2022, 1, 22))
   })
 
   test('Should call Date getDay to get the day of the week', async () => {
