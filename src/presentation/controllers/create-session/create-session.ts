@@ -67,7 +67,10 @@ export class CreateSessionController implements Controller {
 
       const [year, month, date] = (sessionDate as string).split('/').map(Number)
       const sDate = new Date(year, month, date)
-      this.dateValidator.isValid(sDate)
+      const isDateValid = this.dateValidator.isValid(sDate)
+      if (!isDateValid) {
+        return badRequest(new InvalidParamError('session_date'))
+      }
 
       sDate.getDay()
     } catch (error) {
