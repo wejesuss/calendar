@@ -355,7 +355,6 @@ describe('Create Session Controller', () => {
 
   test('Should call DateValidator with correct values', async () => {
     const { sut, dateValidatorStub } = makeSut()
-
     const dateValidatorSpy = jest.spyOn(dateValidatorStub, 'isValid')
 
     const httpRequest = makeFakeHttpRequest()
