@@ -1,6 +1,10 @@
 import { CreateSessionController } from './create-session'
 import {
   HttpRequest,
+  GetSchedule,
+  GetScheduleOptions,
+  Schedule,
+  ObtainedSchedule,
   EmailValidator,
   PhoneValidator,
   CPFValidator,
@@ -63,12 +67,23 @@ const makeDateValidatorStub = (): DateValidator => {
   return new DateValidatorStub()
 }
 
+const makeGetScheduleStub = (): GetSchedule => {
+  class GetScheduleStub implements GetSchedule {
+    async get (scheduleOptions?: GetScheduleOptions): Promise<ObtainedSchedule | Schedule> {
+      return null
+    }
+  }
+
+  return new GetScheduleStub()
+}
+
 interface SutTypes {
   sut: CreateSessionController
   emailValidatorStub: EmailValidator
   phoneValidatorStub: PhoneValidator
   cpfValidatorStub: CPFValidator
   dateValidatorStub: DateValidator
+  getScheduleStub: GetSchedule
 }
 
 const makeSut = (): SutTypes => {
@@ -76,14 +91,16 @@ const makeSut = (): SutTypes => {
   const phoneValidatorStub = makePhoneValidatorStub()
   const cpfValidatorStub = makeCPFValidatorStub()
   const dateValidatorStub = makeDateValidatorStub()
-  const sut = new CreateSessionController(emailValidatorStub, phoneValidatorStub, cpfValidatorStub, dateValidatorStub)
+  const getScheduleStub = makeGetScheduleStub()
+  const sut = new CreateSessionController(emailValidatorStub, phoneValidatorStub, cpfValidatorStub, dateValidatorStub, getScheduleStub)
 
   return {
     sut,
     emailValidatorStub,
     phoneValidatorStub,
     cpfValidatorStub,
-    dateValidatorStub
+    dateValidatorStub,
+    getScheduleStub
   }
 }
 
@@ -389,5 +406,15 @@ describe('Create Session Controller', () => {
     await sut.handle(httpRequest)
 
     expect(daySpy).toReturnWith(2)
+  })
+
+  test('Should call GetSchedule with correct values', async () => {
+    const { sut, getScheduleStub } = makeSut()
+    const getScheduleSpy = jest.spyOn(getScheduleStub, 'get')
+
+    const httpRequest = makeFakeHttpRequest()
+    await sut.handle(httpRequest)
+
+    expect(getScheduleSpy).toHaveBeenCalledWith({ weekDay: 2, year: 2022, month: 1, date: 22 })
   })
 })
