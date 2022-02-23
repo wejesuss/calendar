@@ -18,8 +18,8 @@ const makeFakeHttpRequest = (body?: any): HttpRequest => ({
     phone: 'any_phone',
     cpf: 'any_cpf',
     description: 'any_description',
-    session_date: 'any_session_date',
-    session_time: 'any_session_time'
+    session_date: '2022/01/22',
+    session_time: '09:00'
   }
 })
 
@@ -341,11 +341,6 @@ describe('Create Session Controller', () => {
     const dateSpy = jest.spyOn(global, 'Date')
 
     const httpRequest = makeFakeHttpRequest()
-    httpRequest.body = {
-      ...httpRequest.body,
-      session_date: '2022/01/22'
-    }
-
     await sut.handle(httpRequest)
 
     expect(dateSpy).toHaveBeenCalledWith(2022, 1, 22)
@@ -358,10 +353,6 @@ describe('Create Session Controller', () => {
     const dateValidatorSpy = jest.spyOn(dateValidatorStub, 'isValid')
 
     const httpRequest = makeFakeHttpRequest()
-    httpRequest.body = {
-      ...httpRequest.body,
-      session_date: '2022/01/22'
-    }
     await sut.handle(httpRequest)
 
     const firstParam = dateValidatorSpy.mock.calls.pop()[0]
@@ -395,11 +386,6 @@ describe('Create Session Controller', () => {
     const daySpy = jest.spyOn(Date.prototype, 'getDay')
 
     const httpRequest = makeFakeHttpRequest()
-    httpRequest.body = {
-      ...httpRequest.body,
-      session_date: '2022/01/22'
-    }
-
     await sut.handle(httpRequest)
 
     expect(daySpy).toReturnWith(2)
