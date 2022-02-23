@@ -368,6 +368,16 @@ describe('Create Session Controller', () => {
     expect(firstParam).toEqual(new Date(2022, 1, 22))
   })
 
+  test('Should return 400 if DateValidator returns false', async () => {
+    const { sut, dateValidatorStub } = makeSut()
+    jest.spyOn(dateValidatorStub, 'isValid').mockReturnValueOnce(false)
+
+    const httpRequest = makeFakeHttpRequest()
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_date')))
+  })
+
   test('Should call Date getDay to get the day of the week', async () => {
     const { sut } = makeSut()
     const daySpy = jest.spyOn(Date.prototype, 'getDay')
