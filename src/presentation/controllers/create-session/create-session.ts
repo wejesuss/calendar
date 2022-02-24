@@ -6,7 +6,7 @@ import {
   EmailValidator,
   PhoneValidator,
   CPFValidator,
-  DateValidator,
+  SessionDateValidator,
   MissingParamError,
   InvalidParamError,
   internalServerError,
@@ -18,20 +18,20 @@ export class CreateSessionController implements Controller {
   private readonly emailValidator: EmailValidator
   private readonly phoneValidator: PhoneValidator
   private readonly cpfValidator: CPFValidator
-  private readonly dateValidator: DateValidator
+  private readonly sessionDateValidator: SessionDateValidator
   private readonly getSchedule: GetSchedule
 
   constructor (
     emailValidator: EmailValidator,
     phoneValidator: PhoneValidator,
     cpfValidator: CPFValidator,
-    dateValidator: DateValidator,
+    sessionDateValidator: SessionDateValidator,
     getSchedule: GetSchedule
   ) {
     this.emailValidator = emailValidator
     this.phoneValidator = phoneValidator
     this.cpfValidator = cpfValidator
-    this.dateValidator = dateValidator
+    this.sessionDateValidator = sessionDateValidator
     this.getSchedule = getSchedule
   }
 
@@ -40,7 +40,7 @@ export class CreateSessionController implements Controller {
       const { email, phone, cpf, session_date: sessionDate } = httpRequest.body
 
       const requiredFields = ['name', 'email', 'phone', 'cpf', 'description', 'session_date', 'session_time']
-      const stringRequiredFields = ['name', 'description', 'session_date', 'session_time']
+      const stringRequiredFields = ['name', 'description', 'session_time']
 
       for (const field of requiredFields) {
         if (!httpRequest.body[field]) {
@@ -69,13 +69,13 @@ export class CreateSessionController implements Controller {
         return badRequest(new InvalidParamError('cpf'))
       }
 
-      const [year, month, date] = (sessionDate as string).split('/').map(Number)
-      const sDate = new Date(year, month, date)
-      const isDateValid = this.dateValidator.isValid(sDate)
+      const isDateValid = this.sessionDateValidator.isValid(sessionDate)
       if (!isDateValid) {
         return badRequest(new InvalidParamError('session_date'))
       }
 
+      const [year, month, date] = (sessionDate as string).split('/').map(Number)
+      const sDate = new Date(year, month, date)
       const weekDay = sDate.getDay()
 
       await this.getSchedule.get({ weekDay, year, month, date })

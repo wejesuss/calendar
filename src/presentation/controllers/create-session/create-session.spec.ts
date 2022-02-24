@@ -8,7 +8,7 @@ import {
   EmailValidator,
   PhoneValidator,
   CPFValidator,
-  DateValidator,
+  SessionDateValidator,
   InvalidParamError,
   MissingParamError,
   internalServerError,
@@ -57,14 +57,14 @@ const makeCPFValidatorStub = (): CPFValidator => {
   return new CPFValidatorStub()
 }
 
-const makeDateValidatorStub = (): DateValidator => {
-  class DateValidatorStub implements DateValidator {
-    isValid (date: Date): boolean {
+const makeSessionDateValidatorStub = (): SessionDateValidator => {
+  class SessionDateValidatorStub implements SessionDateValidator {
+    isValid (sessionDate: string): boolean {
       return true
     }
   }
 
-  return new DateValidatorStub()
+  return new SessionDateValidatorStub()
 }
 
 const makeGetScheduleStub = (): GetSchedule => {
@@ -82,7 +82,7 @@ interface SutTypes {
   emailValidatorStub: EmailValidator
   phoneValidatorStub: PhoneValidator
   cpfValidatorStub: CPFValidator
-  dateValidatorStub: DateValidator
+  sessionDateValidatorStub: SessionDateValidator
   getScheduleStub: GetSchedule
 }
 
@@ -90,16 +90,16 @@ const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidatorStub()
   const phoneValidatorStub = makePhoneValidatorStub()
   const cpfValidatorStub = makeCPFValidatorStub()
-  const dateValidatorStub = makeDateValidatorStub()
+  const sessionDateValidatorStub = makeSessionDateValidatorStub()
   const getScheduleStub = makeGetScheduleStub()
-  const sut = new CreateSessionController(emailValidatorStub, phoneValidatorStub, cpfValidatorStub, dateValidatorStub, getScheduleStub)
+  const sut = new CreateSessionController(emailValidatorStub, phoneValidatorStub, cpfValidatorStub, sessionDateValidatorStub, getScheduleStub)
 
   return {
     sut,
     emailValidatorStub,
     phoneValidatorStub,
     cpfValidatorStub,
-    dateValidatorStub,
+    sessionDateValidatorStub,
     getScheduleStub
   }
 }
@@ -309,17 +309,36 @@ describe('Create Session Controller', () => {
     expect(httpResponse).toEqual(badRequest(new MissingParamError('session_date')))
   })
 
-  test('Should return 400 if session date is not a string', async () => {
-    const { sut } = makeSut()
+  test('Should call SessionDateValidator with correct values', async () => {
+    const { sut, sessionDateValidatorStub } = makeSut()
+    const sessionDateValidatorSpy = jest.spyOn(sessionDateValidatorStub, 'isValid')
 
     const httpRequest = makeFakeHttpRequest()
-    httpRequest.body = {
-      ...httpRequest.body,
-      session_date: 42
-    }
+    await sut.handle(httpRequest)
 
+    expect(sessionDateValidatorSpy).toHaveBeenCalledWith(httpRequest.body.session_date)
+  })
+
+  test('Should return 400 if SessionDateValidator returns false', async () => {
+    const { sut, sessionDateValidatorStub } = makeSut()
+    jest.spyOn(sessionDateValidatorStub, 'isValid').mockReturnValueOnce(false)
+
+    const httpRequest = makeFakeHttpRequest()
     const httpResponse = await sut.handle(httpRequest)
+
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_date')))
+  })
+
+  test('Should return 500 if SessionDateValidator throws', async () => {
+    const { sut, sessionDateValidatorStub } = makeSut()
+    jest.spyOn(sessionDateValidatorStub, 'isValid').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const httpRequest = makeFakeHttpRequest()
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(internalServerError(new Error()))
   })
 
   test('Should return 400 if no session time is provided', async () => {
@@ -363,39 +382,6 @@ describe('Create Session Controller', () => {
     expect(dateSpy).toHaveBeenCalledWith(2022, 1, 22)
 
     global.Date = originalDate
-  })
-
-  test('Should call DateValidator with correct values', async () => {
-    const { sut, dateValidatorStub } = makeSut()
-    const dateValidatorSpy = jest.spyOn(dateValidatorStub, 'isValid')
-
-    const httpRequest = makeFakeHttpRequest()
-    await sut.handle(httpRequest)
-
-    const firstParam = dateValidatorSpy.mock.calls.pop()[0]
-    expect(firstParam).toEqual(new Date(2022, 1, 22))
-  })
-
-  test('Should return 400 if DateValidator returns false', async () => {
-    const { sut, dateValidatorStub } = makeSut()
-    jest.spyOn(dateValidatorStub, 'isValid').mockReturnValueOnce(false)
-
-    const httpRequest = makeFakeHttpRequest()
-    const httpResponse = await sut.handle(httpRequest)
-
-    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_date')))
-  })
-
-  test('Should return 500 if DateValidator throws', async () => {
-    const { sut, dateValidatorStub } = makeSut()
-    jest.spyOn(dateValidatorStub, 'isValid').mockImplementationOnce(() => {
-      throw new Error()
-    })
-
-    const httpRequest = makeFakeHttpRequest()
-    const httpResponse = await sut.handle(httpRequest)
-
-    expect(httpResponse).toEqual(internalServerError(new Error()))
   })
 
   test('Should call Date getDay to get the day of the week', async () => {
