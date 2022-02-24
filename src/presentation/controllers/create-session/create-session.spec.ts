@@ -382,6 +382,16 @@ describe('Create Session Controller', () => {
     expect(sessionTimeValidatorSpy).toHaveBeenCalledWith(httpRequest.body.session_time)
   })
 
+  test('Should return 400 if SessionTimeValidator returns false', async () => {
+    const { sut, sessionTimeValidatorStub } = makeSut()
+    jest.spyOn(sessionTimeValidatorStub, 'isValid').mockReturnValueOnce(false)
+
+    const httpRequest = makeFakeHttpRequest()
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+  })
+
   test('Should call Date with correct values', async () => {
     const { sut } = makeSut()
     const originalDate = global.Date
