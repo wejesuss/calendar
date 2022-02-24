@@ -7,6 +7,7 @@ import {
   PhoneValidator,
   CPFValidator,
   SessionDateValidator,
+  SessionTimeValidator,
   MissingParamError,
   InvalidParamError,
   internalServerError,
@@ -19,6 +20,7 @@ export class CreateSessionController implements Controller {
   private readonly phoneValidator: PhoneValidator
   private readonly cpfValidator: CPFValidator
   private readonly sessionDateValidator: SessionDateValidator
+  private readonly sessionTimeValidator: SessionTimeValidator
   private readonly getSchedule: GetSchedule
 
   constructor (
@@ -26,21 +28,23 @@ export class CreateSessionController implements Controller {
     phoneValidator: PhoneValidator,
     cpfValidator: CPFValidator,
     sessionDateValidator: SessionDateValidator,
+    sessionTimeValidator: SessionTimeValidator,
     getSchedule: GetSchedule
   ) {
     this.emailValidator = emailValidator
     this.phoneValidator = phoneValidator
     this.cpfValidator = cpfValidator
     this.sessionDateValidator = sessionDateValidator
+    this.sessionTimeValidator = sessionTimeValidator
     this.getSchedule = getSchedule
   }
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { email, phone, cpf, session_date: sessionDate } = httpRequest.body
+      const { email, phone, cpf, session_date: sessionDate, session_time: sessionTime } = httpRequest.body
 
       const requiredFields = ['name', 'email', 'phone', 'cpf', 'description', 'session_date', 'session_time']
-      const stringRequiredFields = ['name', 'description', 'session_time']
+      const stringRequiredFields = ['name', 'description']
 
       for (const field of requiredFields) {
         if (!httpRequest.body[field]) {
@@ -72,6 +76,11 @@ export class CreateSessionController implements Controller {
       const isDateValid = this.sessionDateValidator.isValid(sessionDate)
       if (!isDateValid) {
         return badRequest(new InvalidParamError('session_date'))
+      }
+
+      const isTimeValid = this.sessionTimeValidator.isValid(sessionTime)
+      if (!isTimeValid) {
+        return badRequest(new InvalidParamError('session_time'))
       }
 
       const [year, month, date] = (sessionDate as string).split('/').map(Number)
