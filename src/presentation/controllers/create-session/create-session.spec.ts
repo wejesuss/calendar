@@ -9,6 +9,7 @@ import {
   PhoneValidator,
   CPFValidator,
   SessionDateValidator,
+  SessionTimeValidator,
   InvalidParamError,
   MissingParamError,
   internalServerError,
@@ -67,6 +68,16 @@ const makeSessionDateValidatorStub = (): SessionDateValidator => {
   return new SessionDateValidatorStub()
 }
 
+const makeSessionTimeValidatorStub = (): SessionTimeValidator => {
+  class SessionTimeValidatorStub implements SessionTimeValidator {
+    isValid (sessionTime: string): boolean {
+      return true
+    }
+  }
+
+  return new SessionTimeValidatorStub()
+}
+
 const makeGetScheduleStub = (): GetSchedule => {
   class GetScheduleStub implements GetSchedule {
     async get (scheduleOptions?: GetScheduleOptions): Promise<ObtainedSchedule | Schedule> {
@@ -83,6 +94,7 @@ interface SutTypes {
   phoneValidatorStub: PhoneValidator
   cpfValidatorStub: CPFValidator
   sessionDateValidatorStub: SessionDateValidator
+  sessionTimeValidatorStub: SessionTimeValidator
   getScheduleStub: GetSchedule
 }
 
@@ -91,8 +103,9 @@ const makeSut = (): SutTypes => {
   const phoneValidatorStub = makePhoneValidatorStub()
   const cpfValidatorStub = makeCPFValidatorStub()
   const sessionDateValidatorStub = makeSessionDateValidatorStub()
+  const sessionTimeValidatorStub = makeSessionTimeValidatorStub()
   const getScheduleStub = makeGetScheduleStub()
-  const sut = new CreateSessionController(emailValidatorStub, phoneValidatorStub, cpfValidatorStub, sessionDateValidatorStub, getScheduleStub)
+  const sut = new CreateSessionController(emailValidatorStub, phoneValidatorStub, cpfValidatorStub, sessionDateValidatorStub, sessionTimeValidatorStub, getScheduleStub)
 
   return {
     sut,
@@ -100,6 +113,7 @@ const makeSut = (): SutTypes => {
     phoneValidatorStub,
     cpfValidatorStub,
     sessionDateValidatorStub,
+    sessionTimeValidatorStub,
     getScheduleStub
   }
 }
@@ -358,17 +372,14 @@ describe('Create Session Controller', () => {
     expect(httpResponse).toEqual(badRequest(new MissingParamError('session_time')))
   })
 
-  test('Should return 400 if session time is not a string', async () => {
-    const { sut } = makeSut()
+  test('Should call SessionTimeValidator with correct values', async () => {
+    const { sut, sessionTimeValidatorStub } = makeSut()
+    const sessionTimeValidatorSpy = jest.spyOn(sessionTimeValidatorStub, 'isValid')
 
     const httpRequest = makeFakeHttpRequest()
-    httpRequest.body = {
-      ...httpRequest.body,
-      session_time: 42
-    }
+    await sut.handle(httpRequest)
 
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+    expect(sessionTimeValidatorSpy).toHaveBeenCalledWith(httpRequest.body.session_time)
   })
 
   test('Should call Date with correct values', async () => {
