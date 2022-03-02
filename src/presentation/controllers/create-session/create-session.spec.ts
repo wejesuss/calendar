@@ -436,4 +436,16 @@ describe('Create Session Controller', () => {
 
     expect(getScheduleSpy).toHaveBeenCalledWith({ weekDay: 2, year: 2022, month: 1, date: 22 })
   })
+
+  test('Should return 500 if GetSchedule throws', async () => {
+    const { sut, getScheduleStub } = makeSut()
+    jest.spyOn(getScheduleStub, 'get').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const httpRequest = makeFakeHttpRequest()
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(internalServerError(new Error()))
+  })
 })
