@@ -1,12 +1,12 @@
 export interface TimeInterval {
-  time_from: number
-  time_to: number
+  time_from: string
+  time_to: string
 }
 
 export interface Replacement {
   date: number
-  time_from: number
-  time_to: number
+  time_from: string
+  time_to: string
 }
 
 export interface Schedule {
@@ -23,4 +23,5 @@ export interface Schedule {
   availability_6: TimeInterval[]
   replacements: Replacement[]
   created_at: number
+  updated_at: number
 }
