@@ -4,7 +4,7 @@ import {
   GetSchedule,
   GetScheduleOptions,
   Schedule,
-  ObtainedSchedule,
+  PartialSchedule,
   EmailValidator,
   PhoneValidator,
   CPFValidator,
@@ -80,7 +80,8 @@ const makeSessionTimeValidatorStub = (): SessionTimeValidator => {
 
 const makeGetScheduleStub = (): GetSchedule => {
   class GetScheduleStub implements GetSchedule {
-    async get (scheduleOptions?: GetScheduleOptions): Promise<ObtainedSchedule | Schedule> {
+    getAll: () => Promise<Schedule>
+    async getPartial (scheduleOptions?: GetScheduleOptions): Promise<PartialSchedule> {
       return null
     }
   }
@@ -429,7 +430,7 @@ describe('Create Session Controller', () => {
 
   test('Should call GetSchedule with correct values', async () => {
     const { sut, getScheduleStub } = makeSut()
-    const getScheduleSpy = jest.spyOn(getScheduleStub, 'get')
+    const getScheduleSpy = jest.spyOn(getScheduleStub, 'getPartial')
 
     const httpRequest = makeFakeHttpRequest()
     await sut.handle(httpRequest)
@@ -439,7 +440,7 @@ describe('Create Session Controller', () => {
 
   test('Should return 500 if GetSchedule throws', async () => {
     const { sut, getScheduleStub } = makeSut()
-    jest.spyOn(getScheduleStub, 'get').mockImplementationOnce(() => {
+    jest.spyOn(getScheduleStub, 'getPartial').mockImplementationOnce(() => {
       throw new Error()
     })
 

@@ -1,5 +1,5 @@
 export { Schedule } from '../../../domain/models/schedule'
-export { GetSchedule, GetScheduleOptions, ObtainedSchedule } from '../../../domain/usecases/get-schedule'
+export { GetSchedule, GetScheduleOptions, PartialSchedule } from '../../../domain/usecases/get-schedule'
 export { MissingParamError, InvalidParamError, ServerError } from '../../errors'
 export { HttpRequest, HttpResponse, Controller } from '../../protocols'
 export { EmailValidator } from '../../protocols/email-validator'

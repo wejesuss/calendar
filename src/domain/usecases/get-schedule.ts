@@ -7,11 +7,13 @@ export interface GetScheduleOptions {
   date: number
 }
 
-type PartialSchedule = Pick<Schedule, 'duration'|'activation_interval'|'activation_interval_type'|'replacements'>
-export type ObtainedSchedule = {
+type PickedPartialSchedule = Pick<Schedule, 'duration'|'activation_interval'|'activation_interval_type'|'replacements'>
+
+export type PartialSchedule = {
   availability: TimeInterval[]
-} & PartialSchedule
+} & PickedPartialSchedule
 
 export interface GetSchedule {
-  get: (scheduleOptions?: GetScheduleOptions) => Promise<ObtainedSchedule | Schedule>
+  getAll: () => Promise<Schedule>
+  getPartial: (scheduleOptions?: GetScheduleOptions) => Promise<PartialSchedule>
 }

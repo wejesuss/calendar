@@ -87,7 +87,7 @@ export class CreateSessionController implements Controller {
       const sDate = new Date(year, month, date)
       const weekDay = sDate.getDay()
 
-      await this.getSchedule.get({ weekDay, year, month, date })
+      await this.getSchedule.getPartial({ weekDay, year, month, date })
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
     }
