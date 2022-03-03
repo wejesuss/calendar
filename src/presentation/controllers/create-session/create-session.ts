@@ -3,6 +3,7 @@ import {
   HttpRequest,
   HttpResponse,
   GetSchedule,
+  CreateTimeTo,
   EmailValidator,
   PhoneValidator,
   CPFValidator,
@@ -22,6 +23,7 @@ export class CreateSessionController implements Controller {
   private readonly sessionDateValidator: SessionDateValidator
   private readonly sessionTimeValidator: SessionTimeValidator
   private readonly getSchedule: GetSchedule
+  private readonly createTimeTo: CreateTimeTo
 
   constructor (
     emailValidator: EmailValidator,
@@ -29,7 +31,8 @@ export class CreateSessionController implements Controller {
     cpfValidator: CPFValidator,
     sessionDateValidator: SessionDateValidator,
     sessionTimeValidator: SessionTimeValidator,
-    getSchedule: GetSchedule
+    getSchedule: GetSchedule,
+    createTimeTo: CreateTimeTo
   ) {
     this.emailValidator = emailValidator
     this.phoneValidator = phoneValidator
@@ -37,6 +40,7 @@ export class CreateSessionController implements Controller {
     this.sessionDateValidator = sessionDateValidator
     this.sessionTimeValidator = sessionTimeValidator
     this.getSchedule = getSchedule
+    this.createTimeTo = createTimeTo
   }
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -87,7 +91,9 @@ export class CreateSessionController implements Controller {
       const sDate = new Date(year, month, date)
       const weekDay = sDate.getDay()
 
-      await this.getSchedule.getPartial({ weekDay, year, month, date })
+      const partialSchedule = await this.getSchedule.getPartial({ weekDay, year, month, date })
+
+      this.createTimeTo.create(sessionTime as string, partialSchedule.duration)
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
     }
