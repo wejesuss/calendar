@@ -5,6 +5,7 @@ import {
   GetScheduleOptions,
   Schedule,
   PartialSchedule,
+  CreateTimeTo,
   EmailValidator,
   PhoneValidator,
   CPFValidator,
@@ -82,11 +83,27 @@ const makeGetScheduleStub = (): GetSchedule => {
   class GetScheduleStub implements GetSchedule {
     getAll: () => Promise<Schedule>
     async getPartial (scheduleOptions?: GetScheduleOptions): Promise<PartialSchedule> {
-      return null
+      return {
+        duration: 15,
+        activation_interval: 3,
+        activation_interval_type: 30,
+        availability: [],
+        replacements: []
+      }
     }
   }
 
   return new GetScheduleStub()
+}
+
+const makeCreateTimeToStub = (): CreateTimeTo => {
+  class CreateTimeToStub implements CreateTimeTo {
+    create (timeFrom: string, duration: number): string {
+      return '09:15'
+    }
+  }
+
+  return new CreateTimeToStub()
 }
 
 interface SutTypes {
@@ -97,6 +114,7 @@ interface SutTypes {
   sessionDateValidatorStub: SessionDateValidator
   sessionTimeValidatorStub: SessionTimeValidator
   getScheduleStub: GetSchedule
+  createTimeToStub: CreateTimeTo
 }
 
 const makeSut = (): SutTypes => {
@@ -106,7 +124,16 @@ const makeSut = (): SutTypes => {
   const sessionDateValidatorStub = makeSessionDateValidatorStub()
   const sessionTimeValidatorStub = makeSessionTimeValidatorStub()
   const getScheduleStub = makeGetScheduleStub()
-  const sut = new CreateSessionController(emailValidatorStub, phoneValidatorStub, cpfValidatorStub, sessionDateValidatorStub, sessionTimeValidatorStub, getScheduleStub)
+  const createTimeToStub = makeCreateTimeToStub()
+  const sut = new CreateSessionController(
+    emailValidatorStub,
+    phoneValidatorStub,
+    cpfValidatorStub,
+    sessionDateValidatorStub,
+    sessionTimeValidatorStub,
+    getScheduleStub,
+    createTimeToStub
+  )
 
   return {
     sut,
@@ -115,7 +142,8 @@ const makeSut = (): SutTypes => {
     cpfValidatorStub,
     sessionDateValidatorStub,
     sessionTimeValidatorStub,
-    getScheduleStub
+    getScheduleStub,
+    createTimeToStub
   }
 }
 
@@ -448,5 +476,15 @@ describe('Create Session Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(internalServerError(new Error()))
+  })
+
+  test('Should call CreateTimeTo with correct values', async () => {
+    const { sut, createTimeToStub } = makeSut()
+    const createTimeToSpy = jest.spyOn(createTimeToStub, 'create')
+
+    const httpRequest = makeFakeHttpRequest()
+    await sut.handle(httpRequest)
+
+    expect(createTimeToSpy).toHaveBeenCalledWith('09:00', 15)
   })
 })
