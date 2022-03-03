@@ -487,4 +487,14 @@ describe('Create Session Controller', () => {
 
     expect(createTimeToSpy).toHaveBeenCalledWith('09:00', 15)
   })
+
+  test('Should return 500 if CreateTimeTo throws', async () => {
+    const { sut, createTimeToStub } = makeSut()
+    const createTimeToSpy = jest.spyOn(createTimeToStub, 'create')
+
+    const httpRequest = makeFakeHttpRequest()
+    await sut.handle(httpRequest)
+
+    expect(createTimeToSpy).toHaveBeenCalledWith('09:00', 15)
+  })
 })
