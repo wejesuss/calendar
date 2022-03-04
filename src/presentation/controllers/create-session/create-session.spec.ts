@@ -497,4 +497,23 @@ describe('Create Session Controller', () => {
 
     expect(createTimeToSpy).toHaveBeenCalledWith('09:00', 15)
   })
+
+  test('Should return 400 if session date is not available', async () => {
+    const { sut } = makeSut()
+    const time = 1642820400000
+    const daysToFuture = 7776000000
+    jest.spyOn(Date.prototype, 'getTime').mockReturnValueOnce(time)
+    jest.spyOn(Date, 'now').mockReturnValueOnce(time)
+
+    const httpRequest = makeFakeHttpRequest()
+    let httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_date')))
+
+    jest.spyOn(Date.prototype, 'getTime').mockReturnValueOnce(time + daysToFuture + 1000)
+    jest.spyOn(Date, 'now').mockReturnValueOnce(time)
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_date')))
+  })
 })
