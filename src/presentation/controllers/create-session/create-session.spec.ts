@@ -446,16 +446,6 @@ describe('Create Session Controller', () => {
     global.Date = originalDate
   })
 
-  test('Should call Date getDay to get the day of the week', async () => {
-    const { sut } = makeSut()
-    const daySpy = jest.spyOn(Date.prototype, 'getDay')
-
-    const httpRequest = makeFakeHttpRequest()
-    await sut.handle(httpRequest)
-
-    expect(daySpy).toReturnWith(2)
-  })
-
   test('Should call GetSchedule with correct values', async () => {
     const { sut, getScheduleStub } = makeSut()
     const getScheduleSpy = jest.spyOn(getScheduleStub, 'getPartial')
