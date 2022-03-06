@@ -43,6 +43,14 @@ export class CreateSessionController implements Controller {
     this.createTimeTo = createTimeTo
   }
 
+  normalizeTime (value: string, index: number): number {
+    let valueNumber = Number(value)
+
+    if (valueNumber === 0 && index === 0) valueNumber = 24
+
+    return valueNumber
+  }
+
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
       const { email, phone, cpf, session_date: sessionDate, session_time: sessionTime } = httpRequest.body
