@@ -17,7 +17,7 @@ import {
   badRequest
 } from './create-session-protocols'
 
-const makeFakeHttpRequest = (body?: any): HttpRequest => ({
+const makeFakeHttpRequest = (body?: any, sessionTime?: string): HttpRequest => ({
   body: body ?? {
     name: 'any name',
     email: 'any_email',
@@ -25,7 +25,7 @@ const makeFakeHttpRequest = (body?: any): HttpRequest => ({
     cpf: 'any_cpf',
     description: 'any_description',
     session_date: '2022/01/22',
-    session_time: '09:00'
+    session_time: sessionTime || '10:00'
   }
 })
 
@@ -87,7 +87,9 @@ const makeGetScheduleStub = (): GetSchedule => {
         duration: 15,
         activation_interval: 3,
         activation_interval_type: 30,
-        availability: [],
+        availability: [
+          { time_from: '09:45', time_to: '17:00' }
+        ],
         replacements: []
       }
     }
@@ -99,7 +101,7 @@ const makeGetScheduleStub = (): GetSchedule => {
 const makeCreateTimeToStub = (): CreateTimeTo => {
   class CreateTimeToStub implements CreateTimeTo {
     create (timeFrom: string, duration: number): string {
-      return '09:15'
+      return '10:15'
     }
   }
 
@@ -474,20 +476,22 @@ describe('Create Session Controller', () => {
     const { sut, createTimeToStub } = makeSut()
     const createTimeToSpy = jest.spyOn(createTimeToStub, 'create')
 
-    const httpRequest = makeFakeHttpRequest()
+    const httpRequest = makeFakeHttpRequest(null, '10:00')
     await sut.handle(httpRequest)
 
-    expect(createTimeToSpy).toHaveBeenCalledWith('09:00', 15)
+    expect(createTimeToSpy).toHaveBeenCalledWith('10:00', 15)
   })
 
   test('Should return 500 if CreateTimeTo throws', async () => {
     const { sut, createTimeToStub } = makeSut()
-    const createTimeToSpy = jest.spyOn(createTimeToStub, 'create')
+    jest.spyOn(createTimeToStub, 'create').mockImplementationOnce(() => {
+      throw new Error('')
+    })
 
     const httpRequest = makeFakeHttpRequest()
-    await sut.handle(httpRequest)
+    const httpResponse = await sut.handle(httpRequest)
 
-    expect(createTimeToSpy).toHaveBeenCalledWith('09:00', 15)
+    expect(httpResponse).toEqual(internalServerError(new Error()))
   })
 
   test('Should return 400 if session date is not available', async () => {
