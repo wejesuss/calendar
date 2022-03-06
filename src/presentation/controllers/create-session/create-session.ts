@@ -101,13 +101,47 @@ export class CreateSessionController implements Controller {
 
       const partialSchedule = await this.getSchedule.getPartial({ weekDay, year, month, date })
 
-      this.createTimeTo.create(sessionTime as string, partialSchedule.duration)
+      const timeFrom = sessionTime as string
+      const timeTo = this.createTimeTo.create(timeFrom, partialSchedule.duration)
 
       const today = Date.now()
       const sDateTime = sDate.getTime()
       const daysToFuture = (partialSchedule.activation_interval * partialSchedule.activation_interval_type) * 24 * 60 * 60 * 1000
       if (sDateTime <= today || sDateTime > (today + daysToFuture)) {
         return badRequest(new InvalidParamError('session_date'))
+      }
+
+      const [sessionTimeFromHours, sessionTimeFromMinutes] = timeFrom.split(':').map(this.normalizeTime)
+      const [sessionTimeToHours, sessionTimeToMinutes] = timeTo.split(':').map(this.normalizeTime)
+      const isScheduleAvailable = partialSchedule.availability.some((timeInterval): boolean => {
+        const [timeFromHours, timeFromMinutes] = timeInterval.time_from.split(':').map(this.normalizeTime)
+        const [timeToHours, timeToMinutes] = timeInterval.time_to.split(':').map(this.normalizeTime)
+
+        if (sessionTimeFromHours < timeFromHours) {
+          return false
+        }
+
+        if (sessionTimeFromHours === timeFromHours) {
+          if (sessionTimeFromMinutes < timeFromMinutes) {
+            return false
+          }
+        }
+
+        if (sessionTimeToHours > timeToHours) {
+          return false
+        }
+
+        if (sessionTimeToHours === timeToHours) {
+          if (sessionTimeToMinutes > timeToMinutes) {
+            return false
+          }
+        }
+
+        return true
+      })
+
+      if (!isScheduleAvailable) {
+        return badRequest(new InvalidParamError('session_time'))
       }
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
