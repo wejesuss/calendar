@@ -523,4 +523,30 @@ describe('Create Session Controller', () => {
     expect(normalizedHours).toBe(24)
     expect(minutes).toBe(15)
   })
+
+  test('Should return 400 if session time is not available', async () => {
+    const { sut, createTimeToStub } = makeSut()
+
+    let httpRequest = makeFakeHttpRequest(null, '08:00')
+    let httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+
+    httpRequest = makeFakeHttpRequest(null, '09:15')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('18:00')
+    httpRequest = makeFakeHttpRequest()
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('17:15')
+    httpRequest = makeFakeHttpRequest()
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+  })
 })
