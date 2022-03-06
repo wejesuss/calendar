@@ -96,9 +96,9 @@ export class CreateSessionController implements Controller {
       this.createTimeTo.create(sessionTime as string, partialSchedule.duration)
 
       const today = Date.now()
-      const sTime = sDate.getTime()
+      const sDateTime = sDate.getTime()
       const daysToFuture = (partialSchedule.activation_interval * partialSchedule.activation_interval_type) * 24 * 60 * 60 * 1000
-      if (sTime <= today || sTime > (today + daysToFuture)) {
+      if (sDateTime <= today || sDateTime > (today + daysToFuture)) {
         return badRequest(new InvalidParamError('session_date'))
       }
     } catch (error) {
