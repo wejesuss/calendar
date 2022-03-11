@@ -504,7 +504,7 @@ describe('Create Session Controller', () => {
     let httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_date')))
 
-    // session date is grater than limit
+    // session date is greater than limit
     jest.spyOn(Date.prototype, 'getTime').mockReturnValueOnce(time + daysToFuture + 1000)
 
     httpResponse = await sut.handle(httpRequest)
