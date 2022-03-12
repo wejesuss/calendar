@@ -112,10 +112,10 @@ export class CreateSessionController implements Controller {
         return badRequest(new InvalidParamError('session_date'))
       }
 
-      const [sessionTimeFromHours, sessionTimeFromMinutes] = timeFrom.split(':').map(this.normalizeTime)
+      const [sessionTimeFromHours, sessionTimeFromMinutes] = timeFrom.split(':').map(Number)
       const [sessionTimeToHours, sessionTimeToMinutes] = timeTo.split(':').map(this.normalizeTime)
       const isScheduleAvailable = partialSchedule.availability.some((timeInterval): boolean => {
-        const [timeFromHours, timeFromMinutes] = timeInterval.time_from.split(':').map(this.normalizeTime)
+        const [timeFromHours, timeFromMinutes] = timeInterval.time_from.split(':').map(Number)
         const [timeToHours, timeToMinutes] = timeInterval.time_to.split(':').map(this.normalizeTime)
 
         if (sessionTimeFromHours < timeFromHours) {
