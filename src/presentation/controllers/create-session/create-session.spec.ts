@@ -149,7 +149,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-const time = 1642820400000
+const time = 1642820400000 // 2022/01/23
 jest.spyOn(Date, 'now').mockReturnValue(time)
 describe('Create Session Controller', () => {
   test('Should return 400 if no name is provided', async () => {
