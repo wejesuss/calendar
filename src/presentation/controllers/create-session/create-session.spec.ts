@@ -17,15 +17,15 @@ import {
   badRequest
 } from './create-session-protocols'
 
-const makeFakeHttpRequest = (body?: any, sessionTime?: string): HttpRequest => ({
+const makeFakeHttpRequest = (body?: any, sessionTime?: string, sessionDate?: string): HttpRequest => ({
   body: body ?? {
     name: 'any name',
     email: 'any_email',
     phone: 'any_phone',
     cpf: 'any_cpf',
     description: 'any_description',
-    session_date: '2022/01/22',
-    session_time: sessionTime || '10:00'
+    session_date: sessionDate ?? '2022/01/22',
+    session_time: sessionTime ?? '10:00'
   }
 })
 
