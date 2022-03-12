@@ -525,6 +525,37 @@ describe('Create Session Controller', () => {
     expect(minutes).toBe(15)
   })
 
+  test('Should call normalizeTime and normalize just timeTo', async () => {
+    const { sut, getScheduleStub, createTimeToStub } = makeSut()
+    const partialSchedule = {
+      duration: 15,
+      activation_interval: 3,
+      activation_interval_type: 30,
+      availability: [{ time_from: '23:00', time_to: '00:00' }],
+      replacements: []
+    }
+
+    const normalizeTimeSpy = jest.spyOn(sut, 'normalizeTime')
+    jest.spyOn(getScheduleStub, 'getPartial').mockResolvedValueOnce(partialSchedule)
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('00:00')
+
+    const httpRequest = makeFakeHttpRequest(null, '23:00')
+    await sut.handle(httpRequest)
+
+    const firstCall = normalizeTimeSpy.mock.calls[0]
+    const secondCall = normalizeTimeSpy.mock.calls[2]
+    const fourthCall = normalizeTimeSpy.mock.calls[4]
+
+    expect(firstCall[0]).not.toBe('23')
+    expect(fourthCall).toBeFalsy()
+
+    expect(firstCall[0]).toBe('00')
+    expect(firstCall[1]).toBe(0)
+
+    expect(secondCall[0]).toBe('00')
+    expect(secondCall[1]).toBe(0)
+  })
+
   test('Should return 400 if session time is not available', async () => {
     const { sut, createTimeToStub } = makeSut()
 
