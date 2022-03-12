@@ -514,11 +514,12 @@ describe('Create Session Controller', () => {
   test('Should have normalizeTime and normalize just hours', async () => {
     const { sut } = makeSut()
 
+    expect(sut).toHaveProperty('normalizeTime')
+
     const hours = sut.normalizeTime('09', 0)
     const normalizedHours = sut.normalizeTime('00', 0)
     const minutes = sut.normalizeTime('15', 1)
 
-    expect(sut).toHaveProperty('normalizeTime')
     expect(hours).toBe(9)
     expect(normalizedHours).toBe(24)
     expect(minutes).toBe(15)
