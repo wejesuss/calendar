@@ -90,7 +90,9 @@ const makeGetScheduleStub = (): GetSchedule => {
         availability: [
           { time_from: '09:45', time_to: '17:00' }
         ],
-        replacements: []
+        replacements: [
+          { date: '2022/01/23', time_from: '11:00', time_to: '16:00' }
+        ]
       }
     }
   }
@@ -559,6 +561,7 @@ describe('Create Session Controller', () => {
   test('Should return 400 if session time is not available', async () => {
     const { sut, createTimeToStub } = makeSut()
 
+    // availability
     let httpRequest = makeFakeHttpRequest(null, '08:00')
     let httpResponse = await sut.handle(httpRequest)
 
@@ -577,6 +580,18 @@ describe('Create Session Controller', () => {
 
     jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('17:15')
     httpRequest = makeFakeHttpRequest()
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+
+    // replacements
+    httpRequest = makeFakeHttpRequest(null, '10:00', '2022/01/23')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('17:00')
+    httpRequest = makeFakeHttpRequest(null, '12:00', '2022/01/23')
     httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
