@@ -1,3 +1,4 @@
+import { TimeInterval } from '../../../domain/models/schedule'
 import {
   Controller,
   HttpRequest,
@@ -49,6 +50,35 @@ export class CreateSessionController implements Controller {
     if (valueNumber === 0 && index === 0) valueNumber = 24
 
     return valueNumber
+  }
+
+  validateTimeInterval (sessionTimeInterval: TimeInterval, scheduleTimeInterval: TimeInterval): boolean {
+    const [sessionTimeFromHours, sessionTimeFromMinutes] = sessionTimeInterval.time_from.split(':').map(Number)
+    const [sessionTimeToHours, sessionTimeToMinutes] = sessionTimeInterval.time_to.split(':').map(this.normalizeTime)
+    const [timeFromHours, timeFromMinutes] = scheduleTimeInterval.time_from.split(':').map(Number)
+    const [timeToHours, timeToMinutes] = scheduleTimeInterval.time_to.split(':').map(this.normalizeTime)
+
+    if (sessionTimeFromHours < timeFromHours) {
+      return false
+    }
+
+    if (sessionTimeFromHours === timeFromHours) {
+      if (sessionTimeFromMinutes < timeFromMinutes) {
+        return false
+      }
+    }
+
+    if (sessionTimeToHours > timeToHours) {
+      return false
+    }
+
+    if (sessionTimeToHours === timeToHours) {
+      if (sessionTimeToMinutes > timeToMinutes) {
+        return false
+      }
+    }
+
+    return true
   }
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
@@ -112,33 +142,13 @@ export class CreateSessionController implements Controller {
         return badRequest(new InvalidParamError('session_date'))
       }
 
-      const [sessionTimeFromHours, sessionTimeFromMinutes] = timeFrom.split(':').map(Number)
-      const [sessionTimeToHours, sessionTimeToMinutes] = timeTo.split(':').map(this.normalizeTime)
-      const isScheduleAvailable = partialSchedule.availability.some((timeInterval): boolean => {
-        const [timeFromHours, timeFromMinutes] = timeInterval.time_from.split(':').map(Number)
-        const [timeToHours, timeToMinutes] = timeInterval.time_to.split(':').map(this.normalizeTime)
-
-        if (sessionTimeFromHours < timeFromHours) {
-          return false
+      const isScheduleAvailable = partialSchedule.availability.some((scheduleTimeInterval): boolean => {
+        const sessionTimeInterval: TimeInterval = {
+          time_from: timeFrom,
+          time_to: timeTo
         }
 
-        if (sessionTimeFromHours === timeFromHours) {
-          if (sessionTimeFromMinutes < timeFromMinutes) {
-            return false
-          }
-        }
-
-        if (sessionTimeToHours > timeToHours) {
-          return false
-        }
-
-        if (sessionTimeToHours === timeToHours) {
-          if (sessionTimeToMinutes > timeToMinutes) {
-            return false
-          }
-        }
-
-        return true
+        return this.validateTimeInterval(sessionTimeInterval, scheduleTimeInterval)
       })
 
       if (!isScheduleAvailable) {
