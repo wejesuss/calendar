@@ -4,7 +4,7 @@ export interface TimeInterval {
 }
 
 export interface Replacement {
-  date: number
+  date: string
   time_from: string
   time_to: string
 }

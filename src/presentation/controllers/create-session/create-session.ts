@@ -142,6 +142,29 @@ export class CreateSessionController implements Controller {
         return badRequest(new InvalidParamError('session_date'))
       }
 
+      const isReplacementAvailable = partialSchedule.replacements.every((replacement): boolean => {
+        const { date, time_from: rTimeFrom, time_to: rTimeTo } = replacement
+
+        if (date === sessionDate) {
+          const sessionTimeInterval: TimeInterval = {
+            time_from: timeFrom,
+            time_to: timeTo
+          }
+          const scheduleTimeInterval: TimeInterval = {
+            time_from: rTimeFrom,
+            time_to: rTimeTo
+          }
+
+          return this.validateTimeInterval(sessionTimeInterval, scheduleTimeInterval)
+        }
+
+        return true
+      })
+
+      if (!isReplacementAvailable) {
+        return badRequest(new InvalidParamError('session_time'))
+      }
+
       const isScheduleAvailable = partialSchedule.availability.some((scheduleTimeInterval): boolean => {
         const sessionTimeInterval: TimeInterval = {
           time_from: timeFrom,
