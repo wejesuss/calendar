@@ -125,11 +125,11 @@ export class CreateSessionController implements Controller {
         return badRequest(new InvalidParamError('session_time'))
       }
 
-      const [year, month, date] = (sessionDate as string).split('/').map(Number)
-      const sDate = new Date(year, month, date)
+      const [sDateYear, sDateMonth, sDateDay] = (sessionDate as string).split('/').map(Number)
+      const sDate = new Date(sDateYear, sDateMonth, sDateDay)
       const weekDay = sDate.getDay()
 
-      const partialSchedule = await this.getSchedule.getPartial({ weekDay, year, month, date })
+      const partialSchedule = await this.getSchedule.getPartial({ weekDay, year: sDateYear, month: sDateMonth, date: sDateDay })
 
       const timeFrom = sessionTime as string
       const timeTo = this.createTimeTo.create(timeFrom, partialSchedule.duration)
