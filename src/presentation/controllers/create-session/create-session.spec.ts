@@ -1,3 +1,4 @@
+import { GetSession, GetSessionOptions, PartialSession } from '../../../domain/usecases/get-session'
 import { CreateSessionController } from './create-session'
 import {
   HttpRequest,
@@ -110,6 +111,21 @@ const makeCreateTimeToStub = (): CreateTimeTo => {
   return new CreateTimeToStub()
 }
 
+const makeGetSessionStub = (): GetSession => {
+  class GetSessionStub implements GetSession {
+    async getPartial (sessionOptions?: GetSessionOptions): Promise<PartialSession[]> {
+      return [{
+        s_date: '2022/01/22',
+        time_from: '13:00',
+        time_to: '13:15',
+        duration: 15
+      }]
+    }
+  }
+
+  return new GetSessionStub()
+}
+
 interface SutTypes {
   sut: CreateSessionController
   emailValidatorStub: EmailValidator
@@ -119,6 +135,7 @@ interface SutTypes {
   sessionTimeValidatorStub: SessionTimeValidator
   getScheduleStub: GetSchedule
   createTimeToStub: CreateTimeTo
+  getSessionStub: GetSession
 }
 
 const makeSut = (): SutTypes => {
@@ -129,6 +146,7 @@ const makeSut = (): SutTypes => {
   const sessionTimeValidatorStub = makeSessionTimeValidatorStub()
   const getScheduleStub = makeGetScheduleStub()
   const createTimeToStub = makeCreateTimeToStub()
+  const getSessionStub = makeGetSessionStub()
   const sut = new CreateSessionController(
     emailValidatorStub,
     phoneValidatorStub,
@@ -136,7 +154,8 @@ const makeSut = (): SutTypes => {
     sessionDateValidatorStub,
     sessionTimeValidatorStub,
     getScheduleStub,
-    createTimeToStub
+    createTimeToStub,
+    getSessionStub
   )
 
   return {
@@ -147,7 +166,8 @@ const makeSut = (): SutTypes => {
     sessionDateValidatorStub,
     sessionTimeValidatorStub,
     getScheduleStub,
-    createTimeToStub
+    createTimeToStub,
+    getSessionStub
   }
 }
 
@@ -595,5 +615,15 @@ describe('Create Session Controller', () => {
     httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+  })
+
+  test('Should call GetSession with correct values', async () => {
+    const { sut, getSessionStub } = makeSut()
+    const getSessionSpy = jest.spyOn(getSessionStub, 'getPartial')
+
+    const httpRequest = makeFakeHttpRequest()
+    await sut.handle(httpRequest)
+
+    expect(getSessionSpy).toHaveBeenCalledWith({ year: 2022, month: 1, date: 22 })
   })
 })
