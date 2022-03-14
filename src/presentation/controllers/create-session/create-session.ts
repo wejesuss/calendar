@@ -19,34 +19,16 @@ import {
 } from './create-session-protocols'
 
 export class CreateSessionController implements Controller {
-  private readonly emailValidator: EmailValidator
-  private readonly phoneValidator: PhoneValidator
-  private readonly cpfValidator: CPFValidator
-  private readonly sessionDateValidator: SessionDateValidator
-  private readonly sessionTimeValidator: SessionTimeValidator
-  private readonly getSchedule: GetSchedule
-  private readonly createTimeTo: CreateTimeTo
-  private readonly getSession: GetSession
-
   constructor (
-    emailValidator: EmailValidator,
-    phoneValidator: PhoneValidator,
-    cpfValidator: CPFValidator,
-    sessionDateValidator: SessionDateValidator,
-    sessionTimeValidator: SessionTimeValidator,
-    getSchedule: GetSchedule,
-    createTimeTo: CreateTimeTo,
-    getSession: GetSession
-  ) {
-    this.emailValidator = emailValidator
-    this.phoneValidator = phoneValidator
-    this.cpfValidator = cpfValidator
-    this.sessionDateValidator = sessionDateValidator
-    this.sessionTimeValidator = sessionTimeValidator
-    this.getSchedule = getSchedule
-    this.createTimeTo = createTimeTo
-    this.getSession = getSession
-  }
+    private readonly emailValidator: EmailValidator,
+    private readonly phoneValidator: PhoneValidator,
+    private readonly cpfValidator: CPFValidator,
+    private readonly sessionDateValidator: SessionDateValidator,
+    private readonly sessionTimeValidator: SessionTimeValidator,
+    private readonly getSchedule: GetSchedule,
+    private readonly createTimeTo: CreateTimeTo,
+    private readonly getSession: GetSession
+  ) {}
 
   normalizeTime (value: string, index: number): number {
     let valueNumber = Number(value)
