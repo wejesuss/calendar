@@ -1,11 +1,13 @@
-import { GetSession, GetSessionOptions, PartialSession } from '../../../domain/usecases/get-session'
 import { CreateSessionController } from './create-session'
 import {
   HttpRequest,
   GetSchedule,
+  GetSession,
   GetScheduleOptions,
+  GetSessionOptions,
   Schedule,
   PartialSchedule,
+  PartialSession,
   CreateTimeTo,
   EmailValidator,
   PhoneValidator,

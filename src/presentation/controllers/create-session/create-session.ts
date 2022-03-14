@@ -1,10 +1,10 @@
-import { TimeInterval } from '../../../domain/models/schedule'
-import { GetSession } from '../../../domain/usecases/get-session'
 import {
   Controller,
   HttpRequest,
   HttpResponse,
   GetSchedule,
+  TimeInterval,
+  GetSession,
   CreateTimeTo,
   EmailValidator,
   PhoneValidator,

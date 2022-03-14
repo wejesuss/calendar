@@ -1,5 +1,7 @@
-export { Schedule } from '../../../domain/models/schedule'
+export { Schedule, TimeInterval } from '../../../domain/models/schedule'
+export { Session } from '../../../domain/models/session'
 export { GetSchedule, GetScheduleOptions, PartialSchedule } from '../../../domain/usecases/get-schedule'
+export { GetSession, GetSessionOptions, PartialSession } from '../../../domain/usecases/get-session'
 export { MissingParamError, InvalidParamError, ServerError } from '../../errors'
 export { HttpRequest, HttpResponse, Controller } from '../../protocols'
 export { EmailValidator } from '../../protocols/email-validator'
