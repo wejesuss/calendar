@@ -626,4 +626,16 @@ describe('Create Session Controller', () => {
 
     expect(getSessionSpy).toHaveBeenCalledWith({ year: 2022, month: 1, date: 22 })
   })
+
+  test('Should return 500 if GetSession throws', async () => {
+    const { sut, getSessionStub } = makeSut()
+    jest.spyOn(getSessionStub, 'getPartial').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const httpRequest = makeFakeHttpRequest()
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(internalServerError(new Error()))
+  })
 })
