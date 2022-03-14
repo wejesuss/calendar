@@ -1,4 +1,5 @@
 import { TimeInterval } from '../../../domain/models/schedule'
+import { GetSession } from '../../../domain/usecases/get-session'
 import {
   Controller,
   HttpRequest,
@@ -25,6 +26,7 @@ export class CreateSessionController implements Controller {
   private readonly sessionTimeValidator: SessionTimeValidator
   private readonly getSchedule: GetSchedule
   private readonly createTimeTo: CreateTimeTo
+  private readonly getSession: GetSession
 
   constructor (
     emailValidator: EmailValidator,
@@ -33,7 +35,8 @@ export class CreateSessionController implements Controller {
     sessionDateValidator: SessionDateValidator,
     sessionTimeValidator: SessionTimeValidator,
     getSchedule: GetSchedule,
-    createTimeTo: CreateTimeTo
+    createTimeTo: CreateTimeTo,
+    getSession: GetSession
   ) {
     this.emailValidator = emailValidator
     this.phoneValidator = phoneValidator
@@ -42,6 +45,7 @@ export class CreateSessionController implements Controller {
     this.sessionTimeValidator = sessionTimeValidator
     this.getSchedule = getSchedule
     this.createTimeTo = createTimeTo
+    this.getSession = getSession
   }
 
   normalizeTime (value: string, index: number): number {
@@ -177,6 +181,12 @@ export class CreateSessionController implements Controller {
       if (!isScheduleAvailable) {
         return badRequest(new InvalidParamError('session_time'))
       }
+
+      await this.getSession.getPartial({
+        year: sDateYear,
+        month: sDateMonth,
+        date: sDateDay
+      })
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
     }
