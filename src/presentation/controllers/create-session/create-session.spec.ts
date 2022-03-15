@@ -580,10 +580,9 @@ describe('Create Session Controller', () => {
     expect(secondCall[1]).toBe(0)
   })
 
-  test('Should return 400 if session time is not available', async () => {
+  test('Should return 400 if session time is not available using schedule', async () => {
     const { sut, createTimeToStub } = makeSut()
 
-    // availability
     let httpRequest = makeFakeHttpRequest(null, '08:00')
     let httpResponse = await sut.handle(httpRequest)
 
@@ -605,10 +604,13 @@ describe('Create Session Controller', () => {
     httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+  })
 
-    // replacements
-    httpRequest = makeFakeHttpRequest(null, '10:00', '2022/01/23')
-    httpResponse = await sut.handle(httpRequest)
+  test('Should return 400 if session time is not available using replacement', async () => {
+    const { sut, createTimeToStub } = makeSut()
+
+    let httpRequest = makeFakeHttpRequest(null, '10:00', '2022/01/23')
+    let httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
 
