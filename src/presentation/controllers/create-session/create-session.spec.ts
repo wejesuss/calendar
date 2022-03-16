@@ -745,4 +745,16 @@ describe('Create Session Controller', () => {
       description: 'any_description'
     })
   })
+
+  test('Should return 500 if AddSession throws', async () => {
+    const { sut, addSessionStub } = makeSut()
+    jest.spyOn(addSessionStub, 'add').mockImplementationOnce(async () => {
+      throw new Error()
+    })
+
+    const httpRequest = makeFakeHttpRequest()
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(internalServerError(new Error()))
+  })
 })
