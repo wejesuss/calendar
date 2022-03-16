@@ -205,7 +205,7 @@ export class CreateSessionController implements Controller {
         return badRequest(new InvalidParamError('session_time'))
       }
 
-      await this.addSession.add({
+      const session = await this.addSession.add({
         s_date: sessionDate,
         duration: partialSchedule.duration,
         time_from: timeFrom,
@@ -216,6 +216,11 @@ export class CreateSessionController implements Controller {
         cpf,
         description
       })
+
+      return {
+        statusCode: 200,
+        body: session
+      }
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
     }
