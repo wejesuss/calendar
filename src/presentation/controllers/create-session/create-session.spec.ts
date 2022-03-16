@@ -20,7 +20,8 @@ import {
   InvalidParamError,
   MissingParamError,
   internalServerError,
-  badRequest
+  badRequest,
+  ok
 } from './create-session-protocols'
 
 const makeFakeHttpRequest = (body?: any, sessionTime?: string, sessionDate?: string): HttpRequest => ({
@@ -33,6 +34,25 @@ const makeFakeHttpRequest = (body?: any, sessionTime?: string, sessionDate?: str
     session_date: sessionDate ?? '2022/01/22',
     session_time: sessionTime ?? '10:00'
   }
+})
+
+const makeFakeSession = (): Session => ({
+  id: 'valid_id',
+  s_date: '2022/01/22',
+  duration: 15,
+  time_from: '10:00',
+  time_to: '10:15',
+  description: 'any_description',
+  name: 'any name',
+  email: 'any_email',
+  phone: 'any_phone',
+  cpf: 'any_cpf',
+  price: 10000,
+  paid: false,
+  image_path: null,
+  user_id: null,
+  created_at: Date.now(),
+  updated_at: Date.now()
 })
 
 const makeEmailValidatorStub = (): EmailValidator => {
@@ -764,30 +784,6 @@ describe('Create Session Controller', () => {
     const httpRequest = makeFakeHttpRequest()
     const httpResponse = await sut.handle(httpRequest)
 
-    expect(httpResponse.statusCode).toBe(200)
-
-    const {
-      id,
-      s_date: sDate,
-      duration,
-      time_from: timeFrom,
-      time_to: timeTo,
-      description,
-      name,
-      email,
-      phone,
-      cpf
-    } = httpResponse.body
-
-    expect(id).toBe('valid_id')
-    expect(sDate).toBe('2022/01/22')
-    expect(duration).toBe(15)
-    expect(timeFrom).toBe('10:00')
-    expect(timeTo).toBe('10:15')
-    expect(name).toBe('any name')
-    expect(email).toBe('any_email')
-    expect(phone).toBe('any_phone')
-    expect(cpf).toBe('any_cpf')
-    expect(description).toBe('any_description')
+    expect(httpResponse).toEqual(ok(makeFakeSession()))
   })
 })
