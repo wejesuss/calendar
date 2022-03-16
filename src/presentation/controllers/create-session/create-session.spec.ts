@@ -6,9 +6,12 @@ import {
   GetScheduleOptions,
   GetSessionOptions,
   Schedule,
+  Session,
   PartialSchedule,
   PartialSession,
   CreateTimeTo,
+  AddSession,
+  AddSessionModel,
   EmailValidator,
   PhoneValidator,
   CPFValidator,
@@ -128,6 +131,33 @@ const makeGetSessionStub = (): GetSession => {
   return new GetSessionStub()
 }
 
+const makeAddSessionStub = (): AddSession => {
+  class AddSessionStub implements AddSession {
+    async add (sessionData: AddSessionModel): Promise<Session> {
+      return {
+        id: 'valid_id',
+        s_date: '2022/01/22',
+        duration: sessionData.duration,
+        time_from: sessionData.time_from,
+        time_to: sessionData.time_to,
+        description: sessionData.description,
+        name: sessionData.name,
+        email: sessionData.email,
+        phone: sessionData.phone,
+        cpf: sessionData.cpf,
+        price: 10000,
+        paid: false,
+        user_id: null,
+        image_path: null,
+        created_at: Date.now(),
+        updated_at: Date.now()
+      }
+    }
+  }
+
+  return new AddSessionStub()
+}
+
 interface SutTypes {
   sut: CreateSessionController
   emailValidatorStub: EmailValidator
@@ -138,6 +168,7 @@ interface SutTypes {
   getScheduleStub: GetSchedule
   createTimeToStub: CreateTimeTo
   getSessionStub: GetSession
+  addSessionStub: AddSession
 }
 
 const makeSut = (): SutTypes => {
@@ -149,6 +180,8 @@ const makeSut = (): SutTypes => {
   const getScheduleStub = makeGetScheduleStub()
   const createTimeToStub = makeCreateTimeToStub()
   const getSessionStub = makeGetSessionStub()
+  const addSessionStub = makeAddSessionStub()
+
   const sut = new CreateSessionController(
     emailValidatorStub,
     phoneValidatorStub,
@@ -157,7 +190,8 @@ const makeSut = (): SutTypes => {
     sessionTimeValidatorStub,
     getScheduleStub,
     createTimeToStub,
-    getSessionStub
+    getSessionStub,
+    addSessionStub
   )
 
   return {
@@ -169,7 +203,8 @@ const makeSut = (): SutTypes => {
     sessionTimeValidatorStub,
     getScheduleStub,
     createTimeToStub,
-    getSessionStub
+    getSessionStub,
+    addSessionStub
   }
 }
 
@@ -688,5 +723,26 @@ describe('Create Session Controller', () => {
     httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+  })
+
+  test('Should call AddSession with correct values', async () => {
+    const { sut, addSessionStub } = makeSut()
+
+    const addSessionSpy = jest.spyOn(addSessionStub, 'add')
+
+    const httpRequest = makeFakeHttpRequest()
+    await sut.handle(httpRequest)
+
+    expect(addSessionSpy).toHaveBeenCalledWith({
+      s_date: '2022/01/22',
+      duration: 15,
+      time_from: '10:00',
+      time_to: '10:15',
+      name: 'any name',
+      email: 'any_email',
+      phone: 'any_phone',
+      cpf: 'any_cpf',
+      description: 'any_description'
+    })
   })
 })
