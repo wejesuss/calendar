@@ -745,6 +745,46 @@ describe('Create Session Controller', () => {
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
   })
 
+  test('Should validate session time minutes with sessions time minutes', async () => {
+    const { sut, createTimeToStub } = makeSut()
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('13:15')
+    let httpRequest = makeFakeHttpRequest(null, '13:00')
+    let httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).not.toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('13:30')
+    httpRequest = makeFakeHttpRequest(null, '12:00')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).not.toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('15:45')
+    httpRequest = makeFakeHttpRequest(null, '15:30')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).not.toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('16:45')
+    httpRequest = makeFakeHttpRequest(null, '15:30')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).not.toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('16:00')
+    httpRequest = makeFakeHttpRequest(null, '15:30')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).not.toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('13:30')
+    httpRequest = makeFakeHttpRequest(null, '12:30')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).not.toEqual(badRequest(new InvalidParamError('session_time')))
+  })
+
   test('Should call AddSession with correct values', async () => {
     const { sut, addSessionStub } = makeSut()
 
