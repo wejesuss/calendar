@@ -164,11 +164,44 @@ export class CreateSessionController implements Controller {
         return badRequest(new InvalidParamError('session_time'))
       }
 
-      await this.getSession.getPartial({
+      const sessions = await this.getSession.getPartial({
         year: sDateYear,
         month: sDateMonth,
         date: sDateDay
       })
+
+      const isSessionAvailable = sessions.every((session): boolean => {
+        const [sessionTimeFromHours, sessionTimeFromMinutes] = timeFrom.split(':').map(Number)
+        const [sessionTimeToHours, sessionTimeToMinutes] = timeTo.split(':').map(this.normalizeTime)
+        const [timeFromHours, timeFromMinutes] = session.time_from.split(':').map(Number)
+        const [timeToHours, timeToMinutes] = session.time_to.split(':').map(this.normalizeTime)
+
+        if (sessionTimeFromHours < timeFromHours && sessionTimeToHours < timeFromHours) {
+          return true
+        }
+
+        if (sessionTimeFromHours > timeToHours && sessionTimeToHours > timeToHours) {
+          return true
+        }
+
+        if (sessionTimeFromHours === timeFromHours && sessionTimeToHours === timeFromHours) {
+          if (sessionTimeFromMinutes < timeFromMinutes && sessionTimeToMinutes <= timeFromMinutes) {
+            return true
+          }
+        }
+
+        if (sessionTimeFromHours === timeToHours && sessionTimeToHours === timeToHours) {
+          if (sessionTimeFromMinutes >= timeToMinutes && sessionTimeToMinutes > timeToMinutes) {
+            return true
+          }
+        }
+
+        return false
+      })
+
+      if (!isSessionAvailable) {
+        return badRequest(new InvalidParamError('session_time'))
+      }
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
     }
