@@ -14,9 +14,10 @@ import {
   SessionTimeValidator,
   MissingParamError,
   InvalidParamError,
-  internalServerError,
   ServerError,
-  badRequest
+  internalServerError,
+  badRequest,
+  ok
 } from './create-session-protocols'
 
 export class CreateSessionController implements Controller {
@@ -217,10 +218,7 @@ export class CreateSessionController implements Controller {
         description
       })
 
-      return {
-        statusCode: 200,
-        body: session
-      }
+      return ok(session)
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
     }

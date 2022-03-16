@@ -14,3 +14,10 @@ export const internalServerError = (error: Error): HttpResponse => {
     body: new ServerError(error.stack)
   }
 }
+
+export const ok = (body: any): HttpResponse => {
+  return {
+    statusCode: 200,
+    body
+  }
+}
