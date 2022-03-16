@@ -6,6 +6,7 @@ import {
   TimeInterval,
   GetSession,
   CreateTimeTo,
+  AddSession,
   EmailValidator,
   PhoneValidator,
   CPFValidator,
@@ -27,7 +28,8 @@ export class CreateSessionController implements Controller {
     private readonly sessionTimeValidator: SessionTimeValidator,
     private readonly getSchedule: GetSchedule,
     private readonly createTimeTo: CreateTimeTo,
-    private readonly getSession: GetSession
+    private readonly getSession: GetSession,
+    private readonly addSession: AddSession
   ) {}
 
   normalizeTime (value: string, index: number): number {
@@ -69,7 +71,7 @@ export class CreateSessionController implements Controller {
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
-      const { email, phone, cpf, session_date: sessionDate, session_time: sessionTime } = httpRequest.body
+      const { name, email, phone, cpf, description, session_date: sessionDate, session_time: sessionTime } = httpRequest.body
 
       const requiredFields = ['name', 'email', 'phone', 'cpf', 'description', 'session_date', 'session_time']
       const stringRequiredFields = ['name', 'description']
@@ -202,6 +204,18 @@ export class CreateSessionController implements Controller {
       if (!isSessionAvailable) {
         return badRequest(new InvalidParamError('session_time'))
       }
+
+      await this.addSession.add({
+        s_date: sessionDate,
+        duration: partialSchedule.duration,
+        time_from: timeFrom,
+        time_to: timeTo,
+        name,
+        email,
+        phone,
+        cpf,
+        description
+      })
     } catch (error) {
       return internalServerError(new ServerError(error.stack))
     }
