@@ -757,4 +757,37 @@ describe('Create Session Controller', () => {
 
     expect(httpResponse).toEqual(internalServerError(new Error()))
   })
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+
+    const httpRequest = makeFakeHttpRequest()
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse.statusCode).toBe(200)
+
+    const {
+      id,
+      s_date: sDate,
+      duration,
+      time_from: timeFrom,
+      time_to: timeTo,
+      description,
+      name,
+      email,
+      phone,
+      cpf
+    } = httpResponse.body
+
+    expect(id).toBe('valid_id')
+    expect(sDate).toBe('2022/01/22')
+    expect(duration).toBe(15)
+    expect(timeFrom).toBe('10:00')
+    expect(timeTo).toBe('10:15')
+    expect(name).toBe('any name')
+    expect(email).toBe('any_email')
+    expect(phone).toBe('any_phone')
+    expect(cpf).toBe('any_cpf')
+    expect(description).toBe('any_description')
+  })
 })
