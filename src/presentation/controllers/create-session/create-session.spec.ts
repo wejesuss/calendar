@@ -118,9 +118,9 @@ const makeGetSessionStub = (): GetSession => {
     async getPartial (sessionOptions?: GetSessionOptions): Promise<PartialSession[]> {
       return [{
         s_date: '2022/01/22',
-        time_from: '13:00',
-        time_to: '13:15',
-        duration: 15
+        time_from: '13:30',
+        time_to: '15:30',
+        duration: 120
       }]
     }
   }
@@ -173,7 +173,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-const time = 1642820400000 // 2022/01/23
+const time = 1642820400000 // 2022/01/22
 jest.spyOn(Date, 'now').mockReturnValue(time)
 describe('Create Session Controller', () => {
   test('Should return 400 if no name is provided', async () => {
@@ -568,11 +568,8 @@ describe('Create Session Controller', () => {
 
     const firstCall = normalizeTimeSpy.mock.calls[0]
     const secondCall = normalizeTimeSpy.mock.calls[2]
-    const fourthCall = normalizeTimeSpy.mock.calls[4]
 
     expect(firstCall[0]).not.toBe('23')
-    expect(fourthCall).toBeFalsy()
-
     expect(firstCall[0]).toBe('00')
     expect(firstCall[1]).toBe(0)
 
@@ -641,5 +638,55 @@ describe('Create Session Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(internalServerError(new Error()))
+  })
+
+  test('Should return 400 if session time is not available using sessions', async () => {
+    const { sut, createTimeToStub } = makeSut()
+
+    let httpRequest = makeFakeHttpRequest(null, '14:00')
+    let httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('14:00')
+    httpRequest = makeFakeHttpRequest(null, '13:00')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('13:45')
+    httpRequest = makeFakeHttpRequest(null, '13:00')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('13:30')
+    httpRequest = makeFakeHttpRequest(null, '13:30')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+
+    httpRequest = makeFakeHttpRequest(null, '14:00')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('15:00')
+    httpRequest = makeFakeHttpRequest(null, '14:00')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('15:00')
+    httpRequest = makeFakeHttpRequest(null, '15:15')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('15:30')
+    httpRequest = makeFakeHttpRequest(null, '15:30')
+    httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
   })
 })
