@@ -187,14 +187,22 @@ export class CreateSessionController implements Controller {
           return true
         }
 
-        if (sessionTimeFromHours === timeFromHours && sessionTimeToHours === timeFromHours) {
-          if (sessionTimeFromMinutes < timeFromMinutes && sessionTimeToMinutes <= timeFromMinutes) {
+        if (sessionTimeFromHours <= timeFromHours && sessionTimeToHours === timeFromHours) {
+          if (sessionTimeFromHours === timeFromHours) {
+            if (sessionTimeFromMinutes < timeFromMinutes && sessionTimeToMinutes <= timeFromMinutes) {
+              return true
+            }
+          } else if (sessionTimeToMinutes <= timeFromMinutes) {
             return true
           }
         }
 
-        if (sessionTimeFromHours === timeToHours && sessionTimeToHours === timeToHours) {
-          if (sessionTimeFromMinutes >= timeToMinutes && sessionTimeToMinutes > timeToMinutes) {
+        if (sessionTimeFromHours === timeToHours && sessionTimeToHours >= timeToHours) {
+          if (sessionTimeToHours === timeToHours) {
+            if (sessionTimeFromMinutes >= timeToMinutes && sessionTimeToMinutes > timeToMinutes) {
+              return true
+            }
+          } else if (sessionTimeFromMinutes >= timeToMinutes) {
             return true
           }
         }
