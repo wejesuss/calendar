@@ -23,12 +23,21 @@
   gap: 8px;
 }
 
-#btn-mobile span#burger i {
+#btn-mobile span#burger {
+  display: block;
+  border-top: 2px solid;
+  width: 20px;
+  margin: auto;
+}
+
+#btn-mobile span#burger::before,
+#btn-mobile span#burger::after {
+  content: "";
+  display: block;
   width: 20px;
   height: 2px;
-  display: block;
-  background-color: white;
-  margin-top: 4px;
+  background: currentColor;
+  margin-top: 5px;
 }
 
 ul#menu {
