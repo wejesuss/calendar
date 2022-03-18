@@ -26,7 +26,11 @@
       <div class="header-container">
         <h1>Calendar</h1>
         <nav>
-          <input type="checkbox" id="activate-menu" />
+          <input
+            type="checkbox"
+            id="activate-menu"
+            onchange="document.body.style.overflowY = this.checked ? 'hidden' : 'scroll'"
+          />
           <div id="btn-mobile">
             <label for="activate-menu">Menu</label>
             <span

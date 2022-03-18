@@ -71,4 +71,5 @@ ul#menu {
 input#activate-menu:checked ~ ul#menu {
   height: calc(100vh - 48px);
   visibility: visible;
+  overflow-y: auto;
 }
