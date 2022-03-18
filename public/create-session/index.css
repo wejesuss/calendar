@@ -1,4 +1,5 @@
-input#activate-menu {
+input#activate-menu,
+#btn-mobile {
   display: none;
 }
 
