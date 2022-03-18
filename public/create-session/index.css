@@ -1,3 +1,7 @@
+input#activate-menu {
+  display: none;
+}
+
 main .sections {
   display: grid;
   grid-template-columns: repeat(12, 7rem);

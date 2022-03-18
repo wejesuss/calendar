@@ -18,10 +18,6 @@
   padding-right: 24px;
 }
 
-input#activate-menu {
-  display: none;
-}
-
 #btn-mobile {
   display: flex;
   gap: 8px;
