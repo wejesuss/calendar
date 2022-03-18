@@ -28,6 +28,7 @@
   border-top: 2px solid;
   width: 20px;
   margin: auto;
+  transition: 0.2s;
 }
 
 #btn-mobile span#burger::before,
@@ -38,6 +39,8 @@
   height: 2px;
   background: currentColor;
   margin-top: 5px;
+  position: relative;
+  transition: 0.3s;
 }
 
 ul#menu {
@@ -72,4 +75,16 @@ input#activate-menu:checked ~ ul#menu {
   height: calc(100vh - 48px);
   visibility: visible;
   overflow-y: auto;
+}
+
+input#activate-menu:checked ~ #btn-mobile span#burger {
+  border-top-color: transparent;
+}
+
+input#activate-menu:checked ~ #btn-mobile span#burger::before {
+  transform: rotate(135deg);
+}
+input#activate-menu:checked ~ #btn-mobile span#burger::after {
+  transform: rotate(-135deg);
+  top: -7px;
 }
