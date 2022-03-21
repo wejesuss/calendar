@@ -88,3 +88,18 @@ input#activate-menu:checked ~ #btn-mobile span#burger::after {
   transform: rotate(-135deg);
   top: -7px;
 }
+
+main .sections {
+  margin: 0 30px 52px;
+  grid-template-columns: auto;
+}
+
+main .sections section:nth-of-type(1) {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+main .sections section:nth-of-type(2),
+main .sections section:nth-of-type(3) {
+  grid-column: auto;
+}
