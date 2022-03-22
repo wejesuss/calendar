@@ -28,6 +28,8 @@
   --calendar-dates: #d8d8d8;
   --hour-picker-background: #404040;
   --hour-picker-text-color: #c1c1c1;
+  --arrow-down-image: url("/images/arrow-down.svg");
+  --upload-image-icon: url("/images/upload.svg");
 }
 
 html {
@@ -98,7 +100,7 @@ header {
   right: 0;
   width: 100%;
   height: 100%;
-  background-image: url("/images/arrow-down.svg");
+  background-image: var(--arrow-down-image);
   background-repeat: no-repeat;
   background-position: right;
   background-size: contain;

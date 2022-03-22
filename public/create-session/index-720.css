@@ -1,0 +1,109 @@
+.header-container {
+  display: grid;
+  grid-template-columns: auto 14rem;
+  grid-template-rows: 32px;
+  justify-content: space-around;
+  column-gap: 30px;
+  align-items: center;
+}
+
+.header-container nav {
+  grid-column: 2/3;
+  justify-self: end;
+  margin-right: -16px;
+}
+
+.header-container nav ul li:last-child a {
+  position: relative;
+  padding-right: 24px;
+}
+
+#btn-mobile {
+  display: flex;
+  gap: 8px;
+}
+
+#btn-mobile span#burger {
+  display: block;
+  border-top: 2px solid;
+  width: 20px;
+  margin: auto;
+  transition: 0.2s;
+}
+
+#btn-mobile span#burger::before,
+#btn-mobile span#burger::after {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: currentColor;
+  margin-top: 5px;
+  position: relative;
+  transition: 0.3s;
+}
+
+ul#menu {
+  position: absolute;
+  z-index: 1000;
+  width: 100%;
+  height: 0;
+  top: 48px;
+  right: 0;
+  background: var(--box-color);
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+  overflow-y: hidden;
+  transition: 0.4s ease-in-out;
+}
+
+.header-container nav ul li {
+  margin: 0;
+  padding: 1rem 0;
+  width: 100%;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.09);
+}
+
+.header-container nav ul li a {
+  font-size: 1.4rem;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+input#activate-menu:checked ~ ul#menu {
+  height: calc(100vh - 48px);
+  visibility: visible;
+  overflow-y: auto;
+}
+
+input#activate-menu:checked ~ #btn-mobile span#burger {
+  border-top-color: transparent;
+}
+
+input#activate-menu:checked ~ #btn-mobile span#burger::before {
+  transform: rotate(135deg);
+}
+input#activate-menu:checked ~ #btn-mobile span#burger::after {
+  transform: rotate(-135deg);
+  top: -7px;
+}
+
+main .sections {
+  margin: 0 30px 52px;
+  grid-template-columns: auto;
+}
+
+main .sections section {
+  max-width: 380px;
+}
+
+main .sections section:nth-of-type(1) {
+  grid-column: auto;
+  grid-row: auto;
+}
+
+main .sections section:nth-of-type(2),
+main .sections section:nth-of-type(3) {
+  grid-column: auto;
+}
