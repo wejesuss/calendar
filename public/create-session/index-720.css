@@ -94,6 +94,10 @@ main .sections {
   grid-template-columns: auto;
 }
 
+main .sections section {
+  max-width: 380px;
+}
+
 main .sections section:nth-of-type(1) {
   grid-column: auto;
   grid-row: auto;
