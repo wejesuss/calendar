@@ -214,7 +214,7 @@ main .sections section:nth-of-type(3) {
   transform: translate(-4px, -50%);
   width: 50%;
   height: 50%;
-  background-image: url("/public/images/upload.svg");
+  background-image: url("/images/upload.svg");
   background-repeat: no-repeat;
   background-position: right;
   background-size: contain;
