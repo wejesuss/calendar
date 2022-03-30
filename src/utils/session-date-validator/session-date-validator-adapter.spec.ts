@@ -7,9 +7,19 @@ jest.mock('validator', () => ({
   }
 }))
 
+interface SutTypes {
+  sut: SessionDateValidatorAdapter
+}
+
+const makeSut = (): SutTypes => {
+  const sut = new SessionDateValidatorAdapter()
+
+  return { sut }
+}
+
 describe('SessionDateValidator Adapter', () => {
   test('Should return false if session date is not a string', () => {
-    const sut = new SessionDateValidatorAdapter()
+    const { sut } = makeSut()
 
     const isSessionDateValid = sut.isValid(0 as any)
 
@@ -17,7 +27,7 @@ describe('SessionDateValidator Adapter', () => {
   })
 
   test('Should return false if session date is empty string', () => {
-    const sut = new SessionDateValidatorAdapter()
+    const { sut } = makeSut()
 
     const isSessionDateValid = sut.isValid('')
 
@@ -25,7 +35,7 @@ describe('SessionDateValidator Adapter', () => {
   })
 
   test('Should return false if validator returns false', () => {
-    const sut = new SessionDateValidatorAdapter()
+    const { sut } = makeSut()
     jest.spyOn(validator, 'isDate').mockReturnValueOnce(false)
 
     const isSessionDateValid = sut.isValid('2022.03.30')
@@ -34,7 +44,7 @@ describe('SessionDateValidator Adapter', () => {
   })
 
   test('Should call validator with correct date and options', () => {
-    const sut = new SessionDateValidatorAdapter()
+    const { sut } = makeSut()
     const isDateSpy = jest.spyOn(validator, 'isDate')
 
     sut.isValid('2022.03.30')
