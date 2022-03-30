@@ -32,4 +32,13 @@ describe('SessionDateValidator Adapter', () => {
 
     expect(isSessionDateValid).toBe(false)
   })
+
+  test('Should call validator with correct date and options', () => {
+    const sut = new SessionDateValidatorAdapter()
+    const isDateSpy = jest.spyOn(validator, 'isDate')
+
+    sut.isValid('2022.03.30')
+
+    expect(isDateSpy).toHaveBeenCalledWith('2022.03.30', { delimiters: ['/'] })
+  })
 })
