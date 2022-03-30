@@ -8,4 +8,12 @@ describe('SessionDateValidator Adapter', () => {
 
     expect(isSessionDateValid).toBe(false)
   })
+
+  test('Should return false if session date is empty string', () => {
+    const sut = new SessionDateValidatorAdapter()
+
+    const isSessionDateValid = sut.isValid('')
+
+    expect(isSessionDateValid).toBe(false)
+  })
 })
