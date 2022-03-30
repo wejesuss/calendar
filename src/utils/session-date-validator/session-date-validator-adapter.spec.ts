@@ -1,4 +1,4 @@
-import { SessionDateValidatorAdapter } from './session-date-validator-adapter'
+import { SessionDateValidatorAdapter, SessionDateValidatorOptions } from './session-date-validator-adapter'
 import validator from 'validator'
 
 jest.mock('validator', () => ({
@@ -9,12 +9,13 @@ jest.mock('validator', () => ({
 
 interface SutTypes {
   sut: SessionDateValidatorAdapter
+  options: SessionDateValidatorOptions
 }
 
-const makeSut = (): SutTypes => {
-  const sut = new SessionDateValidatorAdapter()
+const makeSut = (options: SessionDateValidatorOptions = { delimiters: ['/'] }): SutTypes => {
+  const sut = new SessionDateValidatorAdapter(options)
 
-  return { sut }
+  return { sut, options }
 }
 
 describe('SessionDateValidator Adapter', () => {
@@ -44,11 +45,11 @@ describe('SessionDateValidator Adapter', () => {
   })
 
   test('Should call validator with correct date and options', () => {
-    const { sut } = makeSut()
+    const { sut, options } = makeSut()
     const isDateSpy = jest.spyOn(validator, 'isDate')
 
     sut.isValid('2022.03.30')
 
-    expect(isDateSpy).toHaveBeenCalledWith('2022.03.30', { delimiters: ['/'] })
+    expect(isDateSpy).toHaveBeenCalledWith('2022.03.30', options)
   })
 })
