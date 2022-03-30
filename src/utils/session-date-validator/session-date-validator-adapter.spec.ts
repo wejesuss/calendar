@@ -52,4 +52,12 @@ describe('SessionDateValidator Adapter', () => {
 
     expect(isDateSpy).toHaveBeenCalledWith('2022.03.30', options)
   })
+
+  test('Should return true if validator returns true', () => {
+    const { sut } = makeSut()
+
+    const isSessionDateValid = sut.isValid('2022/03/30')
+
+    expect(isSessionDateValid).toBe(true)
+  })
 })
