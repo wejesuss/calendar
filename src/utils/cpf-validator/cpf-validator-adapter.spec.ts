@@ -22,4 +22,12 @@ describe('CPFValidator Adapter', () => {
     const isValid = sut.isValid('11111111111')
     expect(isValid).toBe(true)
   })
+
+  test('Should call validator with correct cpf', () => {
+    const sut = new CPFValidatorAdapter()
+    const isTaxIDSpy = jest.spyOn(validator, 'isTaxID')
+
+    sut.isValid('11111111111')
+    expect(isTaxIDSpy).toHaveBeenCalledWith('11111111111', 'pt-BR')
+  })
 })
