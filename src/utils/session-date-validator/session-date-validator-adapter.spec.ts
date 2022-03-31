@@ -12,7 +12,7 @@ interface SutTypes {
   options: SessionDateValidatorOptions
 }
 
-const makeSut = (options: SessionDateValidatorOptions = { delimiters: ['/'] }): SutTypes => {
+const makeSut = (options: SessionDateValidatorOptions = { delimiters: ['/'], format: 'YYYY/MM/DD' }): SutTypes => {
   const sut = new SessionDateValidatorAdapter(options)
 
   return { sut, options }
