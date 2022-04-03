@@ -18,4 +18,12 @@ describe('SessionTimeValidator Adapter', () => {
 
     expect(isSessionTimeValid).toBe(false)
   })
+
+  test('Should return false if session time is empty string', () => {
+    const { sut } = makeSut()
+
+    const isSessionTimeValid = sut.isValid('')
+
+    expect(isSessionTimeValid).toBe(false)
+  })
 })
