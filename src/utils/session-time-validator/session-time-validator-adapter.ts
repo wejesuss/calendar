@@ -13,5 +13,7 @@ export class SessionTimeValidatorAdapter implements SessionTimeValidator {
     const isValidMinute = minutes >= 0 && minutes < 60
 
     if (!isValidHour || !isValidMinute) return false
+
+    return true
   }
 }
