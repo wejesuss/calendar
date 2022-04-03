@@ -26,4 +26,12 @@ describe('SessionTimeValidator Adapter', () => {
 
     expect(isSessionTimeValid).toBe(false)
   })
+
+  test('Should return false if session time is not correctly formatted', () => {
+    const { sut } = makeSut()
+
+    const isSessionTimeValid = sut.isValid('10-30') // 10:30
+
+    expect(isSessionTimeValid).toBe(false)
+  })
 })
