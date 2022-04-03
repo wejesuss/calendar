@@ -5,6 +5,13 @@ export class SessionTimeValidatorAdapter implements SessionTimeValidator {
     if (typeof sessionTime !== 'string' || !sessionTime) return false
 
     const timeFormat = /^\d{2}:\d{2}(:\d{2})?$/
-    return timeFormat.test(sessionTime)
+    if (!timeFormat.test(sessionTime)) return false
+
+    const [hours, minutes] = sessionTime.split(':').map(Number)
+
+    const isValidHour = hours >= 0 && hours < 24
+    const isValidMinute = minutes >= 0 && minutes < 60
+
+    if (!isValidHour || !isValidMinute) return false
   }
 }
