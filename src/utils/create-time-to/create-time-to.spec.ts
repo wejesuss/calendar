@@ -25,5 +25,8 @@ describe('CreateTimeTo Adapter', () => {
 
     timeTo = sut.create('23:00', 145)
     expect(timeTo).toBe('') // 01:25
+
+    timeTo = sut.create('00:34', 1439)
+    expect(timeTo).toBe('') // 00:33
   })
 })
