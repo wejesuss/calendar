@@ -15,6 +15,10 @@ export class CreateTimeToAdapter implements CreateTimeTo {
     const hours = overlappingHours % 24
     const timeTo = `${this.zeroPad(hours)}:${this.zeroPad(minutes)}`
 
+    if (hours === 0 && minutes === 0) return timeTo
+    if (timeFromHours > hours) return ''
+    if (timeFromHours === hours && timeFromMinutes > minutes) return ''
+
     return timeTo
   }
 }
