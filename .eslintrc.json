@@ -9,6 +9,10 @@
   "rules": {
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/no-misused-promises": "off",
-    "arrow-parens": "error"
+    "arrow-parens": "error",
+    "@typescript-eslint/return-await": [
+      "error",
+      "in-try-catch"
+    ]
   }
 }
