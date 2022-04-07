@@ -135,10 +135,13 @@ export class CreateSessionController implements Controller {
         return badRequest(new InvalidParamError('session_date'))
       }
 
-      const isReplacementAvailable = partialSchedule.replacements.every((replacement): boolean => {
+      let noDateMatching = true
+      const isReplacementAvailable = partialSchedule.replacements.some((replacement): boolean => {
         const { date, time_from: rTimeFrom, time_to: rTimeTo } = replacement
 
         if (date === sessionDate) {
+          noDateMatching = false
+
           const sessionTimeInterval: TimeInterval = {
             time_from: timeFrom,
             time_to: timeTo
@@ -151,24 +154,26 @@ export class CreateSessionController implements Controller {
           return this.validateTimeInterval(sessionTimeInterval, scheduleTimeInterval)
         }
 
-        return true
+        return false
       })
 
-      if (!isReplacementAvailable) {
-        return badRequest(new InvalidParamError('session_time'))
-      }
+      if (noDateMatching) {
+        const isScheduleAvailable = partialSchedule.availability.some((scheduleTimeInterval): boolean => {
+          const sessionTimeInterval: TimeInterval = {
+            time_from: timeFrom,
+            time_to: timeTo
+          }
 
-      const isScheduleAvailable = partialSchedule.availability.some((scheduleTimeInterval): boolean => {
-        const sessionTimeInterval: TimeInterval = {
-          time_from: timeFrom,
-          time_to: timeTo
+          return this.validateTimeInterval(sessionTimeInterval, scheduleTimeInterval)
+        })
+
+        if (!isScheduleAvailable) {
+          return badRequest(new InvalidParamError('session_time'))
         }
-
-        return this.validateTimeInterval(sessionTimeInterval, scheduleTimeInterval)
-      })
-
-      if (!isScheduleAvailable) {
-        return badRequest(new InvalidParamError('session_time'))
+      } else {
+        if (!isReplacementAvailable) {
+          return badRequest(new InvalidParamError('session_time'))
+        }
       }
 
       const sessions = await this.getSession.getPartial({
