@@ -109,8 +109,9 @@ export class CreateSessionController implements Controller {
         return badRequest(new InvalidParamError('session_date'))
       }
 
-      const isTimeValid = this.sessionTimeValidator.isValid(sessionTime)
-      if (!isTimeValid) {
+      const timeFrom = sessionTime as string
+      const isTimeFromValid = this.sessionTimeValidator.isValid(timeFrom)
+      if (!isTimeFromValid) {
         return badRequest(new InvalidParamError('session_time'))
       }
 
@@ -120,8 +121,11 @@ export class CreateSessionController implements Controller {
 
       const partialSchedule = await this.getSchedule.getPartial({ weekDay, year: sDateYear, month: sDateMonth, date: sDateDay })
 
-      const timeFrom = sessionTime as string
       const timeTo = this.createTimeTo.create(timeFrom, partialSchedule.duration)
+      const isTimeToValid = this.sessionTimeValidator.isValid(timeTo)
+      if (!isTimeToValid) {
+        return badRequest(new InvalidParamError('session_time'))
+      }
 
       const today = Date.now()
       const sDateTime = sDate.getTime()
