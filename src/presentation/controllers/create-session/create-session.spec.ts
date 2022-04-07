@@ -573,6 +573,17 @@ describe('Create Session Controller', () => {
     expect(httpResponse).toEqual(internalServerError(new Error()))
   })
 
+  test('Should return 400 if CreateTimeTo returns an empty string', async () => {
+    const { sut, createTimeToStub, sessionTimeValidatorStub } = makeSut()
+    jest.spyOn(sessionTimeValidatorStub, 'isValid').mockReturnValueOnce(true).mockReturnValueOnce(false)
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('')
+
+    const httpRequest = makeFakeHttpRequest(null, '23:59')
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+  })
+
   test('Should return 400 if session date is not available', async () => {
     const { sut } = makeSut()
     const daysToFuture = 7776000000
