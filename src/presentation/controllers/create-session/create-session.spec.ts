@@ -117,7 +117,8 @@ const makeGetScheduleStub = (): GetSchedule => {
           { time_from: '09:45', time_to: '17:00' }
         ],
         replacements: [
-          { date: '2022/01/23', time_from: '11:00', time_to: '16:00' }
+          { date: '2022/01/23', time_from: '11:00', time_to: '16:00' },
+          { date: '2022/01/24', time_from: '10:00', time_to: '19:00' }
         ]
       }
     }
@@ -681,6 +682,16 @@ describe('Create Session Controller', () => {
     httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('session_time')))
+  })
+
+  test('Should validate session date and time prioritizing replacement over the schedule', async () => {
+    const { sut, createTimeToStub } = makeSut()
+
+    jest.spyOn(createTimeToStub, 'create').mockReturnValueOnce('18:00')
+    const httpRequest = makeFakeHttpRequest(null, '17:00', '2022/01/24')
+    const httpResponse = await sut.handle(httpRequest)
+
+    expect(httpResponse).not.toEqual(badRequest(new InvalidParamError('session_time')))
   })
 
   test('Should call GetSession with correct values', async () => {
