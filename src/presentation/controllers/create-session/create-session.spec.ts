@@ -228,7 +228,7 @@ const makeSut = (): SutTypes => {
   }
 }
 
-const time = 1642820400000 // 2022/01/22
+const time = 1642734000000 // 2022/01/22
 jest.spyOn(Date, 'now').mockReturnValue(time)
 describe('Create Session Controller', () => {
   test('Should return 400 if no name is provided', async () => {
@@ -524,7 +524,7 @@ describe('Create Session Controller', () => {
     const httpRequest = makeFakeHttpRequest()
     await sut.handle(httpRequest)
 
-    expect(dateSpy).toHaveBeenCalledWith(2022, 1, 22)
+    expect(dateSpy).toHaveBeenCalledWith('2022/01/22')
 
     global.Date = originalDate
   })
@@ -536,7 +536,7 @@ describe('Create Session Controller', () => {
     const httpRequest = makeFakeHttpRequest()
     await sut.handle(httpRequest)
 
-    expect(getScheduleSpy).toHaveBeenCalledWith({ weekDay: 2, year: 2022, month: 1, date: 22 })
+    expect(getScheduleSpy).toHaveBeenCalledWith({ weekDay: 6, year: 2022, month: 1, date: 22 })
   })
 
   test('Should return 500 if GetSchedule throws', async () => {
