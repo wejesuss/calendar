@@ -624,7 +624,6 @@ describe('Create Session Controller', () => {
     const firstCall = normalizeTimeSpy.mock.calls[0]
     const secondCall = normalizeTimeSpy.mock.calls[2]
 
-    expect(firstCall[0]).not.toBe('23')
     expect(firstCall[0]).toBe('00')
     expect(firstCall[1]).toBe(0)
 
