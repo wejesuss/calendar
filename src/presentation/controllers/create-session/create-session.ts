@@ -115,7 +115,7 @@ export class CreateSessionController implements Controller {
       }
 
       const [sDateYear, sDateMonth, sDateDay] = (sessionDate as string).split('/').map(Number)
-      const sDate = new Date(sDateYear, sDateMonth, sDateDay)
+      const sDate = new Date(sessionDate)
       const weekDay = sDate.getDay()
 
       const partialSchedule = await this.getSchedule.getPartial({ weekDay, year: sDateYear, month: sDateMonth, date: sDateDay })
