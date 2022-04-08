@@ -11,6 +11,7 @@ export interface AddSessionModel {
   phone: string
   description: string
   user_id?: string
+  price: number
 }
 
 export interface AddSession {

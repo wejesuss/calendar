@@ -2,7 +2,6 @@ import { AddSession, AddSessionModel, AddSessionRepository, Session } from './db
 
 export class DbAddSession implements AddSession {
   constructor (
-    private readonly price: number,
     private readonly addSessionRepository: AddSessionRepository
   ) { }
 
@@ -11,7 +10,7 @@ export class DbAddSession implements AddSession {
 
     await this.addSessionRepository.add(Object.assign(
       {}, sessionData,
-      { s_date: sessionDate, price: this.price }
+      { s_date: sessionDate }
     ))
 
     return null
