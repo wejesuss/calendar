@@ -1,6 +1,4 @@
-import { Session } from '../../domain/models/session'
-import { AddSessionModel } from '../../domain/usecases/add-session'
-import { AddSessionRepository } from '../protocols/add-session-repository'
+import { AddSessionModel, AddSessionRepository, Session } from './db-add-session-protocols'
 import { DbAddSession } from './db-add-session'
 
 const makeFakeAddSessionModel = (): AddSessionModel => ({

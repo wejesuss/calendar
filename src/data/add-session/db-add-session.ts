@@ -1,6 +1,4 @@
-import { Session } from '../../domain/models/session'
-import { AddSession, AddSessionModel } from '../../domain/usecases/add-session'
-import { AddSessionRepository } from '../protocols/add-session-repository'
+import { AddSession, AddSessionModel, AddSessionRepository, Session } from './db-add-session-protocols'
 
 export class DbAddSession implements AddSession {
   constructor (private readonly addSessionRepository: AddSessionRepository) { }
