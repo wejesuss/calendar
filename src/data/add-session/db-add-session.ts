@@ -8,11 +8,11 @@ export class DbAddSession implements AddSession {
   async add (sessionData: AddSessionModel): Promise<Session> {
     const sessionDate = sessionData.s_date.split('/').join('-')
 
-    await this.addSessionRepository.add(Object.assign(
+    const session = await this.addSessionRepository.add(Object.assign(
       {}, sessionData,
       { s_date: sessionDate }
     ))
 
-    return null
+    return session
   }
 }
