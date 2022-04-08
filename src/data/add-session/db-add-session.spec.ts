@@ -40,7 +40,7 @@ const makeSut = (): SutTypes => {
 
 describe('DbAddSession', () => {
   test('Should call AddSessionRepository with correct values', async () => {
-    const { addSessionRepositoryStub, sut, price } = makeSut()
+    const { sut, addSessionRepositoryStub, price } = makeSut()
     const addSessionSpy = jest.spyOn(addSessionRepositoryStub, 'add')
 
     const sessionModel = makeFakeAddSessionModel(price)
