@@ -50,4 +50,14 @@ describe('DbAddSession', () => {
     await sut.add(sessionModel)
     expect(addSessionSpy).toHaveBeenCalledWith(addSessionData)
   })
+
+  test('Should throw if AddSessionRepository throws', async () => {
+    const { sut, addSessionRepositoryStub, price } = makeSut()
+    jest.spyOn(addSessionRepositoryStub, 'add').mockRejectedValueOnce(new Error())
+
+    const sessionModel = makeFakeAddSessionModel(price)
+
+    const promise = sut.add(sessionModel)
+    await expect(promise).rejects.toThrow()
+  })
 })
