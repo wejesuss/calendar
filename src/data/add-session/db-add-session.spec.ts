@@ -15,13 +15,13 @@ const makeFakeAddSessionModel = (price: number): AddSessionModel => ({
 })
 
 const makeAddSessionRepository = (): AddSessionRepository => {
-  class AddSessionRepository {
+  class AddSessionRepositoryStub {
     async add (sessionData: AddSessionModel): Promise<Session> {
       return null
     }
   }
 
-  return new AddSessionRepository()
+  return new AddSessionRepositoryStub()
 }
 
 interface SutTypes {
