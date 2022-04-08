@@ -3,19 +3,23 @@ import { AddSessionModel } from '../../domain/usecases/add-session'
 import { AddSessionRepository } from '../protocols/add-session-repository'
 import { DbAddSession } from './db-add-session'
 
-interface SutTypes {
-  sut: DbAddSession
-  addSessionRepositoryStub: AddSessionRepository
-}
-
-const makeSut = (): SutTypes => {
+const makeAddSessionRepository = (): AddSessionRepository => {
   class AddSessionRepository {
     async add (sessionData: AddSessionModel): Promise<Session> {
       return null
     }
   }
 
-  const addSessionRepositoryStub = new AddSessionRepository()
+  return new AddSessionRepository()
+}
+
+interface SutTypes {
+  sut: DbAddSession
+  addSessionRepositoryStub: AddSessionRepository
+}
+
+const makeSut = (): SutTypes => {
+  const addSessionRepositoryStub = makeAddSessionRepository()
   const sut = new DbAddSession(addSessionRepositoryStub)
 
   return { sut, addSessionRepositoryStub }
