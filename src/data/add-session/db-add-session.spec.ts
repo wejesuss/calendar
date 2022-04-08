@@ -26,22 +26,25 @@ const makeAddSessionRepository = (): AddSessionRepository => {
 interface SutTypes {
   sut: DbAddSession
   addSessionRepositoryStub: AddSessionRepository
+  price: number
 }
 
 const makeSut = (): SutTypes => {
   const addSessionRepositoryStub = makeAddSessionRepository()
-  const sut = new DbAddSession(addSessionRepositoryStub)
+  const price = 10000
+  const sut = new DbAddSession(price, addSessionRepositoryStub)
 
-  return { sut, addSessionRepositoryStub }
+  return { sut, addSessionRepositoryStub, price }
 }
 
 describe('DbAddSession', () => {
   test('Should call AddSessionRepository with correct values', async () => {
-    const { addSessionRepositoryStub, sut } = makeSut()
+    const { addSessionRepositoryStub, sut, price } = makeSut()
     const addSessionSpy = jest.spyOn(addSessionRepositoryStub, 'add')
 
     const sessionModel = makeFakeAddSessionModel()
-    const addSessionData = Object.assign({}, sessionModel, { s_date: '2022-01-22' })
+    const sessionDate = sessionModel.s_date.split('/').join('-')
+    const addSessionData = Object.assign({}, sessionModel, { s_date: sessionDate, price })
 
     await sut.add(sessionModel)
     expect(addSessionSpy).toHaveBeenCalledWith(addSessionData)
