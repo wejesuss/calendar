@@ -51,6 +51,14 @@ describe('DbGetSchedule', () => {
       await sut.getAll()
       expect(getAllSpy).toHaveBeenCalled()
     })
+
+    test('Should throw if GetScheduleRepository throws', async () => {
+      const { sut, getScheduleRepositoryStub } = makeSut()
+      jest.spyOn(getScheduleRepositoryStub, 'getAll').mockRejectedValueOnce(new Error())
+
+      const promise = sut.getAll()
+      await expect(promise).rejects.toThrow()
+    })
   })
 
   describe('getPartial', () => {
