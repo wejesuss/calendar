@@ -1,5 +1,4 @@
-import { GetScheduleOptions, PartialSchedule } from '../../domain/usecases/get-schedule'
-import { GetScheduleRepository } from '../protocols/get-schedule-repository'
+import { PartialSchedule, GetScheduleOptions, GetScheduleRepository } from './db-get-schedule-protocols'
 import { DbGetSchedule } from './db-get-schedule'
 
 const makeFakeScheduleOptions = (): GetScheduleOptions => ({

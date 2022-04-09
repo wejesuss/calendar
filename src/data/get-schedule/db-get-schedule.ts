@@ -1,6 +1,4 @@
-import { Schedule } from '../../domain/models/schedule'
-import { GetSchedule, GetScheduleOptions, PartialSchedule } from '../../domain/usecases/get-schedule'
-import { GetScheduleRepository } from '../protocols/get-schedule-repository'
+import { Schedule, PartialSchedule, GetSchedule, GetScheduleOptions, GetScheduleRepository } from './db-get-schedule-protocols'
 
 export class DbGetSchedule implements GetSchedule {
   constructor (private readonly getScheduleRepository: GetScheduleRepository) {}
