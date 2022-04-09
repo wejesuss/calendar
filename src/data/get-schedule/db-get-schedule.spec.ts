@@ -2,6 +2,13 @@ import { GetScheduleOptions, PartialSchedule } from '../../domain/usecases/get-s
 import { GetScheduleRepository } from '../protocols/get-schedule-repository'
 import { DbGetSchedule } from './db-get-schedule'
 
+const makeFakeScheduleOptions = (): GetScheduleOptions => ({
+  weekDay: 2,
+  date: 23,
+  month: 2,
+  year: 2022
+})
+
 const makeGetScheduleRepository = (): GetScheduleRepository => {
   class GetScheduleRepository {
     async getPartial (scheduleOptions?: GetScheduleOptions): Promise<PartialSchedule> {
@@ -30,14 +37,9 @@ describe('DbGetSchedule', () => {
       const { sut, getScheduleRepositoryStub } = makeSut()
       const getPartialSpy = jest.spyOn(getScheduleRepositoryStub, 'getPartial')
 
-      const scheduleOptions = {
-        weekDay: 2,
-        date: 23,
-        month: 2,
-        year: 2022
-      }
-
+      const scheduleOptions = makeFakeScheduleOptions()
       await sut.getPartial(scheduleOptions)
+
       expect(getPartialSpy).toHaveBeenCalledWith(scheduleOptions)
     })
   })
