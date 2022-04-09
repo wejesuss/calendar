@@ -8,7 +8,6 @@ export class DbGetSchedule implements GetSchedule {
   }
 
   async getPartial (scheduleOptions?: GetScheduleOptions): Promise<PartialSchedule> {
-    await this.getScheduleRepository.getPartial(scheduleOptions)
-    return null
+    return this.getScheduleRepository.getPartial(scheduleOptions)
   }
 }
