@@ -8,10 +8,18 @@ const makeFakeScheduleOptions = (): GetScheduleOptions => ({
   year: 2022
 })
 
+const makeFakeSchedule = (): PartialSchedule => ({
+  duration: 15,
+  activation_interval: 2,
+  activation_interval_type: 30,
+  availability: [{ time_from: '08:00', time_to: '15:00' }],
+  replacements: []
+})
+
 const makeGetScheduleRepository = (): GetScheduleRepository => {
   class GetScheduleRepository {
     async getPartial (scheduleOptions?: GetScheduleOptions): Promise<PartialSchedule> {
-      return null
+      return makeFakeSchedule()
     }
   }
 
@@ -50,6 +58,15 @@ describe('DbGetSchedule', () => {
       const promise = sut.getPartial(scheduleOptions)
 
       await expect(promise).rejects.toThrow()
+    })
+
+    test('Should return schedule on success', async () => {
+      const { sut } = makeSut()
+
+      const scheduleOptions = makeFakeScheduleOptions()
+      const schedule = await sut.getPartial(scheduleOptions)
+
+      expect(schedule).toEqual(makeFakeSchedule())
     })
   })
 })
