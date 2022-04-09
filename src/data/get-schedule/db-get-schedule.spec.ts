@@ -1,4 +1,4 @@
-import { PartialSchedule, GetScheduleOptions, GetScheduleRepository } from './db-get-schedule-protocols'
+import { PartialSchedule, GetScheduleOptions, GetScheduleRepository, Schedule } from './db-get-schedule-protocols'
 import { DbGetSchedule } from './db-get-schedule'
 
 const makeFakeScheduleOptions = (): GetScheduleOptions => ({
@@ -18,6 +18,10 @@ const makeFakeSchedule = (): PartialSchedule => ({
 
 const makeGetScheduleRepository = (): GetScheduleRepository => {
   class GetScheduleRepository {
+    async getAll (): Promise<Schedule> {
+      return null
+    }
+
     async getPartial (scheduleOptions?: GetScheduleOptions): Promise<PartialSchedule> {
       return makeFakeSchedule()
     }
@@ -39,6 +43,16 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbGetSchedule', () => {
+  describe('getAll', () => {
+    test('Should call GetScheduleRepository with correct values', async () => {
+      const { sut, getScheduleRepositoryStub } = makeSut()
+      const getAllSpy = jest.spyOn(getScheduleRepositoryStub, 'getAll')
+
+      await sut.getAll()
+      expect(getAllSpy).toHaveBeenCalled()
+    })
+  })
+
   describe('getPartial', () => {
     test('Should call GetScheduleRepository with correct values', async () => {
       const { sut, getScheduleRepositoryStub } = makeSut()
