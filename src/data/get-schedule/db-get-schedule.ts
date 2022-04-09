@@ -4,7 +4,8 @@ export class DbGetSchedule implements GetSchedule {
   constructor (private readonly getScheduleRepository: GetScheduleRepository) {}
 
   async getAll (): Promise<Schedule> {
-    throw new Error('Not Implemented')
+    await this.getScheduleRepository.getAll()
+    return null
   }
 
   async getPartial (scheduleOptions?: GetScheduleOptions): Promise<PartialSchedule> {
