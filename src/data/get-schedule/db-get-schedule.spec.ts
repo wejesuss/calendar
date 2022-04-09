@@ -41,5 +41,15 @@ describe('DbGetSchedule', () => {
 
       expect(getPartialSpy).toHaveBeenCalledWith(scheduleOptions)
     })
+
+    test('Should throw if GetScheduleRepository throws', async () => {
+      const { sut, getScheduleRepositoryStub } = makeSut()
+      jest.spyOn(getScheduleRepositoryStub, 'getPartial').mockRejectedValueOnce(new Error())
+
+      const scheduleOptions = makeFakeScheduleOptions()
+      const promise = sut.getPartial(scheduleOptions)
+
+      await expect(promise).rejects.toThrow()
+    })
   })
 })
