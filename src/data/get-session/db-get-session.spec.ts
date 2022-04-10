@@ -32,12 +32,21 @@ const makeSut = (): SutTypes => {
 describe('DbGetSession', () => {
   test('Should call GetSessionRepository with correct values', async () => {
     const { sut, getSessionRepositoryStub } = makeSut()
-
     const getSessionSpy = jest.spyOn(getSessionRepositoryStub, 'getPartial')
 
     const sessionOptions = makeFakeSessionOptions()
     await sut.getPartial(sessionOptions)
 
     expect(getSessionSpy).toHaveBeenCalledWith(sessionOptions)
+  })
+
+  test('Should throw if GetSessionRepository throws', async () => {
+    const { sut, getSessionRepositoryStub } = makeSut()
+    jest.spyOn(getSessionRepositoryStub, 'getPartial').mockRejectedValueOnce(new Error())
+
+    const sessionOptions = makeFakeSessionOptions()
+    const promise = sut.getPartial(sessionOptions)
+
+    await expect(promise).rejects.toThrow()
   })
 })
