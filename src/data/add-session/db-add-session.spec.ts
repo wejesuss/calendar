@@ -1,4 +1,4 @@
-import { AddSessionModel, AddSessionRepository, Session } from './db-add-session-protocols'
+import { AddSession, AddSessionModel, AddSessionRepository, Session } from './db-add-session-protocols'
 import { DbAddSession } from './db-add-session'
 
 const makeFakeAddSessionModel = (): AddSessionModel => ({
@@ -44,7 +44,7 @@ const makeAddSessionRepository = (): AddSessionRepository => {
 }
 
 interface SutTypes {
-  sut: DbAddSession
+  sut: AddSession
   addSessionRepositoryStub: AddSessionRepository
 }
 

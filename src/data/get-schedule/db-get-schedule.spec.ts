@@ -1,4 +1,4 @@
-import { PartialSchedule, GetScheduleOptions, GetScheduleRepository, Schedule } from './db-get-schedule-protocols'
+import { PartialSchedule, GetScheduleOptions, GetScheduleRepository, Schedule, GetSchedule } from './db-get-schedule-protocols'
 import { DbGetSchedule } from './db-get-schedule'
 
 const makeFakeScheduleOptions = (): GetScheduleOptions => ({
@@ -48,7 +48,7 @@ const makeGetScheduleRepository = (): GetScheduleRepository => {
 }
 
 interface SutTypes {
-  sut: DbGetSchedule
+  sut: GetSchedule
   getScheduleRepositoryStub: GetScheduleRepository
 }
 
