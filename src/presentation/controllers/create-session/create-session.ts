@@ -30,7 +30,8 @@ export class CreateSessionController implements Controller {
     private readonly getSchedule: GetSchedule,
     private readonly createTimeTo: CreateTimeTo,
     private readonly getSession: GetSession,
-    private readonly addSession: AddSession
+    private readonly addSession: AddSession,
+    private readonly price: number
   ) {}
 
   normalizeTime (value: string, index: number): number {
@@ -232,7 +233,8 @@ export class CreateSessionController implements Controller {
         email,
         phone,
         cpf,
-        description
+        description,
+        price: this.price
       })
 
       return ok(session)

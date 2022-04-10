@@ -202,6 +202,7 @@ const makeSut = (): SutTypes => {
   const createTimeToStub = makeCreateTimeToStub()
   const getSessionStub = makeGetSessionStub()
   const addSessionStub = makeAddSessionStub()
+  const price = 10000
 
   const sut = new CreateSessionController(
     emailValidatorStub,
@@ -212,7 +213,8 @@ const makeSut = (): SutTypes => {
     getScheduleStub,
     createTimeToStub,
     getSessionStub,
-    addSessionStub
+    addSessionStub,
+    price
   )
 
   return {
@@ -823,7 +825,8 @@ describe('Create Session Controller', () => {
       email: 'any_email',
       phone: 'any_phone',
       cpf: 'any_cpf',
-      description: 'any_description'
+      description: 'any_description',
+      price: 10000
     })
   })
 
