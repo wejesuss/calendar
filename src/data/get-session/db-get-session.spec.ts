@@ -7,10 +7,17 @@ const makeFakeSessionOptions = (): GetSessionOptions => ({
   year: 2022
 })
 
+const makeFakePartialSession = (): PartialSession[] => ([{
+  duration: 15,
+  s_date: '2022/01/22',
+  time_from: '09:30',
+  time_to: '10:00'
+}])
+
 const makeGetSessionRepository = (): GetSessionRepository => {
   class GetSessionRepositoryStub implements GetSessionRepository {
     async getPartial (sessionOptions?: GetSessionOptions): Promise<PartialSession[]> {
-      return null
+      return makeFakePartialSession()
     }
   }
 
@@ -48,5 +55,14 @@ describe('DbGetSession', () => {
     const promise = sut.getPartial(sessionOptions)
 
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should return session on success', async () => {
+    const { sut } = makeSut()
+
+    const sessionOptions = makeFakeSessionOptions()
+    const session = await sut.getPartial(sessionOptions)
+
+    expect(session).toEqual(makeFakePartialSession())
   })
 })
