@@ -1,6 +1,12 @@
 import { GetSession, GetSessionOptions, GetSessionRepository, PartialSession } from './db-get-session-protocols'
 import { DbGetSession } from './db-get-session'
 
+const makeFakeSessionOptions = (): GetSessionOptions => ({
+  date: 22,
+  month: 1,
+  year: 2022
+})
+
 const makeGetSessionRepository = (): GetSessionRepository => {
   class GetSessionRepositoryStub implements GetSessionRepository {
     async getPartial (sessionOptions?: GetSessionOptions): Promise<PartialSession[]> {
@@ -29,15 +35,9 @@ describe('DbGetSession', () => {
 
     const getSessionSpy = jest.spyOn(getSessionRepositoryStub, 'getPartial')
 
-    await sut.getPartial({
-      date: 22,
-      month: 1,
-      year: 2022
-    })
-    expect(getSessionSpy).toHaveBeenCalledWith({
-      date: 22,
-      month: 1,
-      year: 2022
-    })
+    const sessionOptions = makeFakeSessionOptions()
+    await sut.getPartial(sessionOptions)
+
+    expect(getSessionSpy).toHaveBeenCalledWith(sessionOptions)
   })
 })
