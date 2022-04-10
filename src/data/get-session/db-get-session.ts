@@ -4,7 +4,6 @@ export class DbGetSession implements GetSession {
   constructor (private readonly getSessionRepository: GetSessionRepository) {}
 
   async getPartial (sessionOptions?: GetSessionOptions): Promise<PartialSession[]> {
-    await this.getSessionRepository.getPartial(sessionOptions)
-    return null
+    return this.getSessionRepository.getPartial(sessionOptions)
   }
 }
