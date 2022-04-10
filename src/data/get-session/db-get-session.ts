@@ -1,5 +1,4 @@
-import { GetSession, GetSessionOptions, PartialSession } from '../../domain/usecases/get-session'
-import { GetSessionRepository } from '../protocols/get-session-repository'
+import { GetSession, GetSessionOptions, PartialSession, GetSessionRepository } from './db-get-session-protocols'
 
 export class DbGetSession implements GetSession {
   constructor (private readonly getSessionRepository: GetSessionRepository) {}

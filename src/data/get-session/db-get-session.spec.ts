@@ -1,5 +1,4 @@
-import { GetSessionOptions, PartialSession, GetSession } from '../../domain/usecases/get-session'
-import { GetSessionRepository } from '../protocols/get-session-repository'
+import { GetSession, GetSessionOptions, GetSessionRepository, PartialSession } from './db-get-session-protocols'
 import { DbGetSession } from './db-get-session'
 
 const makeGetSessionRepository = (): GetSessionRepository => {
