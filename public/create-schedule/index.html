@@ -8,6 +8,13 @@
     <title>Criar datas da visita</title>
     <link rel="stylesheet" href="/base.css" />
     <link rel="stylesheet" href="/create-schedule/index.css" />
+
+    <link
+      rel="stylesheet"
+      href="/create-schedule/index-720.css"
+      media="screen and (max-width: 720px)"
+    />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -21,7 +28,19 @@
       <div class="header-container">
         <h1>Calendar</h1>
         <nav>
-          <ul>
+          <input
+            type="checkbox"
+            id="activate-menu"
+            onchange="document.body.style.overflowY = this.checked ? 'hidden' : 'scroll'"
+          />
+          <div id="btn-mobile">
+            <label for="activate-menu">Menu</label>
+            <span
+              id="burger"
+              onclick="this.previousElementSibling.click()"
+            ></span>
+          </div>
+          <ul  id="menu">
             <li><a href="#">Horários</a></li>
             <li><a href="#">Pagamentos</a></li>
             <li><a href="#">Wemerson</a></li>

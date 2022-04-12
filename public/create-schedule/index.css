@@ -1,3 +1,8 @@
+input#activate-menu,
+#btn-mobile {
+  display: none;
+}
+
 main {
   margin-bottom: 3.2rem;
 }
