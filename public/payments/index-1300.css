@@ -1,0 +1,16 @@
+.header-container {
+  display: grid;
+  grid-template-columns: repeat(10, 7rem);
+  justify-content: center;
+  column-gap: 30px;
+  align-items: center;
+}
+
+.header-container nav {
+  grid-column: 8/11;
+  margin-left: -15px;
+}
+
+main .sections section:nth-of-type(1) {
+  padding: 1.6rem 2.4rem;
+}
