@@ -50,4 +50,26 @@ describe('PrismaSessionRepository', () => {
     const addSessionData = makeFakeAddSessionData(sessionData)
     expect(createSessionSpy).toHaveBeenCalledWith({ data: addSessionData })
   })
+
+  test('Should return session on success', async () => {
+    const { sut } = makeSut()
+
+    const sessionData = makeFakeSessionData()
+    const session = await sut.add(sessionData)
+
+    expect(session.id).toBeTruthy()
+    expect(session.cpf).toBeTruthy()
+    expect(session.phone).toBeTruthy()
+    expect(session.s_date).toEqual('2022/01/22')
+    expect(session.time_from).toBe('09:00')
+    expect(session.time_to).toBe('10:00')
+    expect(session.duration).toBe(60)
+    expect(session.name).toBe('any_name')
+    expect(session.email).toBe('any_email@example.com')
+    expect(session.description).toBe('')
+    expect(session.price).toBe(10000)
+    expect(session.paid).toBe(false)
+    expect(session.user_id).toBeFalsy()
+    expect(session.image_path).toBeFalsy()
+  })
 })
