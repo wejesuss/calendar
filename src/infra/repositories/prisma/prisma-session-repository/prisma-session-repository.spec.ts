@@ -40,15 +40,15 @@ const makeSut = (): SutTypes => {
 }
 
 describe('PrismaSessionRepository', () => {
-  // test('Should call create on session with correct values', async () => {
+  // test('Should call insert on session with correct values', async () => {
   //   const { sut, prisma } = makeSut()
-  //   const createSessionSpy = jest.spyOn(prisma.session, 'create')
+  //   const insertSessionSpy = jest.spyOn(prisma, '$queryRaw')
 
   //   const sessionData = makeFakeSessionData()
   //   await sut.add(sessionData)
 
   //   const addSessionData = makeFakeAddSessionData(sessionData)
-  //   expect(createSessionSpy).toHaveBeenCalledWith({ data: addSessionData })
+  //   expect(insertSessionSpy).toHaveBeenCalledWith({ data: addSessionData })
   // })
 
   test('Should return session on success', async () => {
@@ -61,8 +61,8 @@ describe('PrismaSessionRepository', () => {
     expect(session.cpf).toBeTruthy()
     expect(session.phone).toBeTruthy()
     expect(session.s_date).toEqual('2022/01/22')
-    expect(session.time_from).toBe('09:00')
-    expect(session.time_to).toBe('10:00')
+    expect(session.time_from).toBe('09:00:00')
+    expect(session.time_to).toBe('10:00:00')
     expect(session.duration).toBe(60)
     expect(session.name).toBe('any_name')
     expect(session.email).toBe('any_email@example.com')
