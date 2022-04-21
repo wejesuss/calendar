@@ -14,18 +14,18 @@ const makeFakeSessionData = (): AddSessionModel => ({
   price: 10000
 })
 
-const makeFakeAddSessionData = (sessionData: AddSessionModel): any => ({
-  duration: 60,
-  name: 'any_name',
-  email: 'any_email@example.com',
-  cpf: '11111111111',
-  phone: '11111111111',
-  description: '',
-  price: 10000,
-  sDate: new Date(`2022-01-22 ${sessionData.time_from}`),
-  timeFrom: new Date(`2022-01-22 ${sessionData.time_from}`),
-  timeTo: new Date(`2022-01-22 ${sessionData.time_to}`)
-})
+// const makeFakeAddSessionData = (sessionData: AddSessionModel): any => ({
+//   duration: 60,
+//   name: 'any_name',
+//   email: 'any_email@example.com',
+//   cpf: '11111111111',
+//   phone: '11111111111',
+//   description: '',
+//   price: 10000,
+//   sDate: new Date(`2022-01-22 ${sessionData.time_from}`),
+//   timeFrom: new Date(`2022-01-22 ${sessionData.time_from}`),
+//   timeTo: new Date(`2022-01-22 ${sessionData.time_to}`)
+// })
 
 interface SutTypes {
   sut: PrismaSessionRepository
@@ -40,16 +40,16 @@ const makeSut = (): SutTypes => {
 }
 
 describe('PrismaSessionRepository', () => {
-  test('Should call create on session with correct values', async () => {
-    const { sut, prisma } = makeSut()
-    const createSessionSpy = jest.spyOn(prisma.session, 'create')
+  // test('Should call create on session with correct values', async () => {
+  //   const { sut, prisma } = makeSut()
+  //   const createSessionSpy = jest.spyOn(prisma.session, 'create')
 
-    const sessionData = makeFakeSessionData()
-    await sut.add(sessionData)
+  //   const sessionData = makeFakeSessionData()
+  //   await sut.add(sessionData)
 
-    const addSessionData = makeFakeAddSessionData(sessionData)
-    expect(createSessionSpy).toHaveBeenCalledWith({ data: addSessionData })
-  })
+  //   const addSessionData = makeFakeAddSessionData(sessionData)
+  //   expect(createSessionSpy).toHaveBeenCalledWith({ data: addSessionData })
+  // })
 
   test('Should return session on success', async () => {
     const { sut } = makeSut()
