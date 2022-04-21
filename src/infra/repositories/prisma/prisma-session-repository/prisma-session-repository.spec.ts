@@ -14,6 +14,17 @@ const makeFakeSessionData = (): AddSessionModel => ({
   price: 10000
 })
 
+const makeInsertQuery = (sessionData: AddSessionModel): Prisma.Sql => {
+  const timeFrom = new Date(`${sessionData.s_date} ${sessionData.time_from} GMT-00`)
+  const timeTo = new Date(`${sessionData.s_date} ${sessionData.time_to} GMT-00`)
+
+  const id = Prisma.sql`gen_random_uuid()`
+  const cpfEncrypted = Prisma.sql`pgp_sym_encrypt(${sessionData.cpf}, ${'longsecretencryptionkey'})`
+  const phoneEncrypted = Prisma.sql`pgp_sym_encrypt(${sessionData.phone}, ${'longsecretencryptionkey'})`
+
+  return Prisma.sql`INSERT INTO session (id,name,email,cpf,phone,description,duration,s_date,time_from,time_to,price,user_id) VALUES (${id},${sessionData.name},${sessionData.email},${cpfEncrypted},${phoneEncrypted},${sessionData.description},${sessionData.duration},${timeFrom},${timeFrom},${timeTo},${sessionData.price},${sessionData.user_id}) RETURNING *;`
+}
+
 interface SutTypes {
   sut: PrismaSessionRepository
   prisma: PrismaClient
@@ -32,19 +43,10 @@ describe('PrismaSessionRepository', () => {
     const insertSessionSpy = jest.spyOn(prisma, '$queryRaw')
 
     const sessionData = makeFakeSessionData()
-
-    const timeFrom = new Date(`${sessionData.s_date} ${sessionData.time_from} GMT-00`)
-    const timeTo = new Date(`${sessionData.s_date} ${sessionData.time_to} GMT-00`)
-
-    const cpfEncrypted = Prisma.sql`pgp_sym_encrypt(${sessionData.cpf}, ${'longsecretencryptionkey'})`
-    const phoneEncrypted = Prisma.sql`pgp_sym_encrypt(${sessionData.phone}, ${'longsecretencryptionkey'})`
-    const id = Prisma.sql`gen_random_uuid()`
-
-    const sql = Prisma.sql`INSERT INTO session (id,name,email,cpf,phone,description,duration,s_date,time_from,time_to,price,user_id) VALUES (${id},${sessionData.name},${sessionData.email},${cpfEncrypted},${phoneEncrypted},${sessionData.description},${sessionData.duration},${timeFrom},${timeFrom},${timeTo},${sessionData.price},${sessionData.user_id}) RETURNING *;`
+    const insertQuery = makeInsertQuery(sessionData)
 
     await sut.add(sessionData)
-
-    expect(insertSessionSpy).toHaveBeenCalledWith(sql)
+    expect(insertSessionSpy).toHaveBeenCalledWith(insertQuery)
   })
 
   test('Should return session on success', async () => {
