@@ -1,6 +1,5 @@
-import { AddSessionModel } from '../../../../domain/usecases/add-session'
+import { AddSessionModel, PrismaClient } from './prisma-session-repository-protocols'
 import { PrismaSessionRepository } from './prisma-session-repository'
-import { PrismaClient } from '@prisma/client'
 
 interface SutTypes {
   sut: PrismaSessionRepository

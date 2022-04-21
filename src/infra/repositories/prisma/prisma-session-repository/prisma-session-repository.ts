@@ -1,7 +1,4 @@
-import { AddSessionRepository } from '../../../../data/protocols/add-session-repository'
-import { Session } from '../../../../domain/models/session'
-import { AddSessionModel } from '../../../../domain/usecases/add-session'
-import { PrismaClient } from '@prisma/client'
+import { AddSessionRepository, Session, AddSessionModel, PrismaClient } from './prisma-session-repository-protocols'
 
 export class PrismaSessionRepository implements AddSessionRepository {
   constructor (private readonly prisma: PrismaClient) {}
