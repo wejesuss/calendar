@@ -15,7 +15,7 @@ export class PrismaSessionRepository implements AddSessionRepository {
     const dateFrom = new Date(`${sDate} ${timeFrom}`)
     const dateTo = new Date(`${sDate} ${timeTo}`)
 
-    await this.prisma.session.create({
+    const session = await this.prisma.session.create({
       data: {
         name: name,
         email: email,
@@ -31,6 +31,23 @@ export class PrismaSessionRepository implements AddSessionRepository {
       }
     })
 
-    return null
+    return {
+      id: session.id,
+      name,
+      email,
+      cpf,
+      phone,
+      description,
+      duration,
+      s_date: sDate.split('-').join('/'),
+      time_from: timeFrom,
+      time_to: timeTo,
+      price,
+      paid: session.paid,
+      user_id: userId,
+      image_path: session.imagePath,
+      created_at: session.createdAt.getTime(),
+      updated_at: session.updatedAt.getTime()
+    }
   }
 }
