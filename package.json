@@ -47,12 +47,17 @@
     "husky": "^7.0.4",
     "jest": "^27.4.3",
     "lint-staged": "^12.3.7",
+    "prisma": "^3.12.0",
     "sucrase": "^3.20.3",
     "supertest": "^6.1.6",
     "ts-jest": "^27.1.4",
     "typescript": "^4.6.3"
   },
   "dependencies": {
+    "@prisma/client": "^3.12.0",
     "validator": "^13.7.0"
+  },
+  "prisma": {
+    "schema": "./src/infra/repositories/prisma/schema.prisma"
   }
 }
