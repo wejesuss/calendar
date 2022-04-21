@@ -1,4 +1,4 @@
-import { AddSessionModel, PrismaClient } from './prisma-session-repository-protocols'
+import { AddSessionModel, PrismaClient, Prisma } from './prisma-session-repository-protocols'
 import { PrismaSessionRepository } from './prisma-session-repository'
 
 const makeFakeSessionData = (): AddSessionModel => ({
@@ -14,19 +14,6 @@ const makeFakeSessionData = (): AddSessionModel => ({
   price: 10000
 })
 
-// const makeFakeAddSessionData = (sessionData: AddSessionModel): any => ({
-//   duration: 60,
-//   name: 'any_name',
-//   email: 'any_email@example.com',
-//   cpf: '11111111111',
-//   phone: '11111111111',
-//   description: '',
-//   price: 10000,
-//   sDate: new Date(`2022-01-22 ${sessionData.time_from}`),
-//   timeFrom: new Date(`2022-01-22 ${sessionData.time_from}`),
-//   timeTo: new Date(`2022-01-22 ${sessionData.time_to}`)
-// })
-
 interface SutTypes {
   sut: PrismaSessionRepository
   prisma: PrismaClient
@@ -40,16 +27,25 @@ const makeSut = (): SutTypes => {
 }
 
 describe('PrismaSessionRepository', () => {
-  // test('Should call insert on session with correct values', async () => {
-  //   const { sut, prisma } = makeSut()
-  //   const insertSessionSpy = jest.spyOn(prisma, '$queryRaw')
+  test('Should call insert on session with correct values', async () => {
+    const { sut, prisma } = makeSut()
+    const insertSessionSpy = jest.spyOn(prisma, '$queryRaw')
 
-  //   const sessionData = makeFakeSessionData()
-  //   await sut.add(sessionData)
+    const sessionData = makeFakeSessionData()
 
-  //   const addSessionData = makeFakeAddSessionData(sessionData)
-  //   expect(insertSessionSpy).toHaveBeenCalledWith({ data: addSessionData })
-  // })
+    const timeFrom = new Date(`${sessionData.s_date} ${sessionData.time_from} GMT-00`)
+    const timeTo = new Date(`${sessionData.s_date} ${sessionData.time_to} GMT-00`)
+
+    const cpfEncrypted = Prisma.sql`pgp_sym_encrypt(${sessionData.cpf}, ${'longsecretencryptionkey'})`
+    const phoneEncrypted = Prisma.sql`pgp_sym_encrypt(${sessionData.phone}, ${'longsecretencryptionkey'})`
+    const id = Prisma.sql`gen_random_uuid()`
+
+    const sql = Prisma.sql`INSERT INTO session (id,name,email,cpf,phone,description,duration,s_date,time_from,time_to,price,user_id) VALUES (${id},${sessionData.name},${sessionData.email},${cpfEncrypted},${phoneEncrypted},${sessionData.description},${sessionData.duration},${timeFrom},${timeFrom},${timeTo},${sessionData.price},${sessionData.user_id}) RETURNING *;`
+
+    await sut.add(sessionData)
+
+    expect(insertSessionSpy).toHaveBeenCalledWith(sql)
+  })
 
   test('Should return session on success', async () => {
     const { sut } = makeSut()
