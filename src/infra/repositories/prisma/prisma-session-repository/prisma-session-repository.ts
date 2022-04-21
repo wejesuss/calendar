@@ -1,4 +1,4 @@
-import { AddSessionRepository, Session, AddSessionModel, PrismaClient } from './prisma-session-repository-protocols'
+import { AddSessionRepository, Session, AddSessionModel, PrismaClient, Prisma } from './prisma-session-repository-protocols'
 
 export class PrismaSessionRepository implements AddSessionRepository {
   constructor (private readonly prisma: PrismaClient) {}
@@ -12,24 +12,15 @@ export class PrismaSessionRepository implements AddSessionRepository {
       user_id: userId
     } = sessionData
 
-    const dateFrom = new Date(`${sDate} ${timeFrom}`)
-    const dateTo = new Date(`${sDate} ${timeTo}`)
+    const dateFrom = new Date(`${sDate} ${timeFrom} GMT-00`)
+    const dateTo = new Date(`${sDate} ${timeTo} GMT-00`)
 
-    const session = await this.prisma.session.create({
-      data: {
-        name: name,
-        email: email,
-        cpf: cpf, // needs encryption
-        phone: phone, // needs encryption
-        description: description,
-        duration: duration,
-        sDate: dateFrom,
-        timeFrom: dateFrom,
-        timeTo: dateTo,
-        price: price,
-        userId: userId
-      }
-    })
+    const cpfEncrypted = Prisma.sql`pgp_sym_encrypt(${cpf}, ${'longsecretencryptionkey'})`
+    const phoneEncrypted = Prisma.sql`pgp_sym_encrypt(${phone}, ${'longsecretencryptionkey'})`
+    const id = Prisma.sql`gen_random_uuid()`
+    const sql = Prisma.sql`INSERT INTO session (id,name,email,cpf,phone,description,duration,s_date,time_from,time_to,price,user_id) VALUES (${id},${name},${email},${cpfEncrypted},${phoneEncrypted},${description},${duration},${dateFrom},${dateFrom},${dateTo},${price},${userId}) RETURNING *;`
+
+    const [session] = await this.prisma.$queryRaw<Session[]>(sql)
 
     return {
       id: session.id,
@@ -39,15 +30,15 @@ export class PrismaSessionRepository implements AddSessionRepository {
       phone,
       description,
       duration,
-      s_date: sDate.split('-').join('/'),
-      time_from: timeFrom,
-      time_to: timeTo,
+      s_date: session.s_date.split('-').join('/'),
+      time_from: session.time_from,
+      time_to: session.time_to,
       price,
       paid: session.paid,
       user_id: userId,
-      image_path: session.imagePath,
-      created_at: session.createdAt.getTime(),
-      updated_at: session.updatedAt.getTime()
+      image_path: session.image_path,
+      created_at: session.created_at,
+      updated_at: session.updated_at
     }
   }
 }
