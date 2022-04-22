@@ -3,7 +3,7 @@ import { AddSessionRepository, Session, AddSessionModel, PrismaClient, Prisma } 
 export class PrismaSessionRepository implements AddSessionRepository {
   constructor (private readonly prisma: PrismaClient) {}
 
-  async add (sessionData: AddSessionModel): Promise<Session> {
+  createInsertionQuery (sessionData: AddSessionModel): Prisma.Sql {
     const {
       name, cpf, description, duration, email, phone, price,
       s_date: sDate,
@@ -18,8 +18,17 @@ export class PrismaSessionRepository implements AddSessionRepository {
     const cpfEncrypted = Prisma.sql`pgp_sym_encrypt(${cpf}, ${'longsecretencryptionkey'})`
     const phoneEncrypted = Prisma.sql`pgp_sym_encrypt(${phone}, ${'longsecretencryptionkey'})`
     const id = Prisma.sql`gen_random_uuid()`
-    const sql = Prisma.sql`INSERT INTO session (id,name,email,cpf,phone,description,duration,s_date,time_from,time_to,price,user_id) VALUES (${id},${name},${email},${cpfEncrypted},${phoneEncrypted},${description},${duration},${dateFrom},${dateFrom},${dateTo},${price},${userId}) RETURNING *;`
 
+    return Prisma.sql`INSERT INTO session (id,name,email,cpf,phone,description,duration,s_date,time_from,time_to,price,user_id) VALUES (${id},${name},${email},${cpfEncrypted},${phoneEncrypted},${description},${duration},${dateFrom},${dateFrom},${dateTo},${price},${userId}) RETURNING *;`
+  }
+
+  async add (sessionData: AddSessionModel): Promise<Session> {
+    const {
+      name, cpf, description, duration, email, phone, price,
+      user_id: userId
+    } = sessionData
+
+    const sql = this.createInsertionQuery(sessionData)
     const [session] = await this.prisma.$queryRaw<Session[]>(sql)
 
     return {
