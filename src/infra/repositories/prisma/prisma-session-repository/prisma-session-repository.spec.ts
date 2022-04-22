@@ -72,4 +72,16 @@ describe('PrismaSessionRepository', () => {
     expect(session.user_id).toBeFalsy()
     expect(session.image_path).toBeFalsy()
   })
+
+  test('Should throw if Prisma queryRaw throw', async () => {
+    const { sut, prisma } = makeSut()
+    jest.spyOn(prisma, '$queryRaw').mockImplementationOnce(() => {
+      throw new Error()
+    })
+
+    const sessionData = makeFakeSessionData()
+    const promise = sut.add(sessionData)
+
+    await expect(promise).rejects.toThrow()
+  })
 })
