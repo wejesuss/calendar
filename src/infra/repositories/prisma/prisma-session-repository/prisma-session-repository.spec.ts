@@ -1,6 +1,8 @@
 import { AddSessionModel, PrismaClient, Prisma } from './prisma-session-repository-protocols'
 import { PrismaSessionRepository } from './prisma-session-repository'
 
+const getEncryptionKey = (): string => 'longsecretencryptionkey'
+
 const makeFakeSessionData = (): AddSessionModel => ({
   s_date: '2022-01-22',
   time_from: '09:00',
@@ -19,8 +21,8 @@ const makeInsertQuery = (sessionData: AddSessionModel): Prisma.Sql => {
   const timeTo = new Date(`${sessionData.s_date} ${sessionData.time_to} GMT-00`)
 
   const id = Prisma.sql`gen_random_uuid()`
-  const cpfEncrypted = Prisma.sql`pgp_sym_encrypt(${sessionData.cpf}, ${'longsecretencryptionkey'})`
-  const phoneEncrypted = Prisma.sql`pgp_sym_encrypt(${sessionData.phone}, ${'longsecretencryptionkey'})`
+  const cpfEncrypted = Prisma.sql`pgp_sym_encrypt(${sessionData.cpf}, ${getEncryptionKey()})`
+  const phoneEncrypted = Prisma.sql`pgp_sym_encrypt(${sessionData.phone}, ${getEncryptionKey()})`
 
   return Prisma.sql`INSERT INTO session (id,name,email,cpf,phone,description,duration,s_date,time_from,time_to,price,user_id) VALUES (${id},${sessionData.name},${sessionData.email},${cpfEncrypted},${phoneEncrypted},${sessionData.description},${sessionData.duration},${timeFrom},${timeFrom},${timeTo},${sessionData.price},${sessionData.user_id}) RETURNING *;`
 }
@@ -32,7 +34,7 @@ interface SutTypes {
 
 const makeSut = (): SutTypes => {
   const prisma = new PrismaClient()
-  const sut = new PrismaSessionRepository(prisma)
+  const sut = new PrismaSessionRepository(prisma, getEncryptionKey())
 
   return { prisma, sut }
 }
