@@ -1,7 +1,7 @@
 import { AddSessionModel, PrismaClient, Prisma } from './prisma-session-repository-protocols'
 import { PrismaSessionRepository } from './prisma-session-repository'
 
-const getEncryptionKey = (): string => 'longsecretencryptionkey'
+const getEncryptionKey = (): string => process.env.CALENDAR_PG_ENCRYPTION_KEY
 
 const makeFakeSessionData = (): AddSessionModel => ({
   s_date: '2022-01-22',
@@ -34,7 +34,7 @@ interface SutTypes {
 
 const makeSut = (): SutTypes => {
   const prisma = new PrismaClient()
-  const sut = new PrismaSessionRepository(prisma, getEncryptionKey())
+  const sut = new PrismaSessionRepository(prisma)
 
   return { prisma, sut }
 }
