@@ -13,6 +13,28 @@ export class PrismaSessionRepository implements AddSessionRepository, GetSession
   constructor (private readonly prisma: PrismaClient) {
   }
 
+  zeroPad (num: number, places: number = 2): string {
+    return String(num).padStart(places, '0')
+  }
+
+  mapSession (session: {
+    duration: number
+    sDate: Date
+    timeFrom: Date
+    timeTo: Date
+  }): PartialSession {
+    const sDate = `${this.zeroPad(session.sDate.getUTCFullYear())}/${this.zeroPad(session.sDate.getUTCMonth() + 1)}/${this.zeroPad(session.sDate.getUTCDate())}`
+    const timeFrom = `${this.zeroPad(session.timeFrom.getUTCHours())}:${this.zeroPad(session.timeFrom.getUTCMinutes())}`
+    const timeTo = `${this.zeroPad(session.timeTo.getUTCHours())}:${this.zeroPad(session.timeTo.getUTCMinutes())}`
+
+    return {
+      duration: session.duration,
+      s_date: sDate,
+      time_from: timeFrom,
+      time_to: timeTo
+    }
+  }
+
   createInsertionQuery (sessionData: AddSessionModel): Prisma.Sql {
     const {
       name, cpf, description, duration, email, phone, price,
@@ -66,11 +88,16 @@ export class PrismaSessionRepository implements AddSessionRepository, GetSession
 
     const dateToMatch = new Date(Date.UTC(year, month - 1, date))
 
-    await this.prisma.session.findMany({
+    const sessions = await this.prisma.session.findMany({
       select: { duration: true, sDate: true, timeFrom: true, timeTo: true },
       where: { sDate: { equals: dateToMatch } }
+
     })
 
-    return null
+    const mappedToPartialSessions = sessions.map((session) => {
+      return this.mapSession(session)
+    })
+
+    return mappedToPartialSessions
   }
 }
