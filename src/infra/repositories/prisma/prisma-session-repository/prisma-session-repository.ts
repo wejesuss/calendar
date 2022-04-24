@@ -1,6 +1,15 @@
-import { AddSessionRepository, Session, AddSessionModel, PrismaClient, Prisma } from './prisma-session-repository-protocols'
+import {
+  Session,
+  PartialSession,
+  AddSessionRepository,
+  AddSessionModel,
+  GetSessionRepository,
+  GetSessionOptions,
+  PrismaClient,
+  Prisma
+} from './prisma-session-repository-protocols'
 
-export class PrismaSessionRepository implements AddSessionRepository {
+export class PrismaSessionRepository implements AddSessionRepository, GetSessionRepository {
   constructor (private readonly prisma: PrismaClient) {
   }
 
@@ -50,5 +59,17 @@ export class PrismaSessionRepository implements AddSessionRepository {
       created_at: session.created_at,
       updated_at: session.updated_at
     }
+  }
+
+  async getPartial (sessionOptions?: GetSessionOptions): Promise<PartialSession[]> {
+    const { date, month, year } = sessionOptions
+
+    const dateToMatch = new Date(Date.UTC(year, month - 1, date))
+
+    await this.prisma.session.findMany({
+      where: { sDate: { equals: dateToMatch } }
+    })
+
+    return null
   }
 }
