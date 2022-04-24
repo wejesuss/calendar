@@ -40,48 +40,68 @@ const makeSut = (): SutTypes => {
 }
 
 describe('PrismaSessionRepository', () => {
-  test('Should call insert on session with correct values', async () => {
-    const { sut, prisma } = makeSut()
-    const insertSessionSpy = jest.spyOn(prisma, '$queryRaw')
+  describe('AddSessionRepository', () => {
+    test('Should call insert on session with correct values', async () => {
+      const { sut, prisma } = makeSut()
+      const insertSessionSpy = jest.spyOn(prisma, '$queryRaw')
 
-    const sessionData = makeFakeSessionData()
-    const insertQuery = makeInsertQuery(sessionData)
+      const sessionData = makeFakeSessionData()
+      const insertQuery = makeInsertQuery(sessionData)
 
-    await sut.add(sessionData)
-    expect(insertSessionSpy).toHaveBeenCalledWith(insertQuery)
-  })
-
-  test('Should return session on success', async () => {
-    const { sut } = makeSut()
-
-    const sessionData = makeFakeSessionData()
-    const session = await sut.add(sessionData)
-
-    expect(session.id).toBeTruthy()
-    expect(session.cpf).toBeTruthy()
-    expect(session.phone).toBeTruthy()
-    expect(session.s_date).toEqual('2022/01/22')
-    expect(session.time_from).toBe('09:00:00')
-    expect(session.time_to).toBe('10:00:00')
-    expect(session.duration).toBe(60)
-    expect(session.name).toBe('any_name')
-    expect(session.email).toBe('any_email@example.com')
-    expect(session.description).toBe('')
-    expect(session.price).toBe(10000)
-    expect(session.paid).toBe(false)
-    expect(session.user_id).toBeFalsy()
-    expect(session.image_path).toBeFalsy()
-  })
-
-  test('Should throw if Prisma queryRaw throw', async () => {
-    const { sut, prisma } = makeSut()
-    jest.spyOn(prisma, '$queryRaw').mockImplementationOnce(() => {
-      throw new Error()
+      await sut.add(sessionData)
+      expect(insertSessionSpy).toHaveBeenCalledWith(insertQuery)
     })
 
-    const sessionData = makeFakeSessionData()
-    const promise = sut.add(sessionData)
+    test('Should return session on success', async () => {
+      const { sut } = makeSut()
 
-    await expect(promise).rejects.toThrow()
+      const sessionData = makeFakeSessionData()
+      const session = await sut.add(sessionData)
+
+      expect(session.id).toBeTruthy()
+      expect(session.cpf).toBeTruthy()
+      expect(session.phone).toBeTruthy()
+      expect(session.s_date).toEqual('2022/01/22')
+      expect(session.time_from).toBe('09:00:00')
+      expect(session.time_to).toBe('10:00:00')
+      expect(session.duration).toBe(60)
+      expect(session.name).toBe('any_name')
+      expect(session.email).toBe('any_email@example.com')
+      expect(session.description).toBe('')
+      expect(session.price).toBe(10000)
+      expect(session.paid).toBe(false)
+      expect(session.user_id).toBeFalsy()
+      expect(session.image_path).toBeFalsy()
+    })
+
+    test('Should throw if Prisma queryRaw throw', async () => {
+      const { sut, prisma } = makeSut()
+      jest.spyOn(prisma, '$queryRaw').mockImplementationOnce(() => {
+        throw new Error()
+      })
+
+      const sessionData = makeFakeSessionData()
+      const promise = sut.add(sessionData)
+
+      await expect(promise).rejects.toThrow()
+    })
+  })
+
+  describe('GetSessionRepository', () => {
+    test('Should call find many on session with correct values', async () => {
+      const { sut, prisma } = makeSut()
+      const findManySpy = jest.spyOn(prisma.session, 'findMany')
+
+      const sessionOptions = {
+        date: 22,
+        month: 1,
+        year: 2022
+      }
+      await sut.getPartial(sessionOptions)
+
+      expect(findManySpy).toHaveBeenCalledWith({
+        where: { sDate: { equals: new Date('2022-01-22T00:00:00.000Z') } }
+      })
+    })
   })
 })
