@@ -40,6 +40,20 @@ const makeSut = (): SutTypes => {
 }
 
 describe('PrismaSessionRepository', () => {
+  beforeEach(async () => {
+    const { sut, prisma } = makeSut()
+
+    await prisma.session.deleteMany()
+    const sessionData = makeFakeSessionData()
+    await sut.add(sessionData)
+  })
+
+  afterAll(async () => {
+    const { prisma } = makeSut()
+
+    await prisma.$disconnect()
+  })
+
   describe('AddSessionRepository', () => {
     test('Should call insert on session with correct values', async () => {
       const { sut, prisma } = makeSut()
@@ -103,6 +117,24 @@ describe('PrismaSessionRepository', () => {
         select: { duration: true, sDate: true, timeFrom: true, timeTo: true },
         where: { sDate: { equals: new Date('2022-01-22T00:00:00.000Z') } }
       })
+    })
+
+    test('Should return partial sessions on success', async () => {
+      const { sut } = makeSut()
+
+      const sessionOptions = {
+        date: 22,
+        month: 1,
+        year: 2022
+      }
+      const sessions = await sut.getPartial(sessionOptions)
+
+      expect(sessions).toEqual([{
+        duration: 60,
+        s_date: '2022/01/22',
+        time_from: '09:00',
+        time_to: '10:00'
+      }])
     })
   })
 })
