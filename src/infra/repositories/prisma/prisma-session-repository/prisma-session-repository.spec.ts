@@ -100,6 +100,7 @@ describe('PrismaSessionRepository', () => {
       await sut.getPartial(sessionOptions)
 
       expect(findManySpy).toHaveBeenCalledWith({
+        select: { duration: true, sDate: true, timeFrom: true, timeTo: true },
         where: { sDate: { equals: new Date('2022-01-22T00:00:00.000Z') } }
       })
     })
