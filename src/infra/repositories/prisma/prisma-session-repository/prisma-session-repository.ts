@@ -67,6 +67,7 @@ export class PrismaSessionRepository implements AddSessionRepository, GetSession
     const dateToMatch = new Date(Date.UTC(year, month - 1, date))
 
     await this.prisma.session.findMany({
+      select: { duration: true, sDate: true, timeFrom: true, timeTo: true },
       where: { sDate: { equals: dateToMatch } }
     })
 
