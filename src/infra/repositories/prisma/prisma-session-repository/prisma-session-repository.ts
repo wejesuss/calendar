@@ -90,8 +90,8 @@ export class PrismaSessionRepository implements AddSessionRepository, GetSession
 
     const sessions = await this.prisma.session.findMany({
       select: { duration: true, sDate: true, timeFrom: true, timeTo: true },
-      where: { sDate: { equals: dateToMatch } }
-
+      where: { sDate: { equals: dateToMatch } },
+      orderBy: { timeFrom: 'asc' }
     })
 
     const mappedToPartialSessions = sessions.map((session) => {
