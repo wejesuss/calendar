@@ -81,28 +81,24 @@ export class PrismaSessionRepository implements AddSessionRepository, GetSession
   }
 
   async getPartial (sessionOptions?: GetSessionOptions): Promise<PartialSession[]> {
+    let sessions = []
+
     if (sessionOptions) {
       const { date, month, year } = sessionOptions
 
       const dateToMatch = new Date(Date.UTC(year, month - 1, date))
 
-      const sessions = await this.prisma.session.findMany({
+      sessions = await this.prisma.session.findMany({
         select: { duration: true, sDate: true, timeFrom: true, timeTo: true },
         where: { sDate: { equals: dateToMatch } },
         orderBy: { timeFrom: 'asc' }
       })
-
-      const mappedToPartialSessions = sessions.map((session) => {
-        return this.mapSession(session)
+    } else {
+      sessions = await this.prisma.session.findMany({
+        select: { duration: true, sDate: true, timeFrom: true, timeTo: true },
+        orderBy: { timeFrom: 'asc' }
       })
-
-      return mappedToPartialSessions
     }
-
-    const sessions = await this.prisma.session.findMany({
-      select: { duration: true, sDate: true, timeFrom: true, timeTo: true },
-      orderBy: { timeFrom: 'asc' }
-    })
 
     const mappedToPartialSessions = sessions.map((session) => {
       return this.mapSession(session)
