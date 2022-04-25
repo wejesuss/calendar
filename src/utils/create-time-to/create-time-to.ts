@@ -1,10 +1,7 @@
 import { CreateTimeTo } from '../../presentation/protocols/create-time-to'
+import { zeroPadder } from '../../shared/zero-pad/zero-pad'
 
 export class CreateTimeToAdapter implements CreateTimeTo {
-  zeroPad (num: number, places: number = 2): string {
-    return String(num).padStart(places, '0')
-  }
-
   create (timeFrom: string, duration: number): string {
     const [timeFromHours, timeFromMinutes] = timeFrom.split(':').map(Number)
 
@@ -13,7 +10,7 @@ export class CreateTimeToAdapter implements CreateTimeTo {
     const overlappingHours = timeFromHours + hoursToAdd
     const minutes = overlappingMinutes % 60
     const hours = overlappingHours % 24
-    const timeTo = `${this.zeroPad(hours)}:${this.zeroPad(minutes)}`
+    const timeTo = `${zeroPadder.pad(hours)}:${zeroPadder.pad(minutes)}`
 
     if (hours === 0 && minutes === 0) return timeTo
     if (timeFromHours > hours) return ''
