@@ -1,4 +1,4 @@
-import { AddSessionModel, PrismaClient, Prisma } from './prisma-session-repository-protocols'
+import { AddSessionModel, PrismaClient, Prisma, GetSessionOptions, PartialSession } from './prisma-session-repository-protocols'
 import { PrismaSessionRepository } from './prisma-session-repository'
 
 const getEncryptionKey = (): string => process.env.CALENDAR_PG_ENCRYPTION_KEY
@@ -26,6 +26,33 @@ const makeInsertQuery = (sessionData: AddSessionModel): Prisma.Sql => {
 
   return Prisma.sql`INSERT INTO session (id,name,email,cpf,phone,description,duration,s_date,time_from,time_to,price,user_id) VALUES (${id},${sessionData.name},${sessionData.email},${cpfEncrypted},${phoneEncrypted},${sessionData.description},${sessionData.duration},${timeFrom},${timeFrom},${timeTo},${sessionData.price},${sessionData.user_id}) RETURNING *;`
 }
+
+const makeFakeSessionOptions = (): GetSessionOptions => ({
+  date: 22,
+  month: 1,
+  year: 2022
+})
+
+const makeFindManyOptions = (): Prisma.SessionFindManyArgs => ({
+  select: { duration: true, sDate: true, timeFrom: true, timeTo: true },
+  where: { sDate: { equals: new Date('2022-01-22T00:00:00.000Z') } },
+  orderBy: { timeFrom: 'asc' }
+})
+
+const makePartialSessions = (): PartialSession[] => ([
+  {
+    duration: 60,
+    s_date: '2022/01/22',
+    time_from: '09:00',
+    time_to: '10:00'
+  },
+  {
+    duration: 60,
+    s_date: '2022/01/22',
+    time_from: '10:00',
+    time_to: '11:00'
+  }
+])
 
 interface SutTypes {
   sut: PrismaSessionRepository
@@ -111,44 +138,19 @@ describe('PrismaSessionRepository', () => {
       const { sut, prisma } = makeSut()
       const findManySpy = jest.spyOn(prisma.session, 'findMany')
 
-      const sessionOptions = {
-        date: 22,
-        month: 1,
-        year: 2022
-      }
+      const sessionOptions = makeFakeSessionOptions()
       await sut.getPartial(sessionOptions)
 
-      expect(findManySpy).toHaveBeenCalledWith({
-        select: { duration: true, sDate: true, timeFrom: true, timeTo: true },
-        where: { sDate: { equals: new Date('2022-01-22T00:00:00.000Z') } },
-        orderBy: { timeFrom: 'asc' }
-      })
+      expect(findManySpy).toHaveBeenCalledWith(makeFindManyOptions())
     })
 
     test('Should return partial sessions on success', async () => {
       const { sut } = makeSut()
 
-      const sessionOptions = {
-        date: 22,
-        month: 1,
-        year: 2022
-      }
+      const sessionOptions = makeFakeSessionOptions()
       const sessions = await sut.getPartial(sessionOptions)
 
-      expect(sessions).toEqual([
-        {
-          duration: 60,
-          s_date: '2022/01/22',
-          time_from: '09:00',
-          time_to: '10:00'
-        },
-        {
-          duration: 60,
-          s_date: '2022/01/22',
-          time_from: '10:00',
-          time_to: '11:00'
-        }
-      ])
+      expect(sessions).toEqual(makePartialSessions())
     })
 
     test('Should throw if Prisma findMany throw', async () => {
@@ -157,11 +159,7 @@ describe('PrismaSessionRepository', () => {
         throw new Error()
       })
 
-      const sessionOptions = {
-        date: 22,
-        month: 1,
-        year: 2022
-      }
+      const sessionOptions = makeFakeSessionOptions()
       const promise = sut.getPartial(sessionOptions)
 
       await expect(promise).rejects.toThrow()
