@@ -47,6 +47,10 @@ describe('PrismaSessionRepository', () => {
     await prisma.session.deleteMany()
     const sessionData = makeFakeSessionData()
     await sut.add(sessionData)
+
+    sessionData.time_from = '10:00'
+    sessionData.time_to = '11:00'
+    await sut.add(sessionData)
   })
 
   afterAll(async () => {
@@ -116,7 +120,8 @@ describe('PrismaSessionRepository', () => {
 
       expect(findManySpy).toHaveBeenCalledWith({
         select: { duration: true, sDate: true, timeFrom: true, timeTo: true },
-        where: { sDate: { equals: new Date('2022-01-22T00:00:00.000Z') } }
+        where: { sDate: { equals: new Date('2022-01-22T00:00:00.000Z') } },
+        orderBy: { timeFrom: 'asc' }
       })
     })
 
@@ -130,12 +135,20 @@ describe('PrismaSessionRepository', () => {
       }
       const sessions = await sut.getPartial(sessionOptions)
 
-      expect(sessions).toEqual([{
-        duration: 60,
-        s_date: '2022/01/22',
-        time_from: '09:00',
-        time_to: '10:00'
-      }])
+      expect(sessions).toEqual([
+        {
+          duration: 60,
+          s_date: '2022/01/22',
+          time_from: '09:00',
+          time_to: '10:00'
+        },
+        {
+          duration: 60,
+          s_date: '2022/01/22',
+          time_from: '10:00',
+          time_to: '11:00'
+        }
+      ])
     })
   })
 })
