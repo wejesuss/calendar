@@ -39,20 +39,32 @@ const makeFindManyOptions = (): Prisma.SessionFindManyArgs => ({
   orderBy: { timeFrom: 'asc' }
 })
 
-const makePartialSessions = (): PartialSession[] => ([
-  {
-    duration: 60,
-    s_date: '2022/01/22',
-    time_from: '09:00',
-    time_to: '10:00'
-  },
-  {
-    duration: 60,
-    s_date: '2022/01/22',
-    time_from: '10:00',
-    time_to: '11:00'
-  }
-])
+const makePartialSessions = (sDate?: string): PartialSession[] => {
+  const allPartialSessions = [
+    {
+      duration: 60,
+      s_date: '2022/01/22',
+      time_from: '09:00',
+      time_to: '10:00'
+    },
+    {
+      duration: 60,
+      s_date: '2022/01/22',
+      time_from: '10:00',
+      time_to: '11:00'
+    },
+    {
+      duration: 60,
+      s_date: '2022/01/30',
+      time_from: '10:00',
+      time_to: '11:00'
+    }
+  ]
+
+  if (!sDate) return allPartialSessions
+
+  return allPartialSessions.filter((session) => session.s_date === sDate)
+}
 
 interface SutTypes {
   sut: PrismaSessionRepository
@@ -77,6 +89,9 @@ describe('PrismaSessionRepository', () => {
 
     sessionData.time_from = '10:00'
     sessionData.time_to = '11:00'
+    await sut.add(sessionData)
+
+    sessionData.s_date = '2022-01-30'
     await sut.add(sessionData)
   })
 
@@ -144,13 +159,20 @@ describe('PrismaSessionRepository', () => {
       expect(findManySpy).toHaveBeenCalledWith(makeFindManyOptions())
     })
 
+    test('Should return all partial sessions if no session options is passed', async () => {
+      const { sut } = makeSut()
+
+      const sessions = await sut.getPartial()
+      expect(sessions).toEqual(makePartialSessions())
+    })
+
     test('Should return partial sessions on success', async () => {
       const { sut } = makeSut()
 
       const sessionOptions = makeFakeSessionOptions()
       const sessions = await sut.getPartial(sessionOptions)
 
-      expect(sessions).toEqual(makePartialSessions())
+      expect(sessions).toEqual(makePartialSessions('2022/01/22'))
     })
 
     test('Should throw if Prisma findMany throw', async () => {
