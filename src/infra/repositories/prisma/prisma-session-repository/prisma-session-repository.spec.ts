@@ -150,5 +150,21 @@ describe('PrismaSessionRepository', () => {
         }
       ])
     })
+
+    test('Should throw if Prisma findMany throw', async () => {
+      const { sut, prisma } = makeSut()
+      jest.spyOn(prisma.session, 'findMany').mockImplementationOnce(() => {
+        throw new Error()
+      })
+
+      const sessionOptions = {
+        date: 22,
+        month: 1,
+        year: 2022
+      }
+      const promise = sut.getPartial(sessionOptions)
+
+      await expect(promise).rejects.toThrow()
+    })
   })
 })
