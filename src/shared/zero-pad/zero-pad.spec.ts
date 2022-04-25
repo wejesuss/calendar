@@ -1,8 +1,8 @@
-import { ZeroPad } from './zero-pad'
+import { zeroPadder } from './zero-pad'
 
 describe('Zero Pad', () => {
   test('Should pad a number with a given number of zeros', () => {
-    const sut = new ZeroPad()
+    const sut = zeroPadder
 
     let padded = sut.pad(10, 5)
     expect(padded).toBe('00010')

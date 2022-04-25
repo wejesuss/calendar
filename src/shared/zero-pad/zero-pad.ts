@@ -1,4 +1,4 @@
-export class ZeroPad {
+class ZeroPad {
   /**
    *
    * @param num The number to be padded
@@ -9,3 +9,5 @@ export class ZeroPad {
     return String(num).padStart(places, '0')
   }
 }
+
+export const zeroPadder = new ZeroPad()
