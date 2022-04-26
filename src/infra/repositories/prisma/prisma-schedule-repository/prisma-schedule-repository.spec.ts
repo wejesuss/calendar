@@ -70,4 +70,25 @@ describe('PrismaScheduleRepository', () => {
     expect(findIntervalTimeSpy).toHaveBeenCalledWith(makeFindTimeIntervalOptions(scheduleOptions))
     expect(findReplacementSpy).toHaveBeenCalledWith(makeFindReplacementOptions(scheduleOptions))
   })
+
+  test('Should return partial schedule on success', async () => {
+    const { sut } = makeSut()
+
+    const scheduleOptions = makeFakeScheduleOptions()
+    const schedule = await sut.getPartial(scheduleOptions)
+
+    expect(schedule).toEqual({
+      duration: 60,
+      activation_interval: 3,
+      activation_interval_type: 30,
+      replacements: [],
+      availability: [
+        {
+          week: 6,
+          time_from: '09:00',
+          time_to: '17:00'
+        }
+      ]
+    })
+  })
 })
