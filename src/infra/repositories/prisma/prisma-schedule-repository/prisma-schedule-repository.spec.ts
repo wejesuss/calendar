@@ -1,4 +1,4 @@
-import { GetScheduleOptions, PrismaClient, Prisma, zeroPadder } from './prisma-schedule-repository-protocols'
+import { GetScheduleOptions, PrismaClient, Prisma, zeroPadder, PartialSchedule } from './prisma-schedule-repository-protocols'
 import { PrismaScheduleRepository } from './prisma-schedule-repository'
 
 const makeFakeScheduleOptions = (): GetScheduleOptions => ({
@@ -34,6 +34,20 @@ const makeFindReplacementOptions = (scheduleOptions: GetScheduleOptions): Prisma
   },
   orderBy: { rTimeFrom: 'asc' },
   where: { rDate: { equals: new Date(`${scheduleOptions.year}-${zeroPadder.pad(scheduleOptions.month)}-${scheduleOptions.date}T00:00:00.000Z`) } }
+})
+
+const makeFakePartialSchedule = (): PartialSchedule => ({
+  duration: 60,
+  activation_interval: 3,
+  activation_interval_type: 30,
+  replacements: [],
+  availability: [
+    {
+      week: 6,
+      time_from: '09:00',
+      time_to: '17:00'
+    }
+  ]
 })
 
 interface SutTypes {
@@ -77,18 +91,6 @@ describe('PrismaScheduleRepository', () => {
     const scheduleOptions = makeFakeScheduleOptions()
     const schedule = await sut.getPartial(scheduleOptions)
 
-    expect(schedule).toEqual({
-      duration: 60,
-      activation_interval: 3,
-      activation_interval_type: 30,
-      replacements: [],
-      availability: [
-        {
-          week: 6,
-          time_from: '09:00',
-          time_to: '17:00'
-        }
-      ]
-    })
+    expect(schedule).toEqual(makeFakePartialSchedule())
   })
 })
