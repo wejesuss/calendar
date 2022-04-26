@@ -6,7 +6,8 @@ import {
   GetSessionRepository,
   GetSessionOptions,
   PrismaClient,
-  Prisma
+  Prisma,
+  UnmappedPartialSession
 } from './prisma-session-repository-protocols'
 import { zeroPadder } from '../../../../shared/zero-pad/zero-pad'
 
@@ -14,12 +15,7 @@ export class PrismaSessionRepository implements AddSessionRepository, GetSession
   constructor (private readonly prisma: PrismaClient) {
   }
 
-  mapSession (session: {
-    duration: number
-    sDate: Date
-    timeFrom: Date
-    timeTo: Date
-  }): PartialSession {
+  mapSession (session: UnmappedPartialSession): PartialSession {
     const sDate = `${zeroPadder.pad(session.sDate.getUTCFullYear())}/${zeroPadder.pad(session.sDate.getUTCMonth() + 1)}/${zeroPadder.pad(session.sDate.getUTCDate())}`
     const timeFrom = `${zeroPadder.pad(session.timeFrom.getUTCHours())}:${zeroPadder.pad(session.timeFrom.getUTCMinutes())}`
     const timeTo = `${zeroPadder.pad(session.timeTo.getUTCHours())}:${zeroPadder.pad(session.timeTo.getUTCMinutes())}`

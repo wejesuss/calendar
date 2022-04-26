@@ -1,17 +1,22 @@
-import { Schedule, GetScheduleOptions, GetScheduleRepository, PartialSchedule, PrismaClient, zeroPadder } from './prisma-schedule-repository-protocols'
+import {
+  Schedule,
+  GetScheduleOptions,
+  GetScheduleRepository,
+  PartialSchedule,
+  PrismaClient,
+  zeroPadder,
+  MappedReplacement,
+  MappedSchedule,
+  MappedTimeInterval,
+  UnmappedReplacement,
+  UnmappedSchedule,
+  UnmappedTimeInterval
+} from './prisma-schedule-repository-protocols'
 
 export class PrismaScheduleRepository implements GetScheduleRepository {
   constructor (private readonly prisma: PrismaClient) {}
 
-  mapSchedule (schedule: {
-    duration: number
-    activationInterval: number
-    activationIntervalType: number
-  }): {
-      duration: number
-      activation_interval: number
-      activation_interval_type: number
-    } {
+  mapSchedule (schedule: UnmappedSchedule): MappedSchedule {
     return {
       duration: schedule.duration,
       activation_interval: schedule.activationInterval,
@@ -19,12 +24,11 @@ export class PrismaScheduleRepository implements GetScheduleRepository {
     }
   }
 
-  mapTimeInterval (timeInterval: {
-    week: number
-    timeFrom: Date
-    timeTo: Date
-  }): {week: number, time_from: string, time_to: string} {
-    const { timeFrom, timeTo, week } = timeInterval
+  mapTimeInterval (timeInterval: UnmappedTimeInterval): MappedTimeInterval {
+    const {
+      timeFrom,
+      timeTo, week
+    } = timeInterval
 
     return {
       week,
@@ -33,15 +37,7 @@ export class PrismaScheduleRepository implements GetScheduleRepository {
     }
   }
 
-  mapReplacement (replacement: {
-    rDate: Date
-    rTimeFrom: Date
-    rTimeTo: Date
-  }): {
-      date: string
-      time_from: string
-      time_to: string
-    } {
+  mapReplacement (replacement: UnmappedReplacement): MappedReplacement {
     const { rDate, rTimeFrom, rTimeTo } = replacement
 
     const date = `${zeroPadder.pad(rDate.getUTCFullYear())}/${zeroPadder.pad(rDate.getUTCMonth() + 1)}/${zeroPadder.pad(rDate.getUTCDate())}`
