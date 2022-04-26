@@ -99,7 +99,7 @@ export class PrismaScheduleRepository implements GetScheduleRepository {
 
     const replacements = await this.prisma.replacement.findMany({
       select: { rDate: true, rTimeFrom: true, rTimeTo: true },
-      orderBy: { rDate: 'asc' }
+      orderBy: [{ rDate: 'asc' }, { rTimeFrom: 'asc' }]
     })
 
     const mappedSchedule = this.mapSchedule(schedule)
