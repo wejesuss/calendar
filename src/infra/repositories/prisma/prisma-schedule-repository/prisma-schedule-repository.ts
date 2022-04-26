@@ -56,8 +56,37 @@ export class PrismaScheduleRepository implements GetScheduleRepository {
   }
 
   async getPartial (scheduleOptions?: GetScheduleOptions): Promise<PartialSchedule> {
-    const { weekDay, date, month, year } = scheduleOptions
-    const rDate = new Date(Date.UTC(year, month - 1, date))
+    if (scheduleOptions) {
+      const { weekDay, date, month, year } = scheduleOptions
+
+      const rDate = new Date(Date.UTC(year, month - 1, date))
+
+      const schedule = await this.prisma.schedule.findFirst({
+        select: { duration: true, activationInterval: true, activationIntervalType: true }
+      })
+
+      const timeIntervals = await this.prisma.timeInterval.findMany({
+        select: { week: true, timeFrom: true, timeTo: true },
+        orderBy: { timeFrom: 'asc' },
+        where: { week: { equals: weekDay } }
+      })
+
+      const replacements = await this.prisma.replacement.findMany({
+        select: { rDate: true, rTimeFrom: true, rTimeTo: true },
+        orderBy: { rTimeFrom: 'asc' },
+        where: { rDate: { equals: rDate } }
+      })
+
+      const mappedSchedule = this.mapSchedule(schedule)
+      const mappedTimeIntervals = timeIntervals.map((timeInterval) => this.mapTimeInterval(timeInterval))
+      const mappedReplacements = replacements.map((replacement) => this.mapReplacement(replacement))
+
+      return {
+        ...mappedSchedule,
+        availability: mappedTimeIntervals,
+        replacements: mappedReplacements
+      }
+    }
 
     const schedule = await this.prisma.schedule.findFirst({
       select: { duration: true, activationInterval: true, activationIntervalType: true }
@@ -65,14 +94,12 @@ export class PrismaScheduleRepository implements GetScheduleRepository {
 
     const timeIntervals = await this.prisma.timeInterval.findMany({
       select: { week: true, timeFrom: true, timeTo: true },
-      orderBy: { timeFrom: 'asc' },
-      where: { week: { equals: weekDay } }
+      orderBy: { timeFrom: 'asc' }
     })
 
     const replacements = await this.prisma.replacement.findMany({
       select: { rDate: true, rTimeFrom: true, rTimeTo: true },
-      orderBy: { rTimeFrom: 'asc' },
-      where: { rDate: { equals: rDate } }
+      orderBy: { rDate: 'asc' }
     })
 
     const mappedSchedule = this.mapSchedule(schedule)
