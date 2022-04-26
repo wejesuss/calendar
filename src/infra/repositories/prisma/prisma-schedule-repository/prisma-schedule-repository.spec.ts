@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from './prisma-schedule-repository-protocols'
 import { PrismaScheduleRepository } from './prisma-schedule-repository'
 
 interface SutTypes {

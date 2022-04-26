@@ -1,7 +1,4 @@
-import { PrismaClient } from '@prisma/client'
-import { GetScheduleRepository } from '../../../../data/protocols/get-schedule-repository'
-import { Schedule } from '../../../../domain/models/schedule'
-import { GetScheduleOptions, PartialSchedule } from '../../../../domain/usecases/get-schedule'
+import { Schedule, GetScheduleOptions, GetScheduleRepository, PartialSchedule, PrismaClient } from './prisma-schedule-repository-protocols'
 
 export class PrismaScheduleRepository implements GetScheduleRepository {
   constructor (private readonly prisma: PrismaClient) {}
