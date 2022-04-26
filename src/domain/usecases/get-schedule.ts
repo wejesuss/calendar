@@ -7,10 +7,11 @@ export interface GetScheduleOptions {
   date: number
 }
 
+type TimeIntervalWithWeek = TimeInterval & { week: number }
 type PickedPartialSchedule = Pick<Schedule, 'duration'|'activation_interval'|'activation_interval_type'|'replacements'>
 
 export type PartialSchedule = {
-  availability: TimeInterval[]
+  availability: TimeIntervalWithWeek[]
 } & PickedPartialSchedule
 
 export interface GetSchedule {

@@ -29,7 +29,7 @@ const makeFakePartialSchedule = (): PartialSchedule => ({
   duration: 15,
   activation_interval: 2,
   activation_interval_type: 30,
-  availability: [{ time_from: '08:00', time_to: '15:00' }],
+  availability: [{ week: 3, time_from: '08:00', time_to: '15:00' }],
   replacements: []
 })
 
