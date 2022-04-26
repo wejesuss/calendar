@@ -36,19 +36,49 @@ const makeFindReplacementOptions = (scheduleOptions: GetScheduleOptions): Prisma
   where: { rDate: { equals: new Date(`${scheduleOptions.year}-${zeroPadder.pad(scheduleOptions.month)}-${scheduleOptions.date}T00:00:00.000Z`) } }
 })
 
-const makeFakePartialSchedule = (): PartialSchedule => ({
-  duration: 60,
-  activation_interval: 3,
-  activation_interval_type: 30,
-  replacements: [],
-  availability: [
-    {
-      week: 6,
-      time_from: '09:00',
-      time_to: '17:00'
-    }
-  ]
-})
+const makeFakePartialSchedule = (week?: number, date?: string): PartialSchedule => {
+  const partialSchedule = {
+    duration: 60,
+    activation_interval: 3,
+    activation_interval_type: 30,
+    replacements: [
+      {
+        date: '2022/01/23',
+        time_from: '05:00',
+        time_to: '10:00'
+      },
+      {
+        date: '2022/01/23',
+        time_from: '13:00',
+        time_to: '16:00'
+      },
+      {
+        date: '2022/01/24',
+        time_from: '13:00',
+        time_to: '16:00'
+      }
+    ],
+    availability: [
+      {
+        week: 0,
+        time_from: '05:00',
+        time_to: '10:00'
+      },
+      {
+        week: 6,
+        time_from: '09:00',
+        time_to: '17:00'
+      }
+    ]
+  }
+
+  if (week && date) {
+    partialSchedule.availability = partialSchedule.availability.filter((timeInterval) => timeInterval.week === week)
+    partialSchedule.replacements = partialSchedule.replacements.filter((replacement) => replacement.date === date)
+  }
+
+  return partialSchedule
+}
 
 interface SutTypes {
   sut: PrismaScheduleRepository
@@ -85,12 +115,20 @@ describe('PrismaScheduleRepository', () => {
     expect(findReplacementSpy).toHaveBeenCalledWith(makeFindReplacementOptions(scheduleOptions))
   })
 
+  test('Should return all partial schedules if no schedule options is passed', async () => {
+    const { sut } = makeSut()
+
+    const schedule = await sut.getPartial()
+
+    expect(schedule).toEqual(makeFakePartialSchedule())
+  })
+
   test('Should return partial schedule on success', async () => {
     const { sut } = makeSut()
 
     const scheduleOptions = makeFakeScheduleOptions()
     const schedule = await sut.getPartial(scheduleOptions)
 
-    expect(schedule).toEqual(makeFakePartialSchedule())
+    expect(schedule).toEqual(makeFakePartialSchedule(6, '2022/01/22'))
   })
 })
