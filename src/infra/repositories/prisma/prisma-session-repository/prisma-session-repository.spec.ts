@@ -71,8 +71,8 @@ interface SutTypes {
   prisma: PrismaClient
 }
 
+const prisma = new PrismaClient()
 const makeSut = (): SutTypes => {
-  const prisma = new PrismaClient()
   const sut = new PrismaSessionRepository(prisma)
 
   return { prisma, sut }
@@ -80,7 +80,7 @@ const makeSut = (): SutTypes => {
 
 describe('PrismaSessionRepository', () => {
   beforeEach(async () => {
-    const { sut, prisma } = makeSut()
+    const { sut } = makeSut()
     await prisma.$connect()
 
     await prisma.session.deleteMany()
@@ -96,8 +96,6 @@ describe('PrismaSessionRepository', () => {
   })
 
   afterAll(async () => {
-    const { prisma } = makeSut()
-
     await prisma.$disconnect()
   })
 
