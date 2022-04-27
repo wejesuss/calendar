@@ -79,9 +79,12 @@ const makeSut = (): SutTypes => {
 }
 
 describe('PrismaSessionRepository', () => {
+  beforeAll(async () => {
+    await prisma.$connect()
+  })
+
   beforeEach(async () => {
     const { sut } = makeSut()
-    await prisma.$connect()
 
     await prisma.session.deleteMany()
     const sessionData = makeFakeSessionData()

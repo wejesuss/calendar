@@ -93,7 +93,7 @@ const makeSut = (): SutTypes => {
 }
 
 describe('PrismaScheduleRepository', () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await prisma.$connect()
   })
 
