@@ -56,51 +56,38 @@ export class PrismaScheduleRepository implements GetScheduleRepository {
   }
 
   async getPartial (scheduleOptions?: GetScheduleOptions): Promise<PartialSchedule> {
+    const schedule = await this.prisma.schedule.findFirst({
+      select: { duration: true, activationInterval: true, activationIntervalType: true }
+    })
+    let timeIntervals = []
+    let replacements = []
+
     if (scheduleOptions) {
       const { weekDay, date, month, year } = scheduleOptions
-
       const rDate = new Date(Date.UTC(year, month - 1, date))
 
-      const schedule = await this.prisma.schedule.findFirst({
-        select: { duration: true, activationInterval: true, activationIntervalType: true }
-      })
-
-      const timeIntervals = await this.prisma.timeInterval.findMany({
+      timeIntervals = await this.prisma.timeInterval.findMany({
         select: { week: true, timeFrom: true, timeTo: true },
         orderBy: { timeFrom: 'asc' },
         where: { week: { equals: weekDay } }
       })
 
-      const replacements = await this.prisma.replacement.findMany({
+      replacements = await this.prisma.replacement.findMany({
         select: { rDate: true, rTimeFrom: true, rTimeTo: true },
         orderBy: { rTimeFrom: 'asc' },
         where: { rDate: { equals: rDate } }
       })
+    } else {
+      timeIntervals = await this.prisma.timeInterval.findMany({
+        select: { week: true, timeFrom: true, timeTo: true },
+        orderBy: { timeFrom: 'asc' }
+      })
 
-      const mappedSchedule = this.mapSchedule(schedule)
-      const mappedTimeIntervals = timeIntervals.map((timeInterval) => this.mapTimeInterval(timeInterval))
-      const mappedReplacements = replacements.map((replacement) => this.mapReplacement(replacement))
-
-      return {
-        ...mappedSchedule,
-        availability: mappedTimeIntervals,
-        replacements: mappedReplacements
-      }
+      replacements = await this.prisma.replacement.findMany({
+        select: { rDate: true, rTimeFrom: true, rTimeTo: true },
+        orderBy: [{ rDate: 'asc' }, { rTimeFrom: 'asc' }]
+      })
     }
-
-    const schedule = await this.prisma.schedule.findFirst({
-      select: { duration: true, activationInterval: true, activationIntervalType: true }
-    })
-
-    const timeIntervals = await this.prisma.timeInterval.findMany({
-      select: { week: true, timeFrom: true, timeTo: true },
-      orderBy: { timeFrom: 'asc' }
-    })
-
-    const replacements = await this.prisma.replacement.findMany({
-      select: { rDate: true, rTimeFrom: true, rTimeTo: true },
-      orderBy: [{ rDate: 'asc' }, { rTimeFrom: 'asc' }]
-    })
 
     const mappedSchedule = this.mapSchedule(schedule)
     const mappedTimeIntervals = timeIntervals.map((timeInterval) => this.mapTimeInterval(timeInterval))
