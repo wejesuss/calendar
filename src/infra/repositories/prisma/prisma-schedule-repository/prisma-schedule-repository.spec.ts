@@ -131,4 +131,27 @@ describe('PrismaScheduleRepository', () => {
 
     expect(schedule).toEqual(makeFakePartialSchedule(6, '2022/01/22'))
   })
+
+  test('Should throw if any of find functions throw', async () => {
+    const { sut, prisma } = makeSut()
+    const scheduleOptions = makeFakeScheduleOptions()
+
+    jest.spyOn(prisma.timeInterval, 'findMany').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    let promise = sut.getPartial(scheduleOptions)
+    await expect(promise).rejects.toThrow()
+
+    jest.spyOn(prisma.replacement, 'findMany').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    promise = sut.getPartial(scheduleOptions)
+    await expect(promise).rejects.toThrow()
+
+    jest.spyOn(prisma.schedule, 'findFirst').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    promise = sut.getPartial(scheduleOptions)
+    await expect(promise).rejects.toThrow()
+  })
 })
