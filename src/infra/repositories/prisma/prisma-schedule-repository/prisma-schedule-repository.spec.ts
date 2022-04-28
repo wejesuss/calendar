@@ -1,4 +1,4 @@
-import { GetScheduleOptions, PrismaClient, Prisma, zeroPadder, PartialSchedule } from './prisma-schedule-repository-protocols'
+import { GetScheduleOptions, PrismaClient, Prisma, zeroPadder, PartialSchedule, Schedule } from './prisma-schedule-repository-protocols'
 import { PrismaScheduleRepository } from './prisma-schedule-repository'
 
 const makeFakeScheduleOptions = (): GetScheduleOptions => ({
@@ -36,23 +36,35 @@ const makeFindReplacementOptions = (scheduleOptions: GetScheduleOptions): Prisma
   where: { rDate: { equals: new Date(`${scheduleOptions.year}-${zeroPadder.pad(scheduleOptions.month)}-${scheduleOptions.date}T00:00:00.000Z`) } }
 })
 
-const makeFakePartialSchedule = (week?: number, date?: string): PartialSchedule => {
-  const partialSchedule = {
+const makeFakeSchedule = (partial: boolean = false): Schedule | PartialSchedule => {
+  const schedule: Schedule = {
+    id: 1,
     duration: 60,
     activation_interval: 3,
     activation_interval_type: 30,
+    created_at: 1650992336913,
+    updated_at: 1650992336913,
     replacements: [
       {
+        id: 1,
+        created_at: 1650991522964,
+        updated_at: 1650991522964,
         date: '2022/01/23',
         time_from: '05:00',
         time_to: '10:00'
       },
       {
+        id: 2,
+        created_at: 1650991534251,
+        updated_at: 1650991534251,
         date: '2022/01/23',
         time_from: '13:00',
         time_to: '16:00'
       },
       {
+        id: 3,
+        created_at: 1650996050434,
+        updated_at: 1650996050434,
         date: '2022/01/24',
         time_from: '13:00',
         time_to: '16:00'
@@ -60,17 +72,46 @@ const makeFakePartialSchedule = (week?: number, date?: string): PartialSchedule 
     ],
     availability: [
       {
+        id: 2,
         week: 0,
         time_from: '05:00',
         time_to: '10:00'
       },
       {
+        id: 1,
         week: 6,
         time_from: '09:00',
         time_to: '17:00'
       }
     ]
   }
+
+  if (partial) {
+    const partialSchedule = {
+      ...schedule,
+      id: undefined,
+      created_at: undefined,
+      updated_at: undefined,
+      availability: schedule.availability.map((timeInterval) => ({
+        time_from: timeInterval.time_from,
+        time_to: timeInterval.time_to,
+        week: timeInterval.week
+      })),
+      replacements: schedule.replacements.map((replacement) => ({
+        date: replacement.date,
+        time_from: replacement.time_from,
+        time_to: replacement.time_to
+      }))
+    }
+
+    return partialSchedule
+  }
+
+  return schedule
+}
+
+const makeFakePartialSchedule = (week?: number, date?: string): PartialSchedule => {
+  const partialSchedule = makeFakeSchedule(true)
 
   if (week && date) {
     partialSchedule.availability = partialSchedule.availability.filter((timeInterval) => timeInterval.week === week)
@@ -173,6 +214,13 @@ describe('PrismaScheduleRepository', () => {
       expect(findReplacementSpy).toHaveBeenCalledWith({
         orderBy: [{ rDate: 'asc' }, { rTimeFrom: 'asc' }]
       })
+    })
+
+    test('Should return complete schedule on success', async () => {
+      const { sut } = makeSut()
+
+      const schedule = await sut.getAll()
+      expect(schedule).toEqual(makeFakeSchedule())
     })
   })
 })
