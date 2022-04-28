@@ -1,4 +1,4 @@
-import { Session } from '../../domain/models/session'
+import { Session } from '../../domain/models'
 import { AddSessionModel } from '../../domain/usecases/add-session'
 
 export interface AddSessionRepository {

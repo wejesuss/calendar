@@ -114,7 +114,7 @@ const makeGetScheduleStub = (): GetSchedule => {
         activation_interval: 3,
         activation_interval_type: 30,
         availability: [
-          { time_from: '09:45', time_to: '17:00' }
+          { week: 6, time_from: '09:45', time_to: '17:00' }
         ],
         replacements: [
           { date: '2022/01/23', time_from: '11:00', time_to: '16:00' },
@@ -624,7 +624,7 @@ describe('Create Session Controller', () => {
       duration: 15,
       activation_interval: 3,
       activation_interval_type: 30,
-      availability: [{ time_from: '23:00', time_to: '00:00' }],
+      availability: [{ week: 6, time_from: '23:00', time_to: '00:00' }],
       replacements: []
     }
 

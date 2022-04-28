@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model TimeInterval {
+  id       Int       @id @default(autoincrement())
+  week     Int       @db.SmallInt
+  timeFrom DateTime? @map("time_from") @db.Time()
+  timeTo   DateTime? @map("time_to") @db.Time()
+
+  @@map("time_interval")
+}
+
+model Replacement {
+  id        Int       @id @default(autoincrement())
+  rDate     DateTime? @map("r_date") @db.Date
+  rTimeFrom DateTime? @map("r_time_from") @db.Time()
+  rTimeTo   DateTime? @map("r_time_to") @db.Time()
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  @@map("replacement")
+}
+
+model Schedule {
+  id                     Int      @id @default(autoincrement())
+  duration               Int      @db.SmallInt
+  activationInterval     Int      @map("activation_interval") @db.SmallInt
+  activationIntervalType Int      @map("activation_interval_type") @db.SmallInt
+  createdAt              DateTime @default(now()) @map("created_at")
+  updatedAt              DateTime @default(now()) @map("updated_at")
+
+  @@map("schedule")
+}
+
+model Session {
+  id          String   @id @default(uuid()) @db.Uuid
+  sDate       DateTime @map("s_date") @db.Date
+  timeFrom    DateTime @map("time_from") @db.Time()
+  timeTo      DateTime @map("time_to") @db.Time()
+  duration    Int      @db.SmallInt
+  name        String
+  email       String
+  cpf         String
+  phone       String
+  description String?
+  imagePath   String?  @map("image_path")
+  price       Int
+  paid        Boolean  @default(false)
+  userId      String?  @map("user_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @map("updated_at")
+
+  @@map("session")
+}

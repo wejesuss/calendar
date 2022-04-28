@@ -1,5 +1,4 @@
-export { Schedule, TimeInterval } from '../../../domain/models/schedule'
-export { Session } from '../../../domain/models/session'
+export { Session, Schedule, TimeIntervalDTO } from '../../../domain/models'
 export { GetSchedule, GetScheduleOptions, PartialSchedule } from '../../../domain/usecases/get-schedule'
 export { GetSession, GetSessionOptions, PartialSession } from '../../../domain/usecases/get-session'
 export { AddSession, AddSessionModel } from '../../../domain/usecases/add-session'

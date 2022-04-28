@@ -13,13 +13,15 @@ const makeFakeSchedule = (): Schedule => ({
   duration: 15,
   activation_interval: 2,
   activation_interval_type: 30,
-  availability_0: [{ time_from: '09:00', time_to: '12:30' }],
-  availability_1: [{ time_from: '09:00', time_to: '12:30' }],
-  availability_2: [{ time_from: '09:00', time_to: '12:30' }],
-  availability_3: [{ time_from: '09:00', time_to: '12:30' }],
-  availability_4: [{ time_from: '09:00', time_to: '12:30' }],
-  availability_5: [{ time_from: '09:00', time_to: '12:30' }],
-  availability_6: [{ time_from: '09:00', time_to: '12:30' }],
+  availability: [
+    { id: 1, week: 0, time_from: '09:00', time_to: '12:30' },
+    { id: 2, week: 1, time_from: '09:00', time_to: '12:30' },
+    { id: 3, week: 2, time_from: '09:00', time_to: '12:30' },
+    { id: 4, week: 3, time_from: '09:00', time_to: '12:30' },
+    { id: 5, week: 4, time_from: '09:00', time_to: '12:30' },
+    { id: 6, week: 5, time_from: '09:00', time_to: '12:30' },
+    { id: 7, week: 6, time_from: '09:00', time_to: '12:30' }
+  ],
   replacements: [],
   created_at: 1649511107538,
   updated_at: 1649511107538
@@ -29,7 +31,7 @@ const makeFakePartialSchedule = (): PartialSchedule => ({
   duration: 15,
   activation_interval: 2,
   activation_interval_type: 30,
-  availability: [{ time_from: '08:00', time_to: '15:00' }],
+  availability: [{ week: 3, time_from: '08:00', time_to: '15:00' }],
   replacements: []
 })
 

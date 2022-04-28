@@ -3,7 +3,7 @@ import {
   HttpRequest,
   HttpResponse,
   GetSchedule,
-  TimeInterval,
+  TimeIntervalDTO,
   GetSession,
   CreateTimeTo,
   AddSession,
@@ -42,7 +42,7 @@ export class CreateSessionController implements Controller {
     return valueNumber
   }
 
-  validateTimeInterval (sessionTimeInterval: TimeInterval, scheduleTimeInterval: TimeInterval): boolean {
+  validateTimeInterval (sessionTimeInterval: TimeIntervalDTO, scheduleTimeInterval: TimeIntervalDTO): boolean {
     const [sessionTimeFromHours, sessionTimeFromMinutes] = sessionTimeInterval.time_from.split(':').map(Number)
     const [sessionTimeToHours, sessionTimeToMinutes] = sessionTimeInterval.time_to.split(':').map(this.normalizeTime)
     const [timeFromHours, timeFromMinutes] = scheduleTimeInterval.time_from.split(':').map(Number)
@@ -143,11 +143,13 @@ export class CreateSessionController implements Controller {
         if (date === sessionDate) {
           noDateMatching = false
 
-          const sessionTimeInterval: TimeInterval = {
+          const sessionTimeInterval: TimeIntervalDTO = {
+            week: weekDay,
             time_from: timeFrom,
             time_to: timeTo
           }
-          const scheduleTimeInterval: TimeInterval = {
+          const scheduleTimeInterval: TimeIntervalDTO = {
+            week: weekDay,
             time_from: rTimeFrom,
             time_to: rTimeTo
           }
@@ -160,7 +162,8 @@ export class CreateSessionController implements Controller {
 
       if (noDateMatching) {
         const isScheduleAvailable = partialSchedule.availability.some((scheduleTimeInterval): boolean => {
-          const sessionTimeInterval: TimeInterval = {
+          const sessionTimeInterval: TimeIntervalDTO = {
+            week: weekDay,
             time_from: timeFrom,
             time_to: timeTo
           }
