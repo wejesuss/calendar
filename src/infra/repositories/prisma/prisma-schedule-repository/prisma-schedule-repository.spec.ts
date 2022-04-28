@@ -156,4 +156,23 @@ describe('PrismaScheduleRepository', () => {
       await expect(promise).rejects.toThrow()
     })
   })
+
+  describe('getAll', () => {
+    test('Should call find on schedule, replacement and timeInterval with correct values', async () => {
+      const { sut, prisma } = makeSut()
+      const findScheduleSpy = jest.spyOn(prisma.schedule, 'findFirst')
+      const findIntervalTimeSpy = jest.spyOn(prisma.timeInterval, 'findMany')
+      const findReplacementSpy = jest.spyOn(prisma.replacement, 'findMany')
+
+      await sut.getAll()
+
+      expect(findScheduleSpy).toHaveBeenCalledWith()
+      expect(findIntervalTimeSpy).toHaveBeenCalledWith({
+        orderBy: [{ week: 'asc' }, { timeFrom: 'asc' }]
+      })
+      expect(findReplacementSpy).toHaveBeenCalledWith({
+        orderBy: [{ rDate: 'asc' }, { rTimeFrom: 'asc' }]
+      })
+    })
+  })
 })
