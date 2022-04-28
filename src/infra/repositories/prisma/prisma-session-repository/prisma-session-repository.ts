@@ -7,9 +7,9 @@ import {
   GetSessionOptions,
   PrismaClient,
   Prisma,
-  UnmappedPartialSession
+  UnmappedPartialSession,
+  zeroPadder
 } from './prisma-session-repository-protocols'
-import { zeroPadder } from '../../../../shared/zero-pad/zero-pad'
 
 export class PrismaSessionRepository implements AddSessionRepository, GetSessionRepository {
   constructor (private readonly prisma: PrismaClient) {

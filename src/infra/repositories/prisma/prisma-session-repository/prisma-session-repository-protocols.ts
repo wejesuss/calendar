@@ -4,6 +4,7 @@ export { AddSessionRepository } from '../../../../data/protocols/add-session-rep
 export { GetSessionOptions, PartialSession } from '../../../../domain/usecases/get-session'
 export { GetSessionRepository } from '../../../../data/protocols/get-session-repository'
 export { PrismaClient, Prisma } from '@prisma/client'
+export { zeroPadder } from '../../../../shared/zero-pad/zero-pad'
 
 export interface UnmappedPartialSession {
   duration: number
