@@ -61,15 +61,23 @@ export class PrismaScheduleRepository implements GetScheduleRepository {
   }
 
   async getAll (): Promise<Schedule> {
-    await this.prisma.schedule.findFirst()
-    await this.prisma.timeInterval.findMany({
+    const schedule = await this.prisma.schedule.findFirst()
+    const timeIntervals = await this.prisma.timeInterval.findMany({
       orderBy: [{ week: 'asc' }, { timeFrom: 'asc' }]
     })
-    await this.prisma.replacement.findMany({
+    const replacements = await this.prisma.replacement.findMany({
       orderBy: [{ rDate: 'asc' }, { rTimeFrom: 'asc' }]
     })
 
-    return null
+    const mappedSchedule = this.mapSchedule(schedule) as Required<MappedSchedule>
+    const mappedTimeIntervals = timeIntervals.map((timeInterval) => this.mapTimeInterval(timeInterval)) as Array<Required<MappedTimeInterval>>
+    const mappedReplacements = replacements.map((replacement) => this.mapReplacement(replacement)) as Array<Required<MappedReplacement>>
+
+    return {
+      ...mappedSchedule,
+      availability: mappedTimeIntervals,
+      replacements: mappedReplacements
+    }
   }
 
   async getPartial (scheduleOptions?: GetScheduleOptions): Promise<PartialSchedule> {
