@@ -61,7 +61,15 @@ export class PrismaScheduleRepository implements GetScheduleRepository {
   }
 
   async getAll (): Promise<Schedule> {
-    throw new Error('Not Implemented')
+    await this.prisma.schedule.findFirst()
+    await this.prisma.timeInterval.findMany({
+      orderBy: [{ week: 'asc' }, { timeFrom: 'asc' }]
+    })
+    await this.prisma.replacement.findMany({
+      orderBy: [{ rDate: 'asc' }, { rTimeFrom: 'asc' }]
+    })
+
+    return null
   }
 
   async getPartial (scheduleOptions?: GetScheduleOptions): Promise<PartialSchedule> {
