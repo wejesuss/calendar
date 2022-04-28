@@ -18,19 +18,25 @@ export class PrismaScheduleRepository implements GetScheduleRepository {
 
   mapSchedule (schedule: UnmappedSchedule): MappedSchedule {
     return {
+      id: schedule.id,
       duration: schedule.duration,
       activation_interval: schedule.activationInterval,
-      activation_interval_type: schedule.activationIntervalType
+      activation_interval_type: schedule.activationIntervalType,
+      created_at: schedule.createdAt?.getTime(),
+      updated_at: schedule.updatedAt?.getTime()
     }
   }
 
   mapTimeInterval (timeInterval: UnmappedTimeInterval): MappedTimeInterval {
     const {
+      id,
+      week,
       timeFrom,
-      timeTo, week
+      timeTo
     } = timeInterval
 
     return {
+      id,
       week,
       time_from: `${zeroPadder.pad(timeFrom.getUTCHours())}:${zeroPadder.pad(timeFrom.getUTCMinutes())}`,
       time_to: `${zeroPadder.pad(timeTo.getUTCHours())}:${zeroPadder.pad(timeTo.getUTCMinutes())}`
@@ -38,16 +44,19 @@ export class PrismaScheduleRepository implements GetScheduleRepository {
   }
 
   mapReplacement (replacement: UnmappedReplacement): MappedReplacement {
-    const { rDate, rTimeFrom, rTimeTo } = replacement
+    const { id, rDate, rTimeFrom, rTimeTo, createdAt, updatedAt } = replacement
 
     const date = `${zeroPadder.pad(rDate.getUTCFullYear())}/${zeroPadder.pad(rDate.getUTCMonth() + 1)}/${zeroPadder.pad(rDate.getUTCDate())}`
     const timeFrom = `${zeroPadder.pad(rTimeFrom.getUTCHours())}:${zeroPadder.pad(rTimeFrom.getUTCMinutes())}`
     const timeTo = `${zeroPadder.pad(rTimeTo.getUTCHours())}:${zeroPadder.pad(rTimeTo.getUTCMinutes())}`
 
     return {
+      id,
       date: date,
       time_from: timeFrom,
-      time_to: timeTo
+      time_to: timeTo,
+      created_at: createdAt?.getTime(),
+      updated_at: updatedAt?.getTime()
     }
   }
 

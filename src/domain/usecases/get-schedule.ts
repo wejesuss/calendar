@@ -1,4 +1,4 @@
-import { Schedule, TimeInterval } from '../models/schedule'
+import { Schedule, ScheduleDTO, TimeIntervalDTO, ReplacementDTO } from '../models'
 
 export interface GetScheduleOptions {
   weekDay: number
@@ -7,12 +7,10 @@ export interface GetScheduleOptions {
   date: number
 }
 
-type TimeIntervalWithWeek = TimeInterval & { week: number }
-type PickedPartialSchedule = Pick<Schedule, 'duration'|'activation_interval'|'activation_interval_type'|'replacements'>
-
-export type PartialSchedule = {
-  availability: TimeIntervalWithWeek[]
-} & PickedPartialSchedule
+export type PartialSchedule = ScheduleDTO & {
+  availability: TimeIntervalDTO[]
+  replacements: ReplacementDTO[]
+}
 
 export interface GetSchedule {
   getAll: () => Promise<Schedule>

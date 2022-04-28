@@ -101,57 +101,59 @@ describe('PrismaScheduleRepository', () => {
     await prisma.$disconnect()
   })
 
-  test('Should call find on schedule, replacement and timeInterval with correct values', async () => {
-    const { sut, prisma } = makeSut()
-    const findIntervalTimeSpy = jest.spyOn(prisma.timeInterval, 'findMany')
-    const findReplacementSpy = jest.spyOn(prisma.replacement, 'findMany')
-    const findScheduleSpy = jest.spyOn(prisma.schedule, 'findFirst')
+  describe('getPartial', () => {
+    test('Should call find on schedule, replacement and timeInterval with correct values', async () => {
+      const { sut, prisma } = makeSut()
+      const findScheduleSpy = jest.spyOn(prisma.schedule, 'findFirst')
+      const findIntervalTimeSpy = jest.spyOn(prisma.timeInterval, 'findMany')
+      const findReplacementSpy = jest.spyOn(prisma.replacement, 'findMany')
 
-    const scheduleOptions = makeFakeScheduleOptions()
-    await sut.getPartial(scheduleOptions)
+      const scheduleOptions = makeFakeScheduleOptions()
+      await sut.getPartial(scheduleOptions)
 
-    expect(findScheduleSpy).toHaveBeenCalledWith(makeFindScheduleOptions())
-    expect(findIntervalTimeSpy).toHaveBeenCalledWith(makeFindTimeIntervalOptions(scheduleOptions))
-    expect(findReplacementSpy).toHaveBeenCalledWith(makeFindReplacementOptions(scheduleOptions))
-  })
-
-  test('Should return all partial schedules if no schedule options is passed', async () => {
-    const { sut } = makeSut()
-
-    const schedule = await sut.getPartial()
-
-    expect(schedule).toEqual(makeFakePartialSchedule())
-  })
-
-  test('Should return partial schedule on success', async () => {
-    const { sut } = makeSut()
-
-    const scheduleOptions = makeFakeScheduleOptions()
-    const schedule = await sut.getPartial(scheduleOptions)
-
-    expect(schedule).toEqual(makeFakePartialSchedule(6, '2022/01/22'))
-  })
-
-  test('Should throw if any of find functions throw', async () => {
-    const { sut, prisma } = makeSut()
-    const scheduleOptions = makeFakeScheduleOptions()
-
-    jest.spyOn(prisma.timeInterval, 'findMany').mockImplementationOnce(() => {
-      throw new Error()
+      expect(findScheduleSpy).toHaveBeenCalledWith(makeFindScheduleOptions())
+      expect(findIntervalTimeSpy).toHaveBeenCalledWith(makeFindTimeIntervalOptions(scheduleOptions))
+      expect(findReplacementSpy).toHaveBeenCalledWith(makeFindReplacementOptions(scheduleOptions))
     })
-    let promise = sut.getPartial(scheduleOptions)
-    await expect(promise).rejects.toThrow()
 
-    jest.spyOn(prisma.replacement, 'findMany').mockImplementationOnce(() => {
-      throw new Error()
-    })
-    promise = sut.getPartial(scheduleOptions)
-    await expect(promise).rejects.toThrow()
+    test('Should return all partial schedules if no schedule options is passed', async () => {
+      const { sut } = makeSut()
 
-    jest.spyOn(prisma.schedule, 'findFirst').mockImplementationOnce(() => {
-      throw new Error()
+      const schedule = await sut.getPartial()
+
+      expect(schedule).toEqual(makeFakePartialSchedule())
     })
-    promise = sut.getPartial(scheduleOptions)
-    await expect(promise).rejects.toThrow()
+
+    test('Should return partial schedule on success', async () => {
+      const { sut } = makeSut()
+
+      const scheduleOptions = makeFakeScheduleOptions()
+      const schedule = await sut.getPartial(scheduleOptions)
+
+      expect(schedule).toEqual(makeFakePartialSchedule(6, '2022/01/22'))
+    })
+
+    test('Should throw if any of find functions throw', async () => {
+      const { sut, prisma } = makeSut()
+      const scheduleOptions = makeFakeScheduleOptions()
+
+      jest.spyOn(prisma.timeInterval, 'findMany').mockImplementationOnce(() => {
+        throw new Error()
+      })
+      let promise = sut.getPartial(scheduleOptions)
+      await expect(promise).rejects.toThrow()
+
+      jest.spyOn(prisma.replacement, 'findMany').mockImplementationOnce(() => {
+        throw new Error()
+      })
+      promise = sut.getPartial(scheduleOptions)
+      await expect(promise).rejects.toThrow()
+
+      jest.spyOn(prisma.schedule, 'findFirst').mockImplementationOnce(() => {
+        throw new Error()
+      })
+      promise = sut.getPartial(scheduleOptions)
+      await expect(promise).rejects.toThrow()
+    })
   })
 })
