@@ -220,6 +220,11 @@ main .sections section:nth-of-type(3) {
   background-size: contain;
 }
 
+.sections
+  section:nth-child(3)
+  .input-container
+  .photo-upload:focus-within
+  label,
 .sections section:nth-child(3) .input-container .photo-upload label:hover {
   background: var(--upload-file-background-hover);
   border: 1px solid var(--upload-file-border-hover);
