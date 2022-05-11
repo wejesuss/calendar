@@ -1,7 +1,7 @@
-import db from '../config/db'
-import app from '../config/app'
+import db from '../../config/db'
+import app from '../../config/app'
 import supertest from 'supertest'
-import { zeroPadder } from '../../shared/zero-pad/zero-pad'
+import { zeroPadder } from '../../../shared/zero-pad/zero-pad'
 
 describe('CreateSession Route', () => {
   beforeAll(async () => {
