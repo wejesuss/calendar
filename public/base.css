@@ -30,6 +30,9 @@
   --hour-picker-text-color: #c1c1c1;
   --arrow-down-image: url("/images/arrow-down.svg");
   --upload-image-icon: url("/images/upload.svg");
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 html {
