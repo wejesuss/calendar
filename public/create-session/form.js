@@ -1,5 +1,9 @@
 const form = document.querySelector("form#create-session");
 
+const helpers = {
+  isValidFormData: (formData) => formData instanceof FormData,
+  invalidFormDataError: new Error("Invalid provided formData"),
+};
 const validFormParameters = [
   "name",
   "email",
@@ -13,12 +17,34 @@ const validFormParameters = [
   "file",
 ];
 const validRequestParameters = {
-  name: (formData) => formData.get("name"),
-  email: (formData) => formData.get("email"),
-  phone: (formData) => formData.get("phone"),
-  cpf: (formData) => formData.get("cpf"),
-  description: (formData) => formData.get("description"),
+  name: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    return formData.get("name");
+  },
+  email: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    return formData.get("email");
+  },
+  phone: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    return formData.get("phone");
+  },
+  cpf: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    return formData.get("cpf");
+  },
+  description: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    return formData.get("description");
+  },
   session_date: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
     const year = Number(formData.get("year"));
     const month = Number(formData.get("month")) + 1;
     const day = Number(formData.get("day"));
@@ -28,8 +54,13 @@ const validRequestParameters = {
 
     return `${year}/${monthPadded}/${dayPadded}`;
   },
-  session_time: (formData) => formData.get("time"),
+  session_time: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    return formData.get("time");
+  },
 };
+Object.freeze(helpers);
 Object.freeze(validFormParameters);
 Object.freeze(validRequestParameters);
 
