@@ -1,4 +1,5 @@
-const form = document.querySelector("form#create-session");
+const submitButton = document.getElementById("submit-button");
+const form = document.getElementById("create-session");
 
 const helpers = {
   isValidFormData: (formData) => formData instanceof FormData,
@@ -60,9 +61,7 @@ const validRequestParameters = {
     return formData.get("time");
   },
 };
-Object.freeze(helpers);
-Object.freeze(validFormParameters);
-Object.freeze(validRequestParameters);
+Object.freeze(helpers, validFormParameters, validRequestParameters);
 
 function makeRequestBody() {
   const formData = new FormData(form);
@@ -72,18 +71,31 @@ function makeRequestBody() {
     body[key] = validRequestParameters[key](formData);
   });
 
-  const strBody = JSON.stringify(body, null, 2);
-
-  fetch("http://localhost:5000/api/create-session", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-    },
-    body: strBody,
-  })
-    .then((res) => res.json())
-    .then((res) => console.log(res))
-    .catch((reason) => console.error(reason));
+  return JSON.stringify(body, null, 2);
 }
 
-makeRequestBody();
+async function createSession(requestBody = "") {
+  try {
+    const response = await fetch("http://localhost:5000/api/create-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: requestBody,
+    });
+
+    return await response.json();
+  } catch (error) {
+    return error;
+  }
+}
+
+submitButton.addEventListener("click", async (ev) => {
+  try {
+    const body = makeRequestBody();
+    const response = await createSession(body);
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+});
