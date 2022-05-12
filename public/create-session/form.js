@@ -72,7 +72,18 @@ function makeRequestBody() {
     body[key] = validRequestParameters[key](formData);
   });
 
-  console.log(body);
+  const strBody = JSON.stringify(body, null, 2);
+
+  fetch("http://localhost:5000/api/create-session", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },
+    body: strBody,
+  })
+    .then((res) => res.json())
+    .then((res) => console.log(res))
+    .catch((reason) => console.error(reason));
 }
 
 makeRequestBody();
