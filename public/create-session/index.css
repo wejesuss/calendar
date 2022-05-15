@@ -132,12 +132,21 @@ main .sections section:nth-of-type(3) {
 }
 
 .sections section:nth-child(2) .date-days table tbody tr td div {
+  cursor: default;
   border: 1px solid;
   width: 18px;
   height: 18px;
   text-align: center;
   line-height: 16px;
   margin: 0 auto;
+  transition: all 0.4s ease-in;
+}
+
+.sections section:nth-child(2) .date-days table tbody tr td div:hover {
+  background-color: #a68f59;
+  color: #ffffff;
+  border-color: #a68f59;
+  border-radius: 50%;
 }
 
 .sections section:nth-child(2) .hour-picker {
