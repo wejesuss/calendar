@@ -54,6 +54,7 @@ const toMonthDays = () => {
 const mapMonthName = toMonthString();
 const mapMonthDays = toMonthDays();
 let dayActive = "";
+let timeActiveIndex = undefined;
 
 /**
  * Create an array representing the first week
@@ -199,8 +200,6 @@ function setCalendarDays(monthDates, year, month) {
           inputDay.value = day;
           inputMonth.value = month;
           inputYear.value = year;
-
-          document.getElementById("date-picker-time").value = "";
         });
 
         td.append(div);
@@ -319,8 +318,21 @@ document
   .querySelectorAll(
     "body > main > div > section:nth-child(2) > div.hour-picker > ol > li"
   )
-  .forEach((timeEl) => {
+  .forEach((timeEl, timeIndex) => {
     timeEl.addEventListener("click", (e) => {
+      if (typeof timeActiveIndex === "number") {
+        const previousActiveTime = document.querySelector(
+          `section:nth-child(2) .hour-picker > ol > li:nth-child(${
+            timeActiveIndex + 1
+          })`
+        );
+
+        previousActiveTime.classList.remove("active");
+      }
+
+      timeActiveIndex = timeIndex;
+      timeEl.classList.add("active");
+
       const time = `0${e.target.innerText}`.slice(-5);
       document.getElementById("date-picker-time").value = time;
     });

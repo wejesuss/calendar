@@ -168,9 +168,21 @@ main .sections section:nth-of-type(3) {
 }
 
 .sections section:nth-child(2) .hour-picker li {
+  cursor: default;
+  padding: 5px 0;
   font-size: 1rem;
-  margin-bottom: 10px;
+  height: 22px;
   color: var(--hour-picker-text-color);
+  transition: all 0.3s cubic-bezier(0.6, 0.19, 0.42, 1.03),
+    background 0.4s cubic-bezier(0, 0.49, 0.96, 0.61);
+}
+
+.sections section:nth-child(2) .hour-picker li:hover,
+.sections section:nth-child(2) .hour-picker li.active {
+  background-color: #a68f59;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ffffff;
 }
 
 .sections section:nth-child(2) .hour-picker li:last-child {
