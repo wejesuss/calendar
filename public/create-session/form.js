@@ -91,6 +91,8 @@ async function createSession(requestBody = "") {
 }
 
 submitButton.addEventListener("click", async (ev) => {
+  ev.preventDefault();
+
   try {
     const body = makeRequestBody();
     const response = await createSession(body);
