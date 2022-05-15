@@ -142,7 +142,8 @@ main .sections section:nth-of-type(3) {
   transition: all 0.4s ease-in;
 }
 
-.sections section:nth-child(2) .date-days table tbody tr td div:hover {
+.sections section:nth-child(2) .date-days table tbody tr td div:hover,
+.sections section:nth-child(2) .date-days table tbody tr td div.active {
   background-color: #a68f59;
   color: #ffffff;
   border-color: #a68f59;
