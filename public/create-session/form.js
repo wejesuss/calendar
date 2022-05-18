@@ -80,7 +80,7 @@ const validRequestParameters = {
   name: (formData) => {
     if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
 
-    return formData.get("name");
+    return formData.get("name")?.trim();
   },
   email: (formData) => {
     if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
