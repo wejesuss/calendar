@@ -1,3 +1,4 @@
+const { isEmail, isMobilePhone, isTaxID } = validator;
 const submitButton = document.getElementById("submit-button");
 const form = document.getElementById("create-session");
 
@@ -5,18 +6,76 @@ const helpers = {
   isValidFormData: (formData) => formData instanceof FormData,
   invalidFormDataError: new Error("Invalid provided formData"),
 };
-const validFormParameters = [
-  "name",
-  "email",
-  "phone",
-  "cpf",
-  "description",
-  "year",
-  "month",
-  "day",
-  "time",
-  "file",
-];
+const validFormInputs = {
+  name: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    return !!formData.get("name")?.trim();
+  },
+  email: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    return isEmail(formData.get("email"));
+  },
+  phone: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    return isMobilePhone(formData.get("phone"), "pt-BR");
+  },
+  cpf: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    return isTaxID(formData.get("cpf"), "pt-BR");
+  },
+  description: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    return !!formData.get("description");
+  },
+  year: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    return /^[12][0-9]{3}$/.test(formData.get("year"));
+  },
+  month: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    const month = formData.get("month");
+    const validFormat = /^(0?[1-9]|1[012])$/.test(month);
+    const validRange = Number(month) >= 0 && Number(month) <= 12;
+
+    return validFormat && validRange;
+  },
+  day: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    const day = formData.get("day");
+    const validFormat = /^[0-3]?[0-9]$/.test(day);
+    const validRange = Number(day) >= 1 && Number(day) <= 31;
+
+    return validFormat && validRange;
+  },
+  time: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    const time = formData.get("time");
+    const validFormat = /^\d{2}:\d{2}(:\d{2})?$/.test(time);
+
+    const [hours, minutes] = time.split(":").map(Number);
+
+    const isValidHour = hours >= 0 && hours < 24;
+    const isValidMinute = minutes >= 0 && minutes < 60;
+
+    const validRange = isValidHour && isValidMinute;
+
+    return validFormat && validRange;
+  },
+  file: (formData) => {
+    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+
+    return true;
+  },
+};
 const validRequestParameters = {
   name: (formData) => {
     if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
@@ -61,10 +120,22 @@ const validRequestParameters = {
     return formData.get("time");
   },
 };
-Object.freeze(helpers, validFormParameters, validRequestParameters);
 
-function makeRequestBody() {
-  const formData = new FormData(form);
+Object.freeze(helpers, validFormInputs, validRequestParameters);
+
+function validateForm(formData) {
+  const isInvalid = [];
+  Object.keys(validFormInputs).forEach((key) => {
+    const isInputValid = validFormInputs[key](formData);
+    if (!isInputValid) {
+      isInvalid.push(key);
+    }
+  });
+
+  return isInvalid;
+}
+
+function makeRequestBody(formData) {
   const body = {};
 
   Object.keys(validRequestParameters).forEach((key) => {
@@ -94,7 +165,14 @@ submitButton.addEventListener("click", async (ev) => {
   ev.preventDefault();
 
   try {
-    const body = makeRequestBody();
+    const formData = new FormData(form);
+    const isInvalid = validateForm(formData);
+
+    if (isInvalid.length > 0) {
+      return false;
+    }
+
+    const body = makeRequestBody(formData);
     const response = await createSession(body);
     console.log(response);
   } catch (error) {
