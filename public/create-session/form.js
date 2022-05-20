@@ -20,7 +20,7 @@ const validFormInputs = {
     const isValid = !!formData.get("name")?.trim();
     const error = isValid
       ? undefined
-      : helpers.createError("name", "O campo name é obrigatório");
+      : helpers.createError("name", "O campo nome é obrigatório");
 
     return [isValid, error];
   },
