@@ -122,6 +122,20 @@ main {
   margin-top: 5.6rem;
 }
 
+span.error-message {
+  opacity: 0;
+  border-radius: 8px;
+  font-size: small;
+  padding: 8px;
+  color: #390e0e;
+  background: #f09393;
+  transition: all 1.5s;
+}
+
+span.error-message.show {
+  opacity: 1;
+}
+
 /* footer */
 
 footer {

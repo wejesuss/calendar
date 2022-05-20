@@ -217,6 +217,35 @@ function validateForm(formData) {
   return isInvalid;
 }
 
+function showError(error) {
+  const span = document.querySelector("span.error-message");
+
+  if (!error) {
+    span.textContent = "";
+    span.classList.remove("show");
+    return;
+  }
+
+  const { name, message } = error;
+  const input = document.querySelector(
+    `input[name=${name}],textarea[name=${name}]`
+  );
+
+  input.classList.add("error");
+  span.classList.add("show");
+  span.textContent = message;
+
+  input.addEventListener(
+    "keydown",
+    () => {
+      input.classList.remove("error");
+    },
+    { once: true }
+  );
+
+  input.scrollIntoView({ block: "end", behavior: "smooth" });
+}
+
 function makeRequestBody(formData) {
   const body = {};
 
@@ -248,10 +277,13 @@ submitButton.addEventListener("click", async (ev) => {
 
   try {
     const formData = new FormData(form);
-    const isInvalid = validateForm(formData);
+    const invalidFields = validateForm(formData);
 
-    if (isInvalid.length > 0) {
+    if (invalidFields.length > 0) {
+      showError(invalidFields[0]);
       return false;
+    } else {
+      showError(null);
     }
 
     const body = makeRequestBody(formData);
