@@ -5,58 +5,131 @@ const form = document.getElementById("create-session");
 const helpers = {
   isValidFormData: (formData) => formData instanceof FormData,
   invalidFormDataError: new Error("Invalid provided formData"),
+  createError: (errName, message) => {
+    const err = new Error(message);
+    err.name = errName;
+
+    return err;
+  },
 };
 const validFormInputs = {
   name: (formData) => {
-    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+    if (!helpers.isValidFormData(formData))
+      return [false, helpers.invalidFormDataError];
 
-    return !!formData.get("name")?.trim();
+    const isValid = !!formData.get("name")?.trim();
+    const error = isValid
+      ? undefined
+      : helpers.createError("name", "O campo name é obrigatório");
+
+    return [isValid, error];
   },
   email: (formData) => {
-    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+    if (!helpers.isValidFormData(formData))
+      return [false, helpers.invalidFormDataError];
 
-    return isEmail(formData.get("email"));
+    const isValid = isEmail(formData.get("email"));
+    const error = isValid
+      ? undefined
+      : helpers.createError(
+          "email",
+          "O campo email está inválido, verifique novamente"
+        );
+
+    return [isValid, error];
   },
   phone: (formData) => {
-    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+    if (!helpers.isValidFormData(formData))
+      return [false, helpers.invalidFormDataError];
 
-    return isMobilePhone(formData.get("phone"), "pt-BR");
+    const isValid = isMobilePhone(formData.get("phone"), "pt-BR");
+    const error = isValid
+      ? undefined
+      : helpers.createError(
+          "phone",
+          "O campo telefone está inválido, verifique novamente"
+        );
+
+    return [isValid, error];
   },
   cpf: (formData) => {
-    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+    if (!helpers.isValidFormData(formData))
+      return [false, helpers.invalidFormDataError];
 
-    return isTaxID(formData.get("cpf"), "pt-BR");
+    const isValid = isTaxID(formData.get("cpf"), "pt-BR");
+    const error = isValid
+      ? undefined
+      : helpers.createError(
+          "cpf",
+          "O campo cpf está inválido, verifique novamente"
+        );
+
+    return [isValid, error];
   },
   description: (formData) => {
-    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+    if (!helpers.isValidFormData(formData))
+      return [false, helpers.invalidFormDataError];
 
-    return !!formData.get("description");
+    const isValid = !!formData.get("description");
+    const error = isValid
+      ? undefined
+      : helpers.createError("description", "O campo descrição é obrigatório");
+
+    return [isValid, error];
   },
   year: (formData) => {
-    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+    if (!helpers.isValidFormData(formData))
+      return [false, helpers.invalidFormDataError];
 
-    return /^[12][0-9]{3}$/.test(formData.get("year"));
+    const isValid = /^[12][0-9]{3}$/.test(formData.get("year"));
+    const error = isValid
+      ? undefined
+      : helpers.createError(
+          "year",
+          "O campo ano não segue o formato apropriado YYYY"
+        );
+
+    return [isValid, error];
   },
   month: (formData) => {
-    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+    if (!helpers.isValidFormData(formData))
+      return [false, helpers.invalidFormDataError];
 
     const month = formData.get("month");
     const validFormat = /^(0?[1-9]|1[012])$/.test(month);
     const validRange = Number(month) >= 0 && Number(month) <= 12;
 
-    return validFormat && validRange;
+    const isValid = validFormat && validRange;
+    const error = isValid
+      ? undefined
+      : helpers.createError(
+          "month",
+          "O campo mês não segue o formato apropriado MM"
+        );
+
+    return [isValid, error];
   },
   day: (formData) => {
-    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+    if (!helpers.isValidFormData(formData))
+      return [false, helpers.invalidFormDataError];
 
     const day = formData.get("day");
     const validFormat = /^[0-3]?[0-9]$/.test(day);
     const validRange = Number(day) >= 1 && Number(day) <= 31;
 
-    return validFormat && validRange;
+    const isValid = validFormat && validRange;
+    const error = isValid
+      ? undefined
+      : helpers.createError(
+          "day",
+          "O campo dia não segue o formato apropriado DD"
+        );
+
+    return [isValid, error];
   },
   time: (formData) => {
-    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+    if (!helpers.isValidFormData(formData))
+      return [false, helpers.invalidFormDataError];
 
     const time = formData.get("time");
     const validFormat = /^\d{2}:\d{2}(:\d{2})?$/.test(time);
@@ -68,12 +141,21 @@ const validFormInputs = {
 
     const validRange = isValidHour && isValidMinute;
 
-    return validFormat && validRange;
+    const isValid = validFormat && validRange;
+    const error = isValid
+      ? undefined
+      : helpers.createError(
+          "time",
+          "O campo hora não segue o formato apropriado HH:MM"
+        );
+
+    return [isValid, error];
   },
   file: (formData) => {
-    if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
+    if (!helpers.isValidFormData(formData))
+      return [false, helpers.invalidFormDataError];
 
-    return true;
+    return [true, undefined];
   },
 };
 const validRequestParameters = {
@@ -126,9 +208,9 @@ Object.freeze(helpers, validFormInputs, validRequestParameters);
 function validateForm(formData) {
   const isInvalid = [];
   Object.keys(validFormInputs).forEach((key) => {
-    const isInputValid = validFormInputs[key](formData);
+    const [isInputValid, error] = validFormInputs[key](formData);
     if (!isInputValid) {
-      isInvalid.push(key);
+      isInvalid.push(error);
     }
   });
 
