@@ -28,43 +28,67 @@ const validFormInputs = {
     if (!helpers.isValidFormData(formData))
       return [false, helpers.invalidFormDataError];
 
-    const isValid = isEmail(formData.get("email"));
-    const error = isValid
-      ? undefined
-      : helpers.createError(
-          "email",
-          "O campo email está inválido, verifique novamente"
-        );
+    const email = formData.get("email");
+    let isValid = false;
 
-    return [isValid, error];
+    if (!email) {
+      return [
+        isValid,
+        helpers.createError("email", "O campo email é obrigatório"),
+      ];
+    }
+
+    isValid = isEmail(email);
+    if (!isValid) {
+      return [
+        isValid,
+        helpers.createError("email", "O campo email está inválido"),
+      ];
+    }
+
+    return [isValid, undefined];
   },
   phone: (formData) => {
     if (!helpers.isValidFormData(formData))
       return [false, helpers.invalidFormDataError];
 
-    const isValid = isMobilePhone(formData.get("phone"), "pt-BR");
-    const error = isValid
-      ? undefined
-      : helpers.createError(
-          "phone",
-          "O campo telefone está inválido, verifique novamente"
-        );
+    let isValid = false;
+    const phone = formData.get("phone");
 
-    return [isValid, error];
+    if (!phone) {
+      return [
+        isValid,
+        helpers.createError("phone", "O campo telefone é obrigatório"),
+      ];
+    }
+
+    isValid = isMobilePhone(phone, "pt-BR");
+    if (!isValid) {
+      return [
+        isValid,
+        helpers.createError("phone", "O campo telefone está inválido"),
+      ];
+    }
+
+    return [isValid, undefined];
   },
   cpf: (formData) => {
     if (!helpers.isValidFormData(formData))
       return [false, helpers.invalidFormDataError];
 
-    const isValid = isTaxID(formData.get("cpf"), "pt-BR");
-    const error = isValid
-      ? undefined
-      : helpers.createError(
-          "cpf",
-          "O campo cpf está inválido, verifique novamente"
-        );
+    const cpf = formData.get("cpf");
+    let isValid = false;
 
-    return [isValid, error];
+    if (!cpf) {
+      return [isValid, helpers.createError("cpf", "O campo cpf é obrigatório")];
+    }
+
+    isValid = isTaxID(cpf, "pt-BR");
+    if (!isValid) {
+      return [isValid, helpers.createError("cpf", "O campo cpf está inválido")];
+    }
+
+    return [isValid, undefined];
   },
   description: (formData) => {
     if (!helpers.isValidFormData(formData))
@@ -81,75 +105,133 @@ const validFormInputs = {
     if (!helpers.isValidFormData(formData))
       return [false, helpers.invalidFormDataError];
 
-    const isValid = /^[12][0-9]{3}$/.test(formData.get("year"));
-    const error = isValid
-      ? undefined
-      : helpers.createError(
-          "year",
-          "O campo ano não segue o formato apropriado YYYY"
-        );
+    const year = formData.get("year");
+    let isValid = false;
 
-    return [isValid, error];
+    if (!year) {
+      return [
+        isValid,
+        helpers.createError("year", "Selecione uma data válida"),
+      ];
+    }
+
+    isValid = /^[12][0-9]{3}$/.test(year);
+    if (!isValid) {
+      return [
+        isValid,
+        helpers.createError("year", "O campo ano não segue o formato YYYY"),
+      ];
+    }
+
+    return [isValid, undefined];
   },
   month: (formData) => {
     if (!helpers.isValidFormData(formData))
       return [false, helpers.invalidFormDataError];
 
     const month = formData.get("month");
+    let isValid = false;
+    if (!month) {
+      return [
+        isValid,
+        helpers.createError("month", "Selecione uma data válida"),
+      ];
+    }
+
     const validFormat = /^(0?[1-9]|1[012])$/.test(month);
+    if (!validFormat) {
+      return [
+        isValid,
+        helpers.createError("month", "O campo mês não segue o formato MM"),
+      ];
+    }
+
     const validRange = Number(month) >= 0 && Number(month) <= 12;
+    if (!validRange) {
+      return [
+        isValid,
+        helpers.createError("month", "O campo mês não está entre 0 e 12"),
+      ];
+    }
 
-    const isValid = validFormat && validRange;
-    const error = isValid
-      ? undefined
-      : helpers.createError(
-          "month",
-          "O campo mês não segue o formato apropriado MM"
-        );
+    isValid = validFormat && validRange;
 
-    return [isValid, error];
+    return [isValid, undefined];
   },
   day: (formData) => {
     if (!helpers.isValidFormData(formData))
       return [false, helpers.invalidFormDataError];
 
     const day = formData.get("day");
+    let isValid = false;
+
+    if (!day) {
+      return [isValid, helpers.createError("day", "Selecione uma data válida")];
+    }
+
     const validFormat = /^[0-3]?[0-9]$/.test(day);
+    if (!validFormat) {
+      return [
+        isValid,
+        helpers.createError("day", "O campo data não segue o formato DD"),
+      ];
+    }
+
     const validRange = Number(day) >= 1 && Number(day) <= 31;
+    if (!validRange) {
+      return [
+        isValid,
+        helpers.createError("day", "O campo data não está entre 1 e 31"),
+      ];
+    }
 
-    const isValid = validFormat && validRange;
-    const error = isValid
-      ? undefined
-      : helpers.createError(
-          "day",
-          "O campo dia não segue o formato apropriado DD"
-        );
+    isValid = validFormat && validRange;
 
-    return [isValid, error];
+    return [isValid, undefined];
   },
   time: (formData) => {
     if (!helpers.isValidFormData(formData))
       return [false, helpers.invalidFormDataError];
 
     const time = formData.get("time");
+    let isValid = false;
+
+    if (!time) {
+      return [
+        isValid,
+        helpers.createError("time", "Selecione um horário válido"),
+      ];
+    }
+
     const validFormat = /^\d{2}:\d{2}(:\d{2})?$/.test(time);
+    if (!validFormat) {
+      return [
+        isValid,
+        helpers.createError(
+          "time",
+          "O campo horário não segue o formato HH:MM"
+        ),
+      ];
+    }
 
     const [hours, minutes] = time.split(":").map(Number);
-
     const isValidHour = hours >= 0 && hours < 24;
     const isValidMinute = minutes >= 0 && minutes < 60;
 
     const validRange = isValidHour && isValidMinute;
-
-    const isValid = validFormat && validRange;
-    const error = isValid
-      ? undefined
-      : helpers.createError(
+    if (!validRange) {
+      return [
+        isValid,
+        helpers.createError(
           "time",
-          "O campo hora não segue o formato apropriado HH:MM"
-        );
+          "O campo horário não segue o intervalo 00-23 e 00-59"
+        ),
+      ];
+    }
 
-    return [isValid, error];
+    isValid = validFormat && validRange;
+
+    return [isValid, undefined];
   },
   file: (formData) => {
     if (!helpers.isValidFormData(formData))
