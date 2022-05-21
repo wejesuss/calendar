@@ -306,7 +306,7 @@ function showError(error) {
     span.classList.remove("show");
     setTimeout(() => {
       span.textContent = "";
-    }, 1500);
+    }, 600);
     return;
   }
 
@@ -322,14 +322,13 @@ function showError(error) {
         .scrollIntoView({ block: "center", behavior: "smooth" });
     }, 1200);
   } else {
-    const input = document.querySelector(
-      `input[name=${name}],textarea[name=${name}]`
-    );
-
-    input.classList.add("error");
     span.classList.add("show");
     span.textContent = message;
 
+    const input = document.querySelector(
+      `input[name=${name}],textarea[name=${name}]`
+    );
+    input.classList.add("error");
     input.addEventListener(
       "keydown",
       () => {

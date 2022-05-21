@@ -124,19 +124,24 @@ main {
 
 span.error-message {
   display: inline-block;
-  max-height: 0;
-  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  padding: 0;
+  overflow-y: hidden;
   border-radius: 8px;
   font-size: small;
-  padding: 8px;
-  color: #390e0e;
+  color: transparent;
   background: #f09393;
-  transition: all 1.5s, max-height 0.4s;
+  transition: all 1.2s ease-in-out, color 0.6s ease-out, height 0.5s ease-in-out,
+    padding 0.5s ease-in-out;
 }
 
 span.error-message.show {
-  opacity: 1;
-  max-height: 32px;
+  visibility: visible;
+  overflow-y: visible;
+  height: 32px;
+  padding: 8px;
+  color: #390e0e;
 }
 
 /* footer */
