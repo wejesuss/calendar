@@ -311,23 +311,35 @@ function showError(error) {
   }
 
   const { name, message } = error;
-  const input = document.querySelector(
-    `input[name=${name}],textarea[name=${name}]`
-  );
 
-  input.classList.add("error");
-  span.classList.add("show");
-  span.textContent = message;
+  if (/^year|month|day|time$/.test(name)) {
+    span.classList.add("show");
+    span.textContent = message;
+    span.scrollIntoView({ block: "center", behavior: "smooth" });
+    setTimeout(() => {
+      document
+        .querySelector(".sections section:nth-child(2)")
+        .scrollIntoView({ block: "center", behavior: "smooth" });
+    }, 1200);
+  } else {
+    const input = document.querySelector(
+      `input[name=${name}],textarea[name=${name}]`
+    );
 
-  input.addEventListener(
-    "keydown",
-    () => {
-      input.classList.remove("error");
-    },
-    { once: true }
-  );
+    input.classList.add("error");
+    span.classList.add("show");
+    span.textContent = message;
 
-  input.scrollIntoView({ block: "end", behavior: "smooth" });
+    input.addEventListener(
+      "keydown",
+      () => {
+        input.classList.remove("error");
+      },
+      { once: true }
+    );
+
+    input.scrollIntoView({ block: "end", behavior: "smooth" });
+  }
 }
 
 function makeRequestBody(formData) {
