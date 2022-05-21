@@ -303,8 +303,10 @@ function showError(error) {
   const span = document.querySelector("span.error-message");
 
   if (!error) {
-    span.textContent = "";
     span.classList.remove("show");
+    setTimeout(() => {
+      span.textContent = "";
+    }, 1500);
     return;
   }
 
