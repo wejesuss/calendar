@@ -123,17 +123,20 @@ main {
 }
 
 span.error-message {
+  display: inline-block;
+  max-height: 0;
   opacity: 0;
   border-radius: 8px;
   font-size: small;
   padding: 8px;
   color: #390e0e;
   background: #f09393;
-  transition: all 1.5s;
+  transition: all 1.5s, max-height 0.4s;
 }
 
 span.error-message.show {
   opacity: 1;
+  max-height: 32px;
 }
 
 /* footer */
