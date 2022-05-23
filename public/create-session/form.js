@@ -94,7 +94,7 @@ const validFormInputs = {
       return [false, helpers.invalidFormDataError];
 
     let isValid = false;
-    const phone = formData.get("phone");
+    const phone = formData.get("phone").replace(/\D/g, "");
 
     if (!phone) {
       return [
@@ -117,7 +117,7 @@ const validFormInputs = {
     if (!helpers.isValidFormData(formData))
       return [false, helpers.invalidFormDataError];
 
-    const cpf = formData.get("cpf");
+    const cpf = formData.get("cpf").replace(/\D/g, "");
     let isValid = false;
 
     if (!cpf) {
