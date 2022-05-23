@@ -295,12 +295,12 @@ const validRequestParameters = {
   phone: (formData) => {
     if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
 
-    return formData.get("phone");
+    return formData.get("phone").replace(/\D/g, "");
   },
   cpf: (formData) => {
     if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
 
-    return formData.get("cpf");
+    return formData.get("cpf").replace(/\D/g, "");
   },
   description: (formData) => {
     if (!helpers.isValidFormData(formData)) return helpers.invalidFormDataError;
