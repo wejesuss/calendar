@@ -357,13 +357,13 @@ function showError(error) {
     span.classList.remove("show");
     setTimeout(() => {
       span.textContent = "";
-    }, 600);
+    }, 400);
     return;
   }
 
   const { name, message } = error;
 
-  if (/^year|month|day|time$/.test(name)) {
+  if (/^year|month|day|date|time$/.test(name)) {
     span.classList.add("show");
     span.textContent = message;
     span.scrollIntoView({ block: "center", behavior: "smooth" });
@@ -412,7 +412,19 @@ async function createSession(requestBody = "") {
       body: requestBody,
     });
 
-    return await response.json();
+    const resOrErr = await response.json();
+    if (response.status !== 200) {
+      const name = resOrErr.message.split(":").pop().trim();
+
+      const err = new Error(resOrErr.message);
+      err.name = name;
+
+      setTimeout(() => {
+        showError(err);
+      }, 400);
+    }
+
+    return resOrErr;
   } catch (error) {
     return error;
   }
