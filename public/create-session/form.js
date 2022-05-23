@@ -12,6 +12,47 @@ const helpers = {
     return err;
   },
 };
+const inputMask = {
+  phone: {
+    element: document.getElementById("phone"),
+    apply: (originalPhone) => {
+      const cleanPhone = originalPhone.slice(0, 14).replace(/\D/g, "");
+      const phoneRegex =
+        /^((?:55[1-9]{2})|(?:[1-9]{2})|(?:0[1-9]{2}))((?:\d{4}\d{4})|(?:9[2-9]{1}\d{3}\d{4}))$/;
+
+      const [countryAndAreaCode = "", number = ""] = cleanPhone
+        .replace(phoneRegex, "$1 $2")
+        .split(" ");
+
+      const areaCode = countryAndAreaCode.slice(-2);
+      const localNumber =
+        number.length > 8
+          ? `9 ${number.slice(1, 5)}-${number.slice(5, 9)}`
+          : `9 ${number.slice(0, 4)}-${number.slice(4, 8)}`;
+
+      if (!areaCode || areaCode.length !== 2 || localNumber.length !== 11) {
+        return "";
+      }
+
+      return `${areaCode} ${localNumber}`;
+    },
+  },
+  cpf: {
+    element: document.getElementById("cpf"),
+    apply: (originalCpf) => {
+      const cleanCpf = originalCpf.slice(0, 14).replace(/\D/g, "");
+      const cpfRegex = /^(\d{3})(\d{3})(\d{3})(\d{2})$/;
+
+      const cpf = cleanCpf.replace(cpfRegex, "$1.$2.$3-$4");
+
+      if (!cpf || cpf.length !== 14) {
+        return "";
+      }
+
+      return cpf;
+    },
+  },
+};
 const validFormInputs = {
   name: (formData) => {
     if (!helpers.isValidFormData(formData))
@@ -285,7 +326,17 @@ const validRequestParameters = {
   },
 };
 
-Object.freeze(helpers, validFormInputs, validRequestParameters);
+Object.freeze(helpers, inputMask, validFormInputs, validRequestParameters);
+
+function setInputMask() {
+  Object.values(inputMask).forEach((mask) => {
+    const { element, apply } = mask;
+
+    element.addEventListener("blur", () => {
+      element.value = apply(element.value);
+    });
+  });
+}
 
 function validateForm(formData) {
   const isInvalid = [];
@@ -388,3 +439,5 @@ submitButton.addEventListener("click", async (ev) => {
     console.error(error);
   }
 });
+
+setInputMask();
