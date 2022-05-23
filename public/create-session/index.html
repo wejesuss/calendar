@@ -61,9 +61,10 @@
     </header>
 
     <main>
-      <form action="#" method="get" id="create-session"></form>
+      <form action="#" method="post" id="create-session"></form>
       <div class="sections">
         <section>
+          <span class="error-message"></span>
           <div class="input-container">
             <label for="name">Nome:</label>
             <input type="text" name="name" id="name" form="create-session" />
@@ -245,11 +246,11 @@
           </div>
           <div class="hour-picker">
             <ol>
-              <li>7:30</li>
-              <li>8:00</li>
-              <li>8:30</li>
-              <li>9:00</li>
-              <li>9:30</li>
+              <li>07:30</li>
+              <li>08:00</li>
+              <li>08:30</li>
+              <li>09:00</li>
+              <li>09:30</li>
               <li>10:00</li>
               <li>11:00</li>
               <li>14:00</li>
@@ -279,13 +280,15 @@
               />
             </div>
           </div>
-          <button type="submit" form="create-session">Marcar Sessão</button>
+          <button type="submit" id="submit-button">Marcar Sessão</button>
         </section>
       </div>
     </main>
 
     <footer>Todos os direitos reservados &copy;</footer>
 
+    <script src="https://unpkg.com/validator@latest/validator.min.js"></script>
     <script src="/create-session/index.js"></script>
+    <script src="/create-session/form.js"></script>
   </body>
 </html>

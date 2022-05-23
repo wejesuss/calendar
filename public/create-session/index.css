@@ -35,7 +35,7 @@ main .sections section:nth-of-type(3) {
 /* section 1 */
 
 .sections section .input-container:not(:last-child) {
-  margin-bottom: 16px;
+  margin: 8px 0;
 }
 
 .sections section .input-container label {
@@ -59,6 +59,14 @@ main .sections section:nth-of-type(3) {
   height: 95px;
   max-height: 170px;
   resize: vertical;
+}
+
+.sections section .input-container .error {
+  border-color: red;
+}
+
+.sections section .input-container .error:focus-visible {
+  outline: solid rgb(143, 4, 4);
 }
 
 /* section 2 */
@@ -132,12 +140,22 @@ main .sections section:nth-of-type(3) {
 }
 
 .sections section:nth-child(2) .date-days table tbody tr td div {
+  cursor: default;
   border: 1px solid;
   width: 18px;
   height: 18px;
   text-align: center;
   line-height: 16px;
   margin: 0 auto;
+  transition: all 0.4s ease-in;
+}
+
+.sections section:nth-child(2) .date-days table tbody tr td div:hover,
+.sections section:nth-child(2) .date-days table tbody tr td div.active {
+  background-color: #a68f59;
+  color: #ffffff;
+  border-color: #a68f59;
+  border-radius: 50%;
 }
 
 .sections section:nth-child(2) .hour-picker {
@@ -158,9 +176,21 @@ main .sections section:nth-of-type(3) {
 }
 
 .sections section:nth-child(2) .hour-picker li {
+  cursor: default;
+  padding: 5px 0;
   font-size: 1rem;
-  margin-bottom: 10px;
+  height: 22px;
   color: var(--hour-picker-text-color);
+  transition: all 0.3s cubic-bezier(0.6, 0.19, 0.42, 1.03),
+    background 0.4s cubic-bezier(0, 0.49, 0.96, 0.61);
+}
+
+.sections section:nth-child(2) .hour-picker li:hover,
+.sections section:nth-child(2) .hour-picker li.active {
+  background-color: #a68f59;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ffffff;
 }
 
 .sections section:nth-child(2) .hour-picker li:last-child {
@@ -220,6 +250,11 @@ main .sections section:nth-of-type(3) {
   background-size: contain;
 }
 
+.sections
+  section:nth-child(3)
+  .input-container
+  .photo-upload:focus-within
+  label,
 .sections section:nth-child(3) .input-container .photo-upload label:hover {
   background: var(--upload-file-background-hover);
   border: 1px solid var(--upload-file-border-hover);

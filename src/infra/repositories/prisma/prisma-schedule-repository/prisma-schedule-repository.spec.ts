@@ -46,42 +46,56 @@ const makeFakeSchedule = (partial: boolean = false): Schedule | PartialSchedule 
     updated_at: 1650992336913,
     replacements: [
       {
-        id: 1,
-        created_at: 1650991522964,
-        updated_at: 1650991522964,
-        date: '2022/01/23',
-        time_from: '05:00',
-        time_to: '10:00'
-      },
-      {
-        id: 2,
-        created_at: 1650991534251,
-        updated_at: 1650991534251,
-        date: '2022/01/23',
-        time_from: '13:00',
-        time_to: '16:00'
-      },
-      {
-        id: 3,
-        created_at: 1650996050434,
-        updated_at: 1650996050434,
-        date: '2022/01/24',
-        time_from: '13:00',
-        time_to: '16:00'
+        id: 4,
+        date: '2022/10/30',
+        time_from: '17:00',
+        time_to: '19:00',
+        created_at: 1652289540843,
+        updated_at: 1652289540843
       }
     ],
     availability: [
       {
-        id: 2,
-        week: 0,
-        time_from: '05:00',
-        time_to: '10:00'
+        id: 3,
+        time_from: '09:00',
+        time_to: '17:00',
+        week: 0
       },
       {
-        id: 1,
-        week: 6,
+        id: 4,
         time_from: '09:00',
-        time_to: '17:00'
+        time_to: '17:00',
+        week: 1
+      },
+      {
+        id: 5,
+        time_from: '09:00',
+        time_to: '17:00',
+        week: 2
+      },
+      {
+        id: 6,
+        time_from: '09:00',
+        time_to: '17:00',
+        week: 3
+      },
+      {
+        id: 7,
+        time_from: '09:00',
+        time_to: '17:00',
+        week: 4
+      },
+      {
+        id: 8,
+        time_from: '09:00',
+        time_to: '17:00',
+        week: 5
+      },
+      {
+        id: 9,
+        time_from: '09:00',
+        time_to: '17:00',
+        week: 6
       }
     ]
   }

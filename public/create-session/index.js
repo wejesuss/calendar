@@ -53,6 +53,8 @@ const toMonthDays = () => {
 
 const mapMonthName = toMonthString();
 const mapMonthDays = toMonthDays();
+let dayActive = "";
+let timeActiveIndex = undefined;
 
 /**
  * Create an array representing the first week
@@ -171,21 +173,33 @@ function setCalendarDays(monthDates, year, month) {
   const inputYear = document.getElementById("date-picker-year");
 
   document.querySelector("table tbody").innerHTML = "";
-  monthDates.forEach((week) => {
+  monthDates.forEach((week, weekIndex) => {
     const tr = document.createElement("tr");
 
-    week.forEach((day) => {
+    week.forEach((day, dayIndex) => {
       const td = document.createElement("td");
 
       if (day !== null) {
         const div = document.createElement("div");
         div.innerText = day;
         div.addEventListener("click", () => {
+          if (dayActive) {
+            const [weekIndex, dayIndex] = dayActive.split("/").map(Number);
+
+            const previousActiveDay = document.querySelector(
+              `table tbody tr:nth-child(${weekIndex + 1}) td:nth-child(${
+                dayIndex + 1
+              }) div`
+            );
+            previousActiveDay.classList.remove("active");
+          }
+
+          dayActive = `${weekIndex}/${dayIndex}`;
+          div.classList.add("active");
+
           inputDay.value = day;
           inputMonth.value = month;
           inputYear.value = year;
-
-          document.getElementById("date-picker-time").value = "";
         });
 
         td.append(div);
@@ -199,6 +213,9 @@ function setCalendarDays(monthDates, year, month) {
 }
 
 function setPickersEvent(monthsToCreate, dates) {
+  const inputMonth = document.getElementById("date-picker-month");
+  const inputYear = document.getElementById("date-picker-year");
+
   const calendarHeader = document.querySelector(
     "section:nth-child(2) > .date-picker > .date-month-year"
   );
@@ -219,6 +236,21 @@ function setPickersEvent(monthsToCreate, dates) {
     setCalendarTitle(monthToCreate.year, monthToCreate.month);
     setCalendarDays(dates[index], monthToCreate.year, monthToCreate.month);
     calendarHeader.dataset.index = index;
+
+    if (
+      dayActive &&
+      monthToCreate.year === Number(inputYear.value) &&
+      monthToCreate.month === Number(inputMonth.value)
+    ) {
+      const [weekIndex, dayIndex] = dayActive.split("/").map(Number);
+
+      const previousActiveDay = document.querySelector(
+        `table tbody tr:nth-child(${weekIndex + 1}) td:nth-child(${
+          dayIndex + 1
+        }) div`
+      );
+      previousActiveDay.classList.add("active");
+    }
   });
 
   pickers[1].addEventListener("click", () => {
@@ -234,6 +266,21 @@ function setPickersEvent(monthsToCreate, dates) {
     setCalendarTitle(monthToCreate.year, monthToCreate.month);
     setCalendarDays(dates[index], monthToCreate.year, monthToCreate.month);
     calendarHeader.dataset.index = index;
+
+    if (
+      dayActive &&
+      monthToCreate.year === Number(inputYear.value) &&
+      monthToCreate.month === Number(inputMonth.value)
+    ) {
+      const [weekIndex, dayIndex] = dayActive.split("/").map(Number);
+
+      const previousActiveDay = document.querySelector(
+        `table tbody tr:nth-child(${weekIndex + 1}) td:nth-child(${
+          dayIndex + 1
+        }) div`
+      );
+      previousActiveDay.classList.add("active");
+    }
   });
 }
 
@@ -271,8 +318,21 @@ document
   .querySelectorAll(
     "body > main > div > section:nth-child(2) > div.hour-picker > ol > li"
   )
-  .forEach((timeEl) => {
+  .forEach((timeEl, timeIndex) => {
     timeEl.addEventListener("click", (e) => {
+      if (typeof timeActiveIndex === "number") {
+        const previousActiveTime = document.querySelector(
+          `section:nth-child(2) .hour-picker > ol > li:nth-child(${
+            timeActiveIndex + 1
+          })`
+        );
+
+        previousActiveTime.classList.remove("active");
+      }
+
+      timeActiveIndex = timeIndex;
+      timeEl.classList.add("active");
+
       const time = `0${e.target.innerText}`.slice(-5);
       document.getElementById("date-picker-time").value = time;
     });

@@ -1,11 +1,11 @@
-import { Express, Router } from 'express'
+import express from 'express'
 import fb from 'fast-glob'
 
-export default (app: Express): void => {
-  const router = Router()
-  app.use('/api', router)
+export default (app: express.Express): void => {
+  const apiRouter = express.Router()
+  app.use('/api', apiRouter)
 
-  fb.sync('**/src/main/routes/**routes.ts').forEach(async (file) => {
-    (await import(`../../../${file}`)).default(router)
+  fb.sync('**/src/main/routes/api/**routes.ts').forEach(async (file) => {
+    (await import(`../../../${file}`)).default(apiRouter)
   })
 }
