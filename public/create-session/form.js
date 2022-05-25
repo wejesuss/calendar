@@ -404,7 +404,7 @@ function makeRequestBody(formData) {
 
 async function createSession(requestBody = "") {
   try {
-    const response = await fetch("http://localhost:5000/api/create-session", {
+    const response = await fetch("/api/create-session", {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8",
