@@ -4,7 +4,9 @@
   "description": "Calendar",
   "main": "index.js",
   "scripts": {
-    "start": "sucrase-node src/main/server.ts",
+    "start": "node dist/main/server.js",
+    "dev": "sucrase-node src/main/server.ts",
+    "postinstall": "tsc",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:parallel": "jest --passWithNoTests --silent --noStackTrace",
     "test:verbose": "jest --passWithNoTests --runInBand",
