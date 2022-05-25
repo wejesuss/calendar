@@ -242,6 +242,8 @@ export class CreateSessionController implements Controller {
 
       return ok(session)
     } catch (error) {
+      console.log(error)
+
       return internalServerError(new ServerError(error.stack))
     }
   }
