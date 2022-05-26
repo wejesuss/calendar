@@ -46,3 +46,14 @@ CREATE TABLE "session" (
 
 COMMENT ON COLUMN "session"."cpf" IS 'encrypted';
 COMMENT ON COLUMN "session"."phone" IS 'encrypted';
+
+INSERT INTO schedule (activation_interval, activation_interval_type, duration) VALUES (3, 30, 60);
+INSERT INTO time_interval (time_from, time_to, week) VALUES ('09:00', '17:00', 0);
+INSERT INTO time_interval (time_from, time_to, week) VALUES ('09:00', '17:00', 1);
+INSERT INTO time_interval (time_from, time_to, week) VALUES ('09:00', '17:00', 2);
+INSERT INTO time_interval (time_from, time_to, week) VALUES ('09:00', '17:00', 3);
+INSERT INTO time_interval (time_from, time_to, week) VALUES ('09:00', '17:00', 4);
+INSERT INTO time_interval (time_from, time_to, week) VALUES ('09:00', '17:00', 5);
+INSERT INTO time_interval (time_from, time_to, week) VALUES ('09:00', '17:00', 6);
+INSERT INTO replacement (r_date, r_time_from, r_time_to) VALUES ('2022/07/30', '17:00', '19:00');
+INSERT INTO replacement (r_date, r_time_from, r_time_to) VALUES ('2022/10/30', '17:00', '19:00');
